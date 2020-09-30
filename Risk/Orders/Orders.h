@@ -18,6 +18,6 @@ class Deploy : Order { //class Deploy inherits from Order
         int armies;  //number of armies to be deployed
         string destination; //region where army is to be deployed
 
-    Deploy(int a, string o, string d); //constructor for class Deploy
+    Deploy(int a, string d); //constructor for class Deploy
 
 };
