@@ -8,11 +8,26 @@
 
 using namespace std;
 
+struct continents {
+    vector<string> names;
+    vector<string> armyNums;
+} continents;
+
+struct countries {
+    vector<string> names;
+    vector<string> onContinent;
+    vector<vector<string>> pos;
+} countries;
+
+struct borders {
+    vector<vector<string>> adjacent;
+} borders;
+
 
 MapLoader::MapLoader(string path){
     mapPath = path;
 }
-
+    
 string MapLoader::parse(){
     ifstream mapFile(mapPath);
     if (mapFile.is_open()){
@@ -33,13 +48,13 @@ string MapLoader::parse(){
             if (!line.empty()){
                 switch(currentBlock){
                     case 0:
-                        elements = split(line, ' ');
+                        parseContinent(line);
                         break;
                     case 1:
-                        elements = split(line, ' ');
+                        
                         break;
                     case 2:
-                        elements = split(line, ' ');
+                        
                         
                 }
             }
@@ -61,4 +76,10 @@ vector<string> split(const string &line, char delim) {
     }
 
     return result;
+}
+
+vector<string> parseContinent(string line){
+    vector<string> result = split(line, ' ');
+    continents.names.push_back(result[0]);
+    continents.armyNums.push_back(result[1]);
 }
