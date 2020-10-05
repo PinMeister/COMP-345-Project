@@ -78,8 +78,20 @@ vector<string> split(const string &line, char delim) {
     return result;
 }
 
-vector<string> parseContinent(string line){
+void parseContinent(string line){
     vector<string> result = split(line, ' ');
     continents.names.push_back(result[0]);
     continents.armyNums.push_back(result[1]);
+}
+
+void parseCountry(string line){
+    vector<string> result = split(line, ' ');
+    countries.names.push_back(result[1]);
+    countries.onContinent.push_back(result[2]);
+    countries.pos.push_back({result[3], result[4]});
+}
+
+void parseBorder(string line){
+    vector<string> result = split(line, ' ');
+    borders.adjacent.push_back(result);
 }
