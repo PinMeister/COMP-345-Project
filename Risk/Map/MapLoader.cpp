@@ -36,12 +36,15 @@ string MapLoader::parse(){
         while (getline(mapFile, line)) {
             if (line.find("[continents]") != string::npos){
                 currentBlock = 0;
+                continue;
             }
             else if (line.find("[countries]") != string::npos){
                 currentBlock = 1;
+                continue;
             }
             else if (line.find("[borders]") != string::npos){
                 currentBlock = 2;
+                continue;
             }
 
             vector<string> elements;
@@ -51,11 +54,11 @@ string MapLoader::parse(){
                         parseContinent(line);
                         break;
                     case 1:
-                        
+                        parseCountry(line);
                         break;
                     case 2:
-                        
-                        
+                        parseBorder(line);
+                        break;
                 }
             }
         }
@@ -72,7 +75,7 @@ vector<string> split(const string &line, char delim) {
     string element;
 
     while (getline(sstream, element, delim)) {
-        result.push_back (element);
+        result.push_back(element);
     }
 
     return result;
@@ -80,15 +83,19 @@ vector<string> split(const string &line, char delim) {
 
 void parseContinent(string line){
     vector<string> result = split(line, ' ');
-    continents.names.push_back(result[0]);
-    continents.armyNums.push_back(result[1]);
+    if (result.size() >= 2){
+        continents.names.push_back(result[0]);
+        continents.armyNums.push_back(result[1]);
+    }
 }
 
 void parseCountry(string line){
     vector<string> result = split(line, ' ');
-    countries.names.push_back(result[1]);
-    countries.onContinent.push_back(result[2]);
-    countries.pos.push_back({result[3], result[4]});
+    if (result.size() >= 5){
+        countries.names.push_back(result[1]);
+        countries.onContinent.push_back(result[2]);
+        countries.pos.push_back({result[3], result[4]});
+    }
 }
 
 void parseBorder(string line){
