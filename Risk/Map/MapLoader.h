@@ -3,15 +3,16 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class MapLoader{
     public:
         string mapPath;
         MapLoader(string path);
         ~MapLoader();
-        string parse();
-        vector<string> split(const string &line, char delim);
+        int parse();
+        int createMap();
     private:
-        vector<string> parseContinent(string &line);
+        vector<string> split(const string &line, char delim);
+        int parseContinent(string line);
+        int parseCountry(string line);
+        int parseBorder(string line);
 };
