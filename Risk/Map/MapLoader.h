@@ -8,6 +8,12 @@ using namespace std;
 // Load a .map file and create a Map obj
 class MapLoader{
     public:
+        MapLoader(string path); // constructor
+        MapLoader(const MapLoader &mapLoader); // copy constructor
+        ~MapLoader(); // destructor
+        bool parse(); // parse the .map file
+        int createMap(); // create a Map obj
+    private:
         // data container for continents
         struct continents {
             vector<string> names;
@@ -23,15 +29,8 @@ class MapLoader{
         struct borders {
             vector<vector<string>> adjacent;
         } bordersData;
-
-        MapLoader(string path); // constructor
-        MapLoader(const MapLoader &mapLoader); // copy constructor
-        ~MapLoader(); // destructor
-        bool parse(); // parse the .map file
-        int createMap(); // create a Map obj
-    private:
         string mapPath; // path to the .map file
-        int error;
+        int error; // number of errors found when parsing and creating the map
 
         vector<string> split(const string &line, char delim); // split string
         bool parseContinent(string line); // parse continents block in the .map file

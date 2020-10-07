@@ -40,17 +40,17 @@ bool MapLoader::parse(){
         int currentBlock = -1; // current state
         // read the whole text file, 1 line at a time
         while (getline(mapFile, line)) {
-            // if the line contains continents block, update state and skip
+            // if the line contains continents block,
             if (line.find("[continents]") != string::npos){
-                currentBlock = 0;
-                continue;
+                currentBlock = 0; // update state
+                continue; // skip this line
             }
-            // if the line contains countries block, update state and skip
+            // if the line contains countries block
             else if (line.find("[countries]") != string::npos){
                 currentBlock = 1;
                 continue;
             }
-            // if the line contains borders block, update state and skip
+            // if the line contains borders block
             else if (line.find("[borders]") != string::npos){
                 currentBlock = 2;
                 continue;
@@ -174,6 +174,7 @@ bool MapLoader::isDigit(const string &str){
     return (str.find_first_not_of("0123456789") == string::npos);
 }
 
+// clear all the arrays from the structs
 void MapLoader::clearData(){
     continentsData.names.clear();
     continentsData.armyNums.clear();

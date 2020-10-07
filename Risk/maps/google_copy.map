@@ -18,7 +18,7 @@ Balkan 5 black
 
 [countries]
 1 Portugal 6 57 305
-2 Spanien 1 114 312
+2 Spanien 114 312
 3 Frankreich 0 193 206
 4 Gross_Britanien 1 179 104
 5 Irland 1 141 131
@@ -58,7 +58,7 @@ Balkan 5 black
 
 [borders]
 1 2 5 x
-2 1 3 12
+2
 3 2 4 6 8 9 10 12
 4 3 5 7 8 
 5 1 4
