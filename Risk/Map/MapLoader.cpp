@@ -38,6 +38,17 @@ MapLoader::MapLoader(const MapLoader &mapLoader){
     error = mapLoader.error;
 }
 
+MapLoader::~MapLoader(){
+    mapPath = "";
+    error = 0;
+    continents.names.clear();
+    continents.armyNums.clear();
+    countries.names.clear();
+    countries.continentId.clear();
+    countries.pos.clear();
+    borders.adjacent.clear();
+}
+
 // parse a .map file with a given path
 // read data and store them in data containers
 bool MapLoader::parse(){
@@ -80,6 +91,7 @@ bool MapLoader::parse(){
             }
         }
         mapFile.close();
+        cout << "Parse completed, " << error << " errors found.\n\n";
     // if not successful
     }else{
         cout << "Unable to open map file " << mapPath << endl;
@@ -89,7 +101,7 @@ bool MapLoader::parse(){
 }
 
 int createMap(){
-
+ return 0;
 }
 
 // parse a single line in continents block
@@ -102,10 +114,12 @@ bool MapLoader::parseContinent(string line){
         // if the continent already exists
         if (find(continents.names.begin(), continents.names.end(), result[0]) != continents.names.end()){
             error += 1;
+            cout << result[0] << " continent already exists!\n";
         }
         // if the second element is not a number
         if (!isDigit(result[1])){
             error += 1;
+            cout << result[0] << " Bonus is not a number!\n";
         }
         // store the data in the continents data container
         continents.names.push_back(result[0]);
@@ -124,14 +138,17 @@ bool MapLoader::parseCountry(string line){
         // if the country already exists
         if (find(countries.names.begin(), countries.names.end(), result[1]) != countries.names.end()){
             error += 1;
+            cout << result[1] << " country already exists!\n";
         }
         // if the third element is not a number
         if (!isDigit(result[2])){
             error += 1;
+            cout << result[2] << " continent id is not a number!\n";
         }else{
             // if it is a number, check if it is less than 0 or too big
             if (stoi(result[2]) <= 0 || stoi(result[2]) > continents.names.size()){
                 error += 1;
+                cout << result[2] << " continent id is not valid!\n";
             }
         }
         // store the data in the conuntries data container
@@ -159,7 +176,7 @@ bool MapLoader::parseBorder(string line){
 }
 
 // split a string with a specified delimiter and return an array of elements
-vector<string> split(const string &line, char delim){
+vector<string> MapLoader::split(const string &line, char delim){
     vector<string> result;
     stringstream sstream(line);
     string element;
@@ -171,7 +188,7 @@ vector<string> split(const string &line, char delim){
 }
 
 // check if a string is a number
-bool isDigit(const string &str){
+bool MapLoader::isDigit(const string &str){
     // return if a string contains a non-number character
     return (str.find_first_not_of("0123456789") == string::npos);
 }

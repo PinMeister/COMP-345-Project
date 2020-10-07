@@ -3,7 +3,8 @@
 #include <iostream>
 #include <string>
 
-// MapLoader
+using namespace std;
+
 // Load a .map file and create a Map obj
 class MapLoader{
     public:
