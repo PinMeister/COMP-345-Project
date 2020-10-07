@@ -8,24 +8,6 @@
 
 using namespace std;
 
-// data container for continents
-struct continents {
-    vector<string> names;
-    vector<string> armyNums;
-} continents;
-
-// data container for countries
-struct countries {
-    vector<string> names;
-    vector<string> continentId;
-    vector<vector<string>> pos;
-} countries;
-
-// data container for borders
-struct borders {
-    vector<vector<string>> adjacent;
-} borders;
-
 // constructor
 MapLoader::MapLoader(string path){
     mapPath = path;
@@ -36,17 +18,16 @@ MapLoader::MapLoader(string path){
 MapLoader::MapLoader(const MapLoader &mapLoader){
     mapPath = mapLoader.mapPath;
     error = mapLoader.error;
+    continentsData = mapLoader.continentsData;
+    countriesData = mapLoader.countriesData;
+    bordersData = mapLoader.bordersData;
 }
 
+// destructor
 MapLoader::~MapLoader(){
     mapPath = "";
     error = 0;
-    continents.names.clear();
-    continents.armyNums.clear();
-    countries.names.clear();
-    countries.continentId.clear();
-    countries.pos.clear();
-    borders.adjacent.clear();
+    clearData(); // empty all arrays
 }
 
 // parse a .map file with a given path
@@ -101,7 +82,7 @@ bool MapLoader::parse(){
 }
 
 int createMap(){
- return 0;
+    return 0;
 }
 
 // parse a single line in continents block
@@ -112,7 +93,7 @@ bool MapLoader::parseContinent(string line){
     // if the size of result array is 2
     if (result.size() >= 2){
         // if the continent already exists
-        if (find(continents.names.begin(), continents.names.end(), result[0]) != continents.names.end()){
+        if (find(continentsData.names.begin(), continentsData.names.end(), result[0]) != continentsData.names.end()){
             error += 1;
             cout << result[0] << " continent already exists!\n";
         }
@@ -122,8 +103,8 @@ bool MapLoader::parseContinent(string line){
             cout << result[0] << " Bonus is not a number!\n";
         }
         // store the data in the continents data container
-        continents.names.push_back(result[0]);
-        continents.armyNums.push_back(result[1]);
+        continentsData.names.push_back(result[0]);
+        continentsData.armyNums.push_back(result[1]);
         return 1;
     }
     return 0;
@@ -136,7 +117,7 @@ bool MapLoader::parseCountry(string line){
     // if the size of result array is 5
     if (result.size() >= 5){
         // if the country already exists
-        if (find(countries.names.begin(), countries.names.end(), result[1]) != countries.names.end()){
+        if (find(countriesData.names.begin(), countriesData.names.end(), result[1]) != countriesData.names.end()){
             error += 1;
             cout << result[1] << " country already exists!\n";
         }
@@ -146,15 +127,15 @@ bool MapLoader::parseCountry(string line){
             cout << result[2] << " continent id is not a number!\n";
         }else{
             // if it is a number, check if it is less than 0 or too big
-            if (stoi(result[2]) <= 0 || stoi(result[2]) > continents.names.size()){
+            if (stoi(result[2]) <= 0 || stoi(result[2]) > continentsData.names.size()){
                 error += 1;
                 cout << result[2] << " continent id is not valid!\n";
             }
         }
         // store the data in the conuntries data container
-        countries.names.push_back(result[1]);
-        countries.continentId.push_back(result[2]);
-        countries.pos.push_back({result[3], result[4]});
+        countriesData.names.push_back(result[1]);
+        countriesData.continentId.push_back(result[2]);
+        countriesData.pos.push_back({result[3], result[4]});
         return 1;
     }
     return 0;
@@ -169,7 +150,7 @@ bool MapLoader::parseBorder(string line){
         // store the data in the borders data container
         // IMPORTANT NOTE: this array also contains the id of the country at the first index
         // When creating the Map obj, must ignore the first element
-        borders.adjacent.push_back(result);
+        bordersData.adjacent.push_back(result);
         return 1;
     }
     return 0;
@@ -191,4 +172,13 @@ vector<string> MapLoader::split(const string &line, char delim){
 bool MapLoader::isDigit(const string &str){
     // return if a string contains a non-number character
     return (str.find_first_not_of("0123456789") == string::npos);
+}
+
+void MapLoader::clearData(){
+    continentsData.names.clear();
+    continentsData.armyNums.clear();
+    countriesData.names.clear();
+    countriesData.continentId.clear();
+    countriesData.pos.clear();
+    bordersData.adjacent.clear();
 }
