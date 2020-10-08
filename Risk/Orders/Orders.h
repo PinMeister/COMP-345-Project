@@ -6,14 +6,12 @@ using namespace std;
 class OrdersList{
 
     private:
-        Order order;
+        std::list<Order *>  orders;
 
     public:
-        OrdersList();
+        OrdersList::OrdersList(std::list<Order *> ol);
 
-    OrdersList(Order ord);
-
-    list<Order> list;
+    
 
 };
 

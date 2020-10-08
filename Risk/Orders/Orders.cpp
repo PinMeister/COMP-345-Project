@@ -1,24 +1,20 @@
 #include <iostream>
 #include "Orders.h"
 #include <list>
+#include <list>
 using namespace std;
 
 
 class OrdersList {
 
     private:
-        Order *order;
+        std::list<Order *>  orders;
 
     public:
-        OrdersList(){
-
+        
+        OrdersList::OrdersList(std::list<Order *> ol){
+            orders = ol;
         }
-
-        OrdersList(Order *ord){
-            order = ord;
-        }
-
-    list<Order> list;
 
 };
 
