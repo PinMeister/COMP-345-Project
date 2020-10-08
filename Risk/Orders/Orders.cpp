@@ -74,11 +74,6 @@ class Advance : public Order {
 
         }
 
-         /* If the target territory belongs to the current player, the armies are moved to the target
-territory. If the target territory belongs to another player, an attack happens between the two
-territories.  */
-
-
 };
 
 class Bomb : public Order {
