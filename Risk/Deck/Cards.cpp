@@ -24,7 +24,7 @@ std::string Card::getCardTypeToString() const {
 	else if (cardType == AIRLIFT)
 		return "airlift"; 
 	else 
-		return "diplomacy"
+		return "diplomacy";
 }
 
 void Card::setCardType(CardType cardType) {
