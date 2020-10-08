@@ -39,23 +39,14 @@ class Order { //parent class
 
 class Deploy : public Order {  //class Deploy inherits from Order
 
- private:
-    int armies;  //number of armies to be deployed
-    string destination; //region where army is to be deployed
+    public:
+        Deploy::Deploy(){                 //constructor
 
-public:
-
-    Deploy(){                 //constructor
-
-    }
-    Deploy(int a, string d){ //parametrized constructor for class Deploy
-        armies = a;
-        destination = d;
-    }
+        }
 
     friend ostream& operator << (ostream &strm, const Deploy &d){
 
-        return strm << "Deploy " << d.armies << "armies to " << d.destination; 
+        return strm << "Deploy"; 
 
     }
 
@@ -64,13 +55,8 @@ public:
 //classes inheriting from order. yet to be implemented
 class Advance : public Order {
 
-    private:
-        string source;
-        string target;
-
-
     public:
-        Advance(){
+        Advance::Advance(){
 
         }
 
@@ -79,7 +65,7 @@ class Advance : public Order {
 class Bomb : public Order {
 
     public:
-        Bomb(){
+        Bomb::Bomb(){
 
         }
 
@@ -88,7 +74,7 @@ class Bomb : public Order {
 class Blockade : public Order {
 
     public:
-        Blockade(){
+        Blockade::Blockade(){
 
         }
 
@@ -97,7 +83,7 @@ class Blockade : public Order {
 class Airlift : public Order {
 
     public:
-        Airlift(){
+        Airlift::Airlift(){
 
         }
 
@@ -105,7 +91,7 @@ class Airlift : public Order {
 
 class Negotiate : public Order {
 
-    public: Negotiate(){
+    public: Negotiate::Negotiate(){
 
     }
 

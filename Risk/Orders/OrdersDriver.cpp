@@ -9,7 +9,7 @@ int main(){
 
     //creating pointers of user defined class type
 
-     Deploy *deploy = new Deploy(2, "america");
+     Deploy *deploy = new Deploy();
     Advance *advance = new Advance();
     Bomb *bomb = new Bomb();
     Blockade *blockade = new Blockade();

@@ -15,40 +15,30 @@ class OrdersList{
 
 };
 
-
-
-
 class Order{
 
 friend ostream& operator << (ostream &, const Order &); //stream insertion operator added to be inherited 
 
-//validate and execute methods to be inherited by the order subclasses
-void validate(); 
-void execute();
+public:
+    Order::Order();
+
+    //validate and execute methods to be inherited by the order subclasses
+    void validate(); 
+    void execute();
 
 };
 
 class Deploy : public Order { //class Deploy inherits from Order
 
-    private:
-        int armies;  //number of armies to be deployed
-        string destination; //region where army is to be deployed
-
     public:
-    Deploy();  //constructor
-    Deploy(int a, string d); //parametrized constructor for class Deploy
+    Deploy::Deploy();  //constructor
 
 };
 
 class Advance : public Order{
 
-    private:
-        string source;
-        string target;
-
-
     public:
-        Advance(); //constructor
+        Advance::Advance(); //constructor
 
 
 };
@@ -56,7 +46,7 @@ class Advance : public Order{
 class Bomb : public Order{
 
     public:
-        Bomb(); //constructor
+        Bomb::Bomb(); //constructor
 
 
 };
@@ -64,7 +54,7 @@ class Bomb : public Order{
 class Blockade : public Order{
 
     public:
-        Blockade(); //constructor
+        Blockade::Blockade(); //constructor
 
 
 };
@@ -72,7 +62,7 @@ class Blockade : public Order{
 class Airlift : public Order{
 
     public:
-        Airlift(); //constructor
+        Airlift::Airlift(); //constructor
 
 
 };
@@ -80,7 +70,7 @@ class Airlift : public Order{
 class Negotiate : public Order{
 
     public:
-        Negotiate(); //constructor
+        Negotiate::Negotiate(); //constructor
 
 
 };
