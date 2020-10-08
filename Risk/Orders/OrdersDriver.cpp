@@ -11,11 +11,5 @@ int main(){
 
     OrdersList *ordl = new OrdersList(*deploy);
 
-
-
-
-
-
-
 return 0;
 };
