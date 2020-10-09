@@ -11,6 +11,10 @@ class MapLoader{
         MapLoader(string path); // constructor
         MapLoader(const MapLoader &mapLoader); // copy constructor
         ~MapLoader(); // destructor
+        // overloading assignment and string insertion
+        MapLoader& operator=(const MapLoader &mapLoader);
+        friend ostream& operator<<(std::ostream& out, const MapLoader &mapLoader);
+
         bool parse(); // parse the .map file
         int createMap(); // create a Map obj
     private:

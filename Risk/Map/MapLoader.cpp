@@ -16,6 +16,7 @@ MapLoader::MapLoader(string path){
 
 // copy constructor
 MapLoader::MapLoader(const MapLoader &mapLoader){
+    // copy everything
     mapPath = mapLoader.mapPath;
     error = mapLoader.error;
     continentsData = mapLoader.continentsData;
@@ -28,6 +29,22 @@ MapLoader::~MapLoader(){
     mapPath = "";
     error = 0;
     clearData(); // empty all arrays
+}
+
+// assignment operator
+MapLoader& MapLoader::operator=(const MapLoader &mapLoader){
+    mapPath = mapLoader.mapPath;
+    error = mapLoader.error;
+    continentsData = mapLoader.continentsData;
+    countriesData = mapLoader.countriesData;
+    bordersData = mapLoader.bordersData;
+
+    return *this;
+}
+
+// stream insertion operator
+ostream& operator<<(ostream& out, const MapLoader &mapLoader){
+    out << "Path: " << mapLoader.mapPath << "\nError(s): " << mapLoader.error;
 }
 
 // parse a .map file with a given path
