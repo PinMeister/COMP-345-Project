@@ -6,7 +6,7 @@ using namespace std;
 
 // each card has a type 
 enum CardType {
-	SPY, BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, DIPLOMACY
+	BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, DIPLOMACY
 };
 
 class Card {

@@ -13,9 +13,7 @@ CardType Card::getCardType() const {
 
 // SPY, BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, DIPLOMACY
 std::string Card::getCardTypeToString() const {
-	if (cardType == SPY)
-		return "spy";
-	else if (cardType == BOMB)
+	if (cardType == BOMB)
 		return "bomb";
 	else if (cardType == REINFORCEMENT)
 		return "reinforcement";
