@@ -8,7 +8,7 @@ using std::endl;
 
 using namespace std;
 
-void print(list<territories> const &list)
+void print(list<Territory*> const &list)
 {
 	for (auto const& i: list) {
 		std::cout << i << "\n";
@@ -17,9 +17,9 @@ void print(list<territories> const &list)
 
 
 int main() {
-	list<Territory> territories;
+	list<Territory*> territories;
 	Hand hand;
-	list<Orders> orders;
+	list<Orders*> orders;
 	int playerID = 1;
 	cout << "Player being created: " << endl;
 	Player player(territories, hand, orders, playerID);
