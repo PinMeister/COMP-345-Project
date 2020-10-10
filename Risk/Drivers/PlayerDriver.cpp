@@ -1,4 +1,4 @@
-#include "Player/Player.h"
+#include "../Player/Player.h"
 #include <iostream>
 #include <vector>
 
@@ -39,7 +39,7 @@ int main() {
 	palyer.issueOrder(tempOrder);
 
 	cout << "Player orders list AFTER adding a new ORDER: " << endl;
-	cout << print(player.orders) << endl;
+	print(player.orders);
 
 	return 0;
 }

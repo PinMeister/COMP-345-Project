@@ -1,12 +1,10 @@
-#pragma once
-
 #include <iostream>
 #include <string>
 #include <list>
 #include <string>
 
-#include "Orders/Orders.h"
-#include "Cards/Cards.h" // need part 3 to be done
+#include "../Orders/Orders.h"
+#include "../Cards/Cards.h" // need part 3 to be done
 
 using namespace std;
 
