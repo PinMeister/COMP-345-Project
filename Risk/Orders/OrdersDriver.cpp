@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iterator>
-#include <list>
+#include <vector>
+#include <algorithm>
 #include "Orders.h"
 
 using namespace std;
@@ -9,29 +10,44 @@ int main(){
 
     //creating pointers of user defined class type
 
-     Deploy *deploy = new Deploy();
-    Advance *advance = new Advance();
+    Deploy *deploy = new Deploy(2, "america");
+   /*  Advance *advance = new Advance();
     Bomb *bomb = new Bomb();
     Blockade *blockade = new Blockade();
     Airlift *airlift = new Airlift(); 
-    Negotiate *negotiate = new Negotiate();
+    Negotiate *negotiate = new Negotiate(); */
 
-    //creating list of Order* objects
+    //creating vector of Order* objects
 
-    std::list<Order*> list;
+    std::vector<Order*> vec;
 
     // placing elements in list
-    list.push_back(deploy);
-    list.push_back(advance);
-    list.push_back(bomb);
-    list.push_back(blockade);
-    list.push_back(airlift);
-    list.push_back(negotiate);
 
-    //placing the list in OrdersList object (which is a pointer type)
+    vec.push_back(deploy);
+   /*  vec.push_back(advance);
+    vec.push_back(bomb);
+    vec.push_back(blockade);
+    vec.push_back(airlift);
+    vec.push_back(negotiate); */
 
-    OrdersList *olist = new OrdersList(list);
+     //placing the list in OrdersList object (which is a pointer type)
+
+    OrdersList *olist = new OrdersList(vec);
+
+    /* olist->Delete(1);  */
     
+    for(int i=0; i < vec.size(); i++){
+        std::cout << vec.at(i) << ' ';
+    }
+    std::cout << "hi";
+    
+    delete deploy;
+ /*    delete advance;
+    delete bomb;
+    delete blockade;
+    delete airlift;
+    delete negotiate;
+    delete olist; */
 
 return 0;
 };

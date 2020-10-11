@@ -1,98 +1,45 @@
 #include <iostream>
 #include "Orders.h"
-#include <list>
-#include <list>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 
-class OrdersList {
-
-    private:
-        std::list<Order *>  orders;
-
-    public:
-        
-        OrdersList::OrdersList(std::list<Order *> ol){
-            orders = ol;
-        }
-
-};
-
-class Order { //parent class
-
-    public:
-
-        Order(){
-
-        }
-       
-    //validate and execute methods to be inherited by the order subclasses
-    void validate(){
-
-    }
-    void execute(){
-    
+    OrdersList::OrdersList(std::vector<Order*> vl){
+         orders = vl;
     }
 
-};
+    void OrdersList::Delete(int index){
+
+          orders.erase (orders.begin()+(index-1));
+
+     } 
 
 
-class Deploy : public Order {  //class Deploy inherits from Order
+    void OrdersList::move(int start, int end){
 
-    public:
-        Deploy::Deploy(){                 //constructor
+        //first iterator for the order that has to be moved
 
-        }
+        std::vector<Order *>::iterator itr1 = orders.begin();
+        std::advance(itr1, start-1);
 
-    friend ostream& operator << (ostream &strm, const Deploy &d){
+        //second iterator for the order that is to be swapped with
+        std::vector<Order *>::iterator itr2 = orders.begin();
+        std::advance(itr2, end-1);
 
-        return strm << "Deploy"; 
+        //swapping the two orders the iterators point to
 
-    }
-
-};
-
-//classes inheriting from order. yet to be implemented
-class Advance : public Order {
-
-    public:
-        Advance::Advance(){
+        std::iter_swap(*itr1, *itr2);
 
         }
 
-};
+     Deploy::Deploy(int a, string l){
+           armies = a;
+           location = l;
+       }
 
-class Bomb : public Order {
+     ostream& operator << (ostream & os, const Deploy &o){
+          return os << "Deploy " << o.armies << "to " << o.location << endl;
+     }
 
-    public:
-        Bomb::Bomb(){
 
-        }
-
-};
-
-class Blockade : public Order {
-
-    public:
-        Blockade::Blockade(){
-
-        }
-
-};
-
-class Airlift : public Order {
-
-    public:
-        Airlift::Airlift(){
-
-        }
-
-};
-
-class Negotiate : public Order {
-
-    public: Negotiate::Negotiate(){
-
-    }
-
-};

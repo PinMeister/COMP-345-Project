@@ -1,26 +1,15 @@
-#include <iostream>
-using namespace std;
 #pragma once
-
-
-class OrdersList{
-
-    private:
-        std::list<Order *>  orders;
-
-    public:
-        OrdersList::OrdersList(std::list<Order *> ol);
-
-    
-
-};
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
 
 class Order{
 
-friend ostream& operator << (ostream &, const Order &); //stream insertion operator added to be inherited 
-
-public:
-    Order::Order();
+    public:
+        Order(); //constructor
+        ~Order(); //destructor
+        friend ostream& operator << (ostream &, const Order &); //stream insertion operator added to be inherited 
 
     //validate and execute methods to be inherited by the order subclasses
     void validate(); 
@@ -28,17 +17,41 @@ public:
 
 };
 
-class Deploy : public Order { //class Deploy inherits from Order
+class OrdersList{
+    
+    private:
+        std::vector<Order*> orders;
 
     public:
-    Deploy::Deploy();  //constructor
+
+        OrdersList(std::vector<Order*> vl); //constructor
+        ~OrdersList(); //destructor
+
+        void Delete(int index);
+
+        void move(int start, int end);
+    
+
+};
+
+class Deploy : public Order { //class Deploy inherits from Order
+
+    private:
+        int armies;
+        string location;
+
+    public:
+        Deploy(int a, string l);  //constructor
+        ~Deploy(); //destructor
+        friend ostream& operator << (ostream &, const Deploy &); //stream insertion operator added to be inherited 
 
 };
 
 class Advance : public Order{
 
     public:
-        Advance::Advance(); //constructor
+        Advance(); //constructor
+        ~Advance(); //destructor
 
 
 };
@@ -46,15 +59,16 @@ class Advance : public Order{
 class Bomb : public Order{
 
     public:
-        Bomb::Bomb(); //constructor
-
+        Bomb(); //constructor
+        ~Bomb(); //destructor
 
 };
 
 class Blockade : public Order{
 
     public:
-        Blockade::Blockade(); //constructor
+        Blockade(); //constructor
+        ~Blockade(); //destructor
 
 
 };
@@ -62,7 +76,8 @@ class Blockade : public Order{
 class Airlift : public Order{
 
     public:
-        Airlift::Airlift(); //constructor
+        Airlift(); //constructor
+        ~Airlift(); //destructor
 
 
 };
@@ -70,7 +85,9 @@ class Airlift : public Order{
 class Negotiate : public Order{
 
     public:
-        Negotiate::Negotiate(); //constructor
+       Negotiate(); //constructor
+       ~Negotiate(); //destructor
 
 
 };
+
