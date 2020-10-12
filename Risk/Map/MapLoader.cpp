@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "MapLoader.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -45,6 +46,7 @@ MapLoader& MapLoader::operator=(const MapLoader &mapLoader){
 // stream insertion operator
 ostream& operator<<(ostream& out, const MapLoader &mapLoader){
     out << "Path: " << mapLoader.mapPath << "\nError(s): " << mapLoader.error;
+    return out;
 }
 
 // parse a .map file with a given path
@@ -90,6 +92,9 @@ bool MapLoader::parse(){
         }
         mapFile.close();
         cout << "Parse completed, " << error << " errors found.\n\n";
+        if (error > 0){
+            return 0;
+        }
     // if not successful
     }else{
         cout << "Unable to open map file " << mapPath << endl;
@@ -98,8 +103,31 @@ bool MapLoader::parse(){
     return 1;
 }
 
-int createMap(){
-    return 0;
+// create a Map obj using data continers
+void MapLoader::createMap(){
+    Map *map = new Map(); // new Map
+    // add continents to the Map
+    for (int i = 0; i < continentsData.names.size(); i++){
+        Continent *continent = new Continent(continentsData.names[i], stoi(continentsData.armyNums[i]));
+        map->addContinent(continent);
+    }
+
+    // add territories to the Map
+    for (int i = 0; i < countriesData.names.size(); i++){
+        Territory *country = new Territory(countriesData.names[i], continentsData.names[stoi(countriesData.continentId[i]) - 1]);
+        map->addTerritory(country);
+        // add territories to the continent
+        map->addTerritoryToContinent(country, stoi(countriesData.continentId[i]) - 1);
+    } 
+    
+    // add borders
+    for(int i = 0; i < bordersData.adjacent.size(); i++){
+        for(int j = 1; bordersData.adjacent[i].size() > 1 && j < bordersData.adjacent[i].size(); j++){
+            if (isDigit(bordersData.adjacent[i][j])){
+             map->addBorderIndex(i, stoi(bordersData.adjacent[i][j]) - 1);
+            }
+        }
+    }
 }
 
 // parse a single line in continents block
@@ -152,7 +180,7 @@ bool MapLoader::parseCountry(string line){
         // store the data in the conuntries data container
         countriesData.names.push_back(result[1]);
         countriesData.continentId.push_back(result[2]);
-        countriesData.pos.push_back({result[3], result[4]});
+        //countriesData.pos.push_back({result[3], result[4]});
         return 1;
     }
     return 0;
@@ -174,7 +202,7 @@ bool MapLoader::parseBorder(string line){
 }
 
 // split a string with a specified delimiter and return an array of elements
-vector<string> MapLoader::split(const string &line, char delim){
+vector<string> split(const string &line, char delim){
     vector<string> result;
     stringstream sstream(line);
     string element;
@@ -186,7 +214,7 @@ vector<string> MapLoader::split(const string &line, char delim){
 }
 
 // check if a string is a number
-bool MapLoader::isDigit(const string &str){
+bool isDigit(const string &str){
     // return if a string contains a non-number character
     return (str.find_first_not_of("0123456789") == string::npos);
 }

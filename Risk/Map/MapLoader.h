@@ -16,7 +16,7 @@ class MapLoader{
         friend ostream& operator<<(std::ostream& out, const MapLoader &mapLoader);
 
         bool parse(); // parse the .map file
-        int createMap(); // create a Map obj
+        void createMap(); // create a Map obj
     private:
         // data container for continents
         struct continents {
@@ -27,11 +27,11 @@ class MapLoader{
         struct countries {
             vector<string> names;
             vector<string> continentId;
-            vector<vector<string>> pos;
+            vector<vector<string> > pos;
         } countriesData;
         // data container for borders
         struct borders {
-            vector<vector<string>> adjacent;
+            vector<vector<string> > adjacent;
         } bordersData;
         string mapPath; // path to the .map file
         int error; // number of errors found when parsing and creating the map
