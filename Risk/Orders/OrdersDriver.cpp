@@ -17,8 +17,6 @@ int main(){
     Airlift *alt= new Airlift("canada", "usa", 2); 
     Negotiate *ngt = new Negotiate(6);
 
-    //Order *order = new Order(deploy);
-
     //creating vector of Order* objects
 
     vector<Order*> vec;
