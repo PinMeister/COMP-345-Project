@@ -4,7 +4,9 @@
 #include <sstream>
 #include <vector>
 
+#include "Map.h"
 #include "MapLoader.h"
+
 
 using namespace std;
 
@@ -16,6 +18,7 @@ MapLoader::MapLoader(string path){
 
 // copy constructor
 MapLoader::MapLoader(const MapLoader &mapLoader){
+    // copy everything
     mapPath = mapLoader.mapPath;
     error = mapLoader.error;
     continentsData = mapLoader.continentsData;
@@ -28,6 +31,23 @@ MapLoader::~MapLoader(){
     mapPath = "";
     error = 0;
     clearData(); // empty all arrays
+}
+
+// assignment operator
+MapLoader& MapLoader::operator=(const MapLoader &mapLoader){
+    mapPath = mapLoader.mapPath;
+    error = mapLoader.error;
+    continentsData = mapLoader.continentsData;
+    countriesData = mapLoader.countriesData;
+    bordersData = mapLoader.bordersData;
+
+    return *this;
+}
+
+// stream insertion operator
+ostream& operator<<(ostream& out, const MapLoader &mapLoader){
+    out << "Path: " << mapLoader.mapPath << "\nError(s): " << mapLoader.error;
+    return out;
 }
 
 // parse a .map file with a given path
@@ -73,6 +93,9 @@ bool MapLoader::parse(){
         }
         mapFile.close();
         cout << "Parse completed, " << error << " errors found.\n\n";
+        if (error > 0){
+            return 0;
+        }
     // if not successful
     }else{
         cout << "Unable to open map file " << mapPath << endl;
@@ -81,8 +104,32 @@ bool MapLoader::parse(){
     return 1;
 }
 
-int createMap(){
-    return 0;
+// create a Map obj using data continers
+Map* MapLoader::createMap(){
+    Map *map = new Map(); // new Map
+    // add continents to the Map
+    for (int i = 0; i < continentsData.names.size(); i++){
+        Continent *continent = new Continent(continentsData.names[i], stoi(continentsData.armyNums[i]));
+        map->addContinent(continent);
+    }
+
+    // add territories to the Map
+    for (int i = 0; i < countriesData.names.size(); i++){
+        Territory *country = new Territory(countriesData.names[i], continentsData.names[stoi(countriesData.continentId[i]) - 1]);
+        map->addTerritory(country);
+        // add territories to the continent
+        map->addTerritoryToContinent(country, stoi(countriesData.continentId[i]) - 1);
+    } 
+    
+    // add borders
+    for(int i = 0; i < bordersData.adjacent.size(); i++){
+        for(int j = 1; bordersData.adjacent[i].size() > 1 && j < bordersData.adjacent[i].size(); j++){
+            if (isDigit(bordersData.adjacent[i][j])){
+             map->addBorderIndex(i, stoi(bordersData.adjacent[i][j]) - 1);
+            }
+        }
+    }
+    return map;
 }
 
 // parse a single line in continents block
@@ -135,7 +182,7 @@ bool MapLoader::parseCountry(string line){
         // store the data in the conuntries data container
         countriesData.names.push_back(result[1]);
         countriesData.continentId.push_back(result[2]);
-        countriesData.pos.push_back({result[3], result[4]});
+        //countriesData.pos.push_back({result[3], result[4]});
         return 1;
     }
     return 0;
