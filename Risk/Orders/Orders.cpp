@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include "Orders.h"
 
 using namespace std;
@@ -56,6 +57,18 @@ using namespace std;
      }
 
      // for Order
+
+     Order::Order(Order* o){ //constructor
+           ord = o;
+       }
+
+     Order::Order(const Order &order){ //copy constructor
+          ord= order.ord;
+     }
+
+     Order::~Order(){  //destructor
+          delete ord;
+     }
 
      ostream& operator << (ostream &os, const Order &order){ //stream insertion operator for Order
           return os << "Order"<< endl;

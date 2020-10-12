@@ -2,23 +2,24 @@
 #define HEADERFILE_H
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
 class Order{
 
     public:
-        /* Order(); //constructor
+        Order(); //constructor
         Order(const Order &order); //copy constructor
         ~Order(); //destructor
-        Order& operator=(const Order &order); //assignment operator */
+        Order& operator=(const Order &order); //assignment operator 
 
         friend ostream& operator << (ostream &os, const Order &order); //stream insertion operator for Order
          
 
-    //validate and execute methods to be inherited by the Order subclasses
-    void validate(); 
-    void execute();
+        //validate and execute methods to be inherited by the Order subclasses
+        void validate(); 
+        void execute();
 
 };
 
