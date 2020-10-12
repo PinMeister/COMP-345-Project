@@ -3,44 +3,91 @@ using namespace std;
 
 #include <iostream>
 #include <string>
-
-// each card has a type 
-enum CardType {
-	BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, DIPLOMACY
-};
+#include <vector>
 
 class Card {
-private:
+
 public:
-	Card() = default;
+	// enum for card type
+	enum CardType {
+		BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, DIPLOMACY
+	};
+
+	// constructor
+	Card(CardType val);	
+	// copy constructor
+	Card(const Card &card);	
+	// deconstructor
+	~Card();
+	// assignment operator
+	Card& operator = (const Card &card);
+	// stream operator
+	friend ostream& operator << (std::ostream& out, const Card &card); 
+
 	// getter function for card type
-	void getCardType() const;
+	CardType getCardType();
 
-	// converting enum to string
-	std::string getCardTypeToString() const; 
-
-	// setter function for card type
-	void setCardType(cardType cardType);
-
-	// play method that plays the card (creates order and adds to player's list of orders, then returns card to deck)
 	void play();
-
+private:
+	CardType *val;
 };
 
 class Deck {
-
 private:
+	// int deckSize;
+	// int numBomb;
+	// int numbReinforcement;
+	// int numBlockade;
+	// int numbAirlift;
+	// int numDiplomacy;
+	
 public: 
-	Deck() = default;
-	// player draws card at random from cards remaining and puts into their hand
-	void draw();
 
+	// constructor
+	Deck();
+	// copy constructor
+	Deck( const Deck &deck);
+	// destructor
+	~Deck();
+	// assignment operator
+	Deck& operator = ( const Deck &deck);
+
+	explicit Deck(vector<Card *> &cards);
+	// stream operator
+	friend ostream& operator << (std::ostream& out, const Deck &deck);
+
+	vector<Card*> *cards;
+	void printDeck();
+	
+	Card draw();
+	// player draws card at random from cards remaining and puts into their hand
+	int getNumberOfCards(); 
+
+	int get_DeckSize();
 };
 
 // hand has finite collection of cards, taken from deck. When played, cards leave hand and return to deck
 class Hand {
 private:
+	vector<Card*> *cards;
+	int numHandCards;
+	int maxCards;
 public:
-	Hand() = default;
+
+	// constructor
+	Hand();
+	// copy constructor
+	Hand( const Hand &hand);
+	// destructor
+	~Hand();
+	// assignment operator
+	Hand& operator = ( const Hand &hand);
+	// stream operator
+	friend ostream& operator << (std::ostream& out, const Deck &deck);
+	vector<Card*> * get_cards();
+	// void getHand();
+	// void printHand();
+	int getNumberHandCards();
+	// Card play();
 
 };
