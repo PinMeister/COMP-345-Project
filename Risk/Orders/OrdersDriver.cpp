@@ -1,8 +1,7 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
-#include <algorithm>
-#include "Orders.h"
+#include "Orders.cpp"
 
 using namespace std;
 
@@ -33,12 +32,6 @@ int main(){
     //placing the list in OrdersList object (which is a pointer type)
 
     OrdersList *olist = new OrdersList(vec);
-
-    olist->Delete(1); 
-    
-    for(int i=0; i < vec.size(); i++){
-        std::cout << vec.at(i) << ' ';
-    }
    
     delete deploy; 
     delete advance;

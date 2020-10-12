@@ -2,7 +2,7 @@
 #define HEADERFILE_H
 #include <iostream>
 #include <vector>
-#include <algorithm>
+
 using namespace std;
 
 class Order{
@@ -29,7 +29,7 @@ class OrdersList{
 
     public:
 
-        OrdersList(std::vector<Order*> vl); //constructor
+        OrdersList(std::vector<Order*> ord); //constructor
         OrdersList(const OrdersList &ordersList); //copy constructor
         ~OrdersList(); //destructor
         OrdersList& operator=(const OrdersList &ordersList); //assignment operator
