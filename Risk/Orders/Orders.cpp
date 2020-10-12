@@ -1,19 +1,38 @@
 #include <iostream>
-#include "Orders.h"
 #include <vector>
 #include <algorithm>
+#include "Orders.h"
+
 using namespace std;
 
 
-    OrdersList::OrdersList(std::vector<Order*> vl){
-         orders = vl;
+     // for OrdersList
+
+    OrdersList::OrdersList(std::vector<Order*> ord){   //constructor
+         orders = ord;
     }
+
+
+     OrdersList::OrdersList(const OrdersList &ordersList){ //copy constructor
+          orders= ordersList.orders;
+     }
+
+     OrdersList::~OrdersList(){ //destructor
+          orders.clear();
+     }
 
     void OrdersList::Delete(int index){
 
           orders.erase (orders.begin()+(index-1));
 
      } 
+
+     OrdersList& OrdersList::operator=(const OrdersList &ordersList){ //assignment operator
+
+          orders = ordersList.orders;
+          
+          return *this;
+     }
 
 
     void OrdersList::move(int start, int end){
@@ -33,13 +52,71 @@ using namespace std;
 
         }
 
-     Deploy::Deploy(int a, string l){
+     ostream& operator << (ostream &os, const OrdersList &ordersList){ //stream insertion operator for OrdersList
+          return os << "Order List contains " << ordersList.orders<< endl;
+     }
+
+     // for Order
+
+     ostream& operator << (ostream &os, const Order &order){ //stream insertion operator for Order
+          return os << "Order"<< endl;
+     }
+
+     // for Deploy
+
+     Deploy::Deploy(int a, string l){ //constructor
            armies = a;
            location = l;
        }
 
-     ostream& operator << (ostream & os, const Deploy &o){
-          return os << "Deploy " << o.armies << "to " << o.location << endl;
+     Deploy::Deploy(const Deploy &deploy){ //copy constructor
+          armies= deploy.armies;
+          location=deploy.location;
+     }
+
+     Deploy::~Deploy(){  //destructor
+          armies = 0;
+          location="";
+     }
+
+     Deploy& Deploy::operator=(const Deploy &deploy){ //assignment operator
+          armies= deploy.armies;
+          location=deploy.location;
+
+           return *this;
+     }
+
+     ostream& operator << (ostream & os, const Deploy &deploy){  //stream insertion operator for Deploy
+          return os << "Deploy " << deploy.armies << "to " << deploy.location << endl;
      }
 
 
+     // for Advance
+
+     ostream& operator << (ostream &os, const Advance &advance){ //stream insertion operator for Advance
+          return os << "Advance"<< endl;
+     }
+
+     // for Bomb
+
+      ostream& operator << (ostream &os, const Bomb &bomb){ //stream insertion operator for Bomb
+          return os << "Bomb"<< endl;
+     }
+
+     // for Blockade
+
+     ostream& operator << (ostream &os, const Blockade &blockade){ //stream insertion operator for Blockade
+               return os << "Blockade"<< endl;
+          }
+
+     // for Airlift
+
+     ostream& operator << (ostream &os, const Airlift &airlift){ //stream insertion operator for Airlift
+               return os << "Airlift"<< endl;
+          }
+
+     // for Negotiate
+
+     ostream& operator << (ostream &os, const Negotiate &negotiate){ //stream insertion operator for Negotiate
+               return os << "Negotiate"<< endl;
+          }
