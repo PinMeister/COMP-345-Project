@@ -20,8 +20,8 @@ void Map::addTerritory(Territory *territory) {
 }
 
 void Map::addBorder(Territory *t1, Territory *t2) {
-    //territories[t1].push_back(t2);
-    //territories[t2].push_back(t1);
+    t1->neighbours.push_back(t2);
+    t2->neighbours.push_back(t1);
 }
 
 vector<Territory*> Map::getTerritories() {

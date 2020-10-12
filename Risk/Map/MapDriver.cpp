@@ -21,11 +21,17 @@ int main() {
 
     territories = map.getTerritories();
 
+    map.addBorder(canada, us);
+    map.addBorder(us, mexico);
+
+    // check for neighbours
     for (size_t i = 0; i < territories.size(); i++) {
-        cout << territories[i]->getName() << endl;
+        cout << territories[i]->getName() + " has " + to_string(territories[i]->neighbours.size()) + " neighbours." << endl;
+        cout << territories[i]->getName() + "'s neighbours:" << endl;
+        for (size_t j = 0; j < territories[i]->neighbours.size(); j++) {
+            cout << "- " + territories[i]->neighbours[j]->getName() << endl;
+        }
     }
 
     cin.get();
-    //map.addBorder(canada, us);
-    //map.addBorder(us, mexico);
 }

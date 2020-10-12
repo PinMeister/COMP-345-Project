@@ -14,10 +14,10 @@ public:
     Territory(const Territory &territory);
     string getName();
     bool checkContinent();
+    vector<Territory*> neighbours;
 private:
     string name;
     string continent;
-    vector<Territory*> neighbours;
 };
 
 class Continent {
@@ -38,7 +38,7 @@ public:
     Map(vector<Territory*> territories);
     Map(const Map &map);
     void addTerritory(Territory* territory);
-    void addBorder(Territory* t1, Territory* t2); 
+    void addBorder(Territory* t1, Territory* t2);
     vector<Territory*> getTerritories();
     bool mapValidate();
 private:
