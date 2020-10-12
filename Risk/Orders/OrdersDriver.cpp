@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
-#include "Orders.cpp"
+#include "Orders.h"
 
 using namespace std;
 
@@ -9,7 +9,7 @@ int main(){
 
     //creating pointers of user defined class type
 
-    Deploy *deploy = new Deploy(2, "america");
+    Deploy *deploy = new Deploy(2, "usa");
     Advance *advance = new Advance();
     Bomb *bomb = new Bomb();
     Blockade *blockade = new Blockade();
@@ -18,7 +18,7 @@ int main(){
 
     //creating vector of Order* objects
 
-    std::vector<Order*> vec;
+    vector<Order*> vec;
 
     // placing elements in list
 

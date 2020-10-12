@@ -25,11 +25,11 @@ class Order{
 class OrdersList{
     
     private:
-        std::vector<Order*> orders;
+        vector<Order*> orders;
 
     public:
 
-        OrdersList(std::vector<Order*> ord); //constructor
+        OrdersList(vector<Order*> ord); //constructor
         OrdersList(const OrdersList &ordersList); //copy constructor
         ~OrdersList(); //destructor
         OrdersList& operator=(const OrdersList &ordersList); //assignment operator

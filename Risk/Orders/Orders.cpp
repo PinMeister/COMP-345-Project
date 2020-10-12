@@ -7,7 +7,7 @@ using namespace std;
 
      // for OrdersList
 
-    OrdersList::OrdersList(std::vector<Order*> ord){   //constructor
+    OrdersList::OrdersList(vector<Order*> ord){   //constructor
          orders = ord;
     }
 
