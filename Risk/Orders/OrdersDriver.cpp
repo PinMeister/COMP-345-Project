@@ -9,12 +9,12 @@ int main(){
 
     //creating pointers of user defined class type
 
-    Deploy *deploy = new Deploy(2, "usa");
-    Advance *advance = new Advance();
-    Bomb *bomb = new Bomb();
-    Blockade *blockade = new Blockade();
-    Airlift *airlift = new Airlift(); 
-    Negotiate *negotiate = new Negotiate();
+    Deploy *deploy = new Deploy(2, "canada");
+    Advance *advance = new Advance("canada", "usa", 2);
+    Bomb *bomb = new Bomb("mexico");
+    Blockade *blockade = new Blockade("canada");
+    Airlift *airlift = new Airlift("canada", "usa", 2); 
+    Negotiate *negotiate = new Negotiate(6);
 
     //creating vector of Order* objects
 

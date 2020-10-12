@@ -8,10 +8,10 @@ using namespace std;
 class Order{
 
     public:
-        Order(); //constructor
+        /* Order(); //constructor
         Order(const Order &order); //copy constructor
         ~Order(); //destructor
-        Order& operator=(const Order &order); //assignment operator
+        Order& operator=(const Order &order); //assignment operator */
 
         friend ostream& operator << (ostream &os, const Order &order); //stream insertion operator for Order
          
@@ -23,9 +23,6 @@ class Order{
 };
 
 class OrdersList{
-    
-    private:
-        vector<Order*> orders;
 
     public:
 
@@ -38,15 +35,14 @@ class OrdersList{
 
         void Delete(int index);
         void move(int start, int end);
+
+    private:
+        vector<Order*> orders;
     
 
 };
 
 class Deploy : public Order { //class Deploy inherits from Order
-
-    private:
-        int armies;
-        string location;
 
     public:
         Deploy(int a, string l);  //constructor
@@ -55,66 +51,91 @@ class Deploy : public Order { //class Deploy inherits from Order
         Deploy& operator=(const Deploy &deploy); //assignment operator
 
         friend ostream& operator << (ostream &os, const Deploy &deploy); //stream insertion operator for Deploy 
+
+
+    private:
+        int armies;
+        string location;
         
 };
 
 class Advance : public Order{
 
     public:
-        Advance(); //constructor
+        Advance(string s, string t, int a); //constructor
         Advance(const Advance &advance); //copy constructor
         ~Advance(); //destructor
         Advance& operator=(const Advance &advance); //assignment operator
 
-        friend ostream& operator << (ostream &os, const Advance &advance); //stream insertion operator for Advance         
+        friend ostream& operator << (ostream &os, const Advance &advance); //stream insertion operator for Advance  
+
+    private:
+         string source;
+         string target;
+         int armies;
+
 
 };
 
 class Bomb : public Order{
 
     public:
-        Bomb(); //constructor
+        Bomb(string t); //constructor
         Bomb(const Bomb &bomb); //copy constructor
         ~Bomb(); //destructor
         Bomb& operator=(const Bomb &bomb); //assignment operator
 
         friend ostream& operator << (ostream &os, const Bomb &bomb); //stream insertion operator for Bomb
 
+    private:
+        string target;
+
 };
 
 class Blockade : public Order{
 
     public:
-        Blockade(); //constructor
+        Blockade(string t); //constructor
         Blockade(const Blockade &blockade); //copy constructor
         ~Blockade(); //destructor
         Blockade& operator=(const Blockade &blockade); //assignment operator
         
         friend ostream& operator << (ostream &os, const Blockade &blockade); //stream insertion operator for Blockade
 
+    private:
+        string territory;
+
 };
 
 class Airlift : public Order{
 
     public:
-        Airlift(); //constructor
+        Airlift(string o, string d, int a); //constructor
         Airlift(const Airlift &airlift); //copy constructor
         ~Airlift(); //destructor
         Airlift& operator=(const Airlift &airlift); //assignment operator
 
         friend ostream& operator << (ostream &os, const Airlift &airlift); //stream insertion operator for Airlift
 
+        private:
+            string origin;
+            string destination;
+            int armies;
+
 };
 
 class Negotiate : public Order{
 
     public:
-       Negotiate(); //constructor
+       Negotiate(int p); //constructor
        Negotiate(const Negotiate &negotiate); //copy constructor
        ~Negotiate(); //destructor
        Negotiate& operator=(const Negotiate &negotiate); //assignment operator
 
        friend ostream& operator << (ostream &os, const Negotiate &negotiate); //stream insertion operator for Negotiate
+
+       private:
+        int playerID;
 
 };
 
