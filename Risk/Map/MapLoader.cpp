@@ -4,8 +4,9 @@
 #include <sstream>
 #include <vector>
 
-#include "MapLoader.h"
 #include "Map.h"
+#include "MapLoader.h"
+
 
 using namespace std;
 
@@ -104,7 +105,7 @@ bool MapLoader::parse(){
 }
 
 // create a Map obj using data continers
-void MapLoader::createMap(){
+Map* MapLoader::createMap(){
     Map *map = new Map(); // new Map
     // add continents to the Map
     for (int i = 0; i < continentsData.names.size(); i++){
@@ -128,6 +129,7 @@ void MapLoader::createMap(){
             }
         }
     }
+    return map;
 }
 
 // parse a single line in continents block
@@ -202,7 +204,7 @@ bool MapLoader::parseBorder(string line){
 }
 
 // split a string with a specified delimiter and return an array of elements
-vector<string> split(const string &line, char delim){
+vector<string> MapLoader::split(const string &line, char delim){
     vector<string> result;
     stringstream sstream(line);
     string element;
@@ -214,7 +216,7 @@ vector<string> split(const string &line, char delim){
 }
 
 // check if a string is a number
-bool isDigit(const string &str){
+bool MapLoader::isDigit(const string &str){
     // return if a string contains a non-number character
     return (str.find_first_not_of("0123456789") == string::npos);
 }

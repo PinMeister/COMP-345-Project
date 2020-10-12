@@ -16,7 +16,7 @@ class MapLoader{
         friend ostream& operator<<(std::ostream& out, const MapLoader &mapLoader);
 
         bool parse(); // parse the .map file
-        void createMap(); // create a Map obj
+        Map* createMap(); // create a Map obj
     private:
         // data container for continents
         struct continents {
