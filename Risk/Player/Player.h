@@ -4,7 +4,7 @@
 #include <string>
 
 #include "../Orders/Orders.h"
-#include "../Cards/Cards.h" // need part 3 to be done
+#include "../Cards/Cards.h" 
 
 using namespace std;
 
@@ -19,4 +19,7 @@ public:
 	list<Territory> toDefend();
 	list<Territory> toAttack();
 	void issueOrder(Orders* order);
+	Player(const Player &player); // copy constructor
+	Player& operator=(const Player &player); //assignment operator
+	friend ostream& operator << (ostream &os, const Player &player); //stream insertion operator for Player
 };
