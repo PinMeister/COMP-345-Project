@@ -365,3 +365,16 @@ MigrationBackup/
 .history
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
+
+# VS2017 solution files
+/VS2017/Warzone/Debug/Map.obj
+/VS2017/Warzone/Debug/MapDriver.obj
+/VS2017/Warzone/Debug/vc141.idb
+/VS2017/Warzone/Debug/vc141.pdb
+/VS2017/Warzone/Debug/Warzone.exe
+/VS2017/Warzone/Debug/Warzone.ilk
+/VS2017/Warzone/Debug/Warzone.log
+/VS2017/Warzone/Debug/Warzone.pdb
+/VS2017/Warzone/Debug/Warzone.tlog/CL.command.1.tlog
+/VS2017/Warzone/Debug/Warzone.tlog/CL.read.1.tlog
+/VS2017/Warzone/Debug/Warzone.tlog/CL.write.1.tlog
