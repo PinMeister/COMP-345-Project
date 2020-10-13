@@ -15,6 +15,7 @@ public:
     string getName();
     string getContinent();
     vector<Territory*> neighbours;
+    bool visited;
 private:
     string name;
     string continent;
@@ -27,6 +28,7 @@ public:
     Continent(string name, int armies, vector<Territory*> members);
     Continent(const Continent &continent);
     void addTerritory(Territory* territory);
+    string getName();
     vector<Territory*> getMembers();
 private:
     string name;
@@ -48,9 +50,12 @@ public:
     vector<Territory*> getTerritories();
     vector<Continent*> getContinents();
     bool mapValidate();
-    bool checkConnectedGraphs();
+    bool checkMapConnectedGraph();
     bool checkContinentGraphs();
     bool checkContinentMembership();
+    int visitNeighbours(Territory* territory, int visited);
+    int visitContinentNeighbours(Territory* territory, string continent, int visited);
+    void resetVisitedTerritories();
 private:
     vector<Territory*> territories;
     vector<Continent*> continents;
