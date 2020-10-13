@@ -62,7 +62,7 @@ int main() {
     map.addBorder(elSalvador, honduras);
     map.addBorder(honduras, nicaragua);
 
-    // check for neighbours
+    // Check for neighbours
     for (size_t i = 0; i < territories.size(); i++) {
         cout << "\n" + territories[i]->getName() + " has " + to_string(territories[i]->neighbours.size()) + " neighbour(s):" << endl;
         for (size_t j = 0; j < territories[i]->neighbours.size(); j++) {
