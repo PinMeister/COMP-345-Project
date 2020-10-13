@@ -1,25 +1,36 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include "Map.h"
 
 using namespace std;
 
 Map::Map() {}
 
-Map::Map(vector<Territory*> territories) {
+Map::Map(vector<Territory*> territories, vector<Continent*> continents) {
     this->territories = territories;
+    this->continents = continents;
 }
 
 Map::Map(const Map &map) {
     this->territories = map.territories;
+    this->continents = map.continents;
 }
 
-void Map::addContinent(Continent *continent){
+void Map::addContinent(Continent *continent) {
     continents.push_back(continent);
 }
 
-void Map::addTerritoryToContinent(Territory *territory, int continentId){
+int Map::getContinentIndex(Continent *continent) {
+    auto iterator = find(continents.begin(), continents.end(), continent);
+    if (iterator != continents.end()) 
+        return distance(continents.begin(), iterator);
+    else
+        return -1;
+}
+
+void Map::addTerritoryToContinent(Territory *territory, int continentId) {
     continents[continentId]->addTerritory(territory);
 }
 
@@ -45,6 +56,25 @@ vector<Territory*> Map::getTerritories() {
     return territories;
 }
 
+/*bool Map::checkConnectedGraphs() {
+
+}*/
+
+bool Map::checkContinentMembership() {
+    map<string, string> listOfCountries;
+    for (size_t i = 0; i < continents.size(); i++) {
+        vector<Territory*> continentMembers = continents[i]->getMembers();
+        for (size_t j = 0; j < continentMembers.size(); j++)
+            if (listOfCountries.count(continentMembers[j]->getName()) > 0) {
+                return false;
+            }
+            else {
+                listOfCountries[continentMembers[j]->getName()] = continentMembers[j]->getContinent();
+            }
+    }
+    return true;    
+}
+
 Territory::Territory() {};
 
 Territory::Territory(string name, string continent) {
@@ -68,6 +98,10 @@ string Territory::getName() {
     return name;
 }
 
+string Territory::getContinent() {
+    return continent;
+}
+
 Continent::Continent() {};
 
 Continent::Continent(string name, int armies) {
@@ -87,6 +121,10 @@ Continent::Continent(const Continent &continent) {
     this->members = continent.members;
 }
 
-void Continent::addTerritory(Territory* territory){
+void Continent::addTerritory(Territory* territory) {
     members.push_back(territory);
+}
+
+vector<Territory*> Continent::getMembers() {
+    return members;
 }
