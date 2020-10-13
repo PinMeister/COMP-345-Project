@@ -7,7 +7,6 @@
 #include "Map.h"
 #include "MapLoader.h"
 
-
 using namespace std;
 
 // constructor
@@ -92,7 +91,7 @@ bool MapLoader::parse(){
             }
         }
         mapFile.close();
-        cout << "Parse completed, " << error << " errors found.\n\n";
+        cout << "Parse completed, " << error << " errors found.\n";
         if (error > 0){
             return 0;
         }
