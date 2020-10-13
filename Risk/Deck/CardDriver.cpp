@@ -12,7 +12,12 @@ int main() {
 	cout << "++++++++++++" << endl;
 
 
+    Deck* deck = new Deck(); 
+    Hand* hand = new Hand();
 
+
+    cout << deck << endl;
+    cout << hand << endl;
 
 return 0;
 }

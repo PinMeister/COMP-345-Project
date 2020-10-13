@@ -5,7 +5,7 @@ using namespace std;
 
 // constructor and copy constructor
 Card::Card(CardType type) {
-	this->val = new CardType;
+	this->val = type;
 }
 
 Card::Card(const Card &card) {
@@ -13,49 +13,62 @@ Card::Card(const Card &card) {
 }
 
 Card::~Card() {
-	delete val;
-	val = nullptr;
+	delete this;
 }
 
 Card::CardType Card::getCardType() {
-	return *val;
+	return this->val;
 }
 
 ostream& operator<<(ostream& out, const Card &card){
     return out << "Card Type: " << card.val << endl;
 }
 
-// void Card::play() {
+void Card::play() {
 // 	this.card
-// }
-
-Deck::Deck() {
-	cards = new vector<Card*>;
+	return;
 }
 
-Deck::Deck(vector<Card *> &cards) {
-    this->cards = new vector<Card *>(cards.size());
-    auto deckCardsIterator = this->cards->begin();
-    auto previousCardsIterator = cards.begin();
-    for (size_t i = 0; i < cards.size(); i++) {
-        *deckCardsIterator = new Card(**previousCardsIterator);
-        deckCardsIterator++;
-        previousCardsIterator++;
+Deck::Deck() {
+	for (auto i = 0; i < 56;  ++i)
+	{
+		if(i % 5 == 0) {
+			cards.push_back(new Card(Card::BOMB)); 
+		}
+		else if(i % 4 == 1) {
+			cards.push_back(new Card(Card::REINFORCEMENT)); 
+		}
+		else if(i % 4 == 2) {
+			cards.push_back(new Card(Card::BLOCKADE)); 
+		}
+		else if(i % 4 == 3) {
+			cards.push_back(new Card(Card::AIRLIFT)); 
+		}
+		else{
+			cards.push_back(new Card(Card::DIPLOMACY)); 
+		}
+	}
+}
+
+Deck::Deck(vector<Card*> &cpy_cards) {
+    // vector<Card*> temp  = new vector<Card*>(cards.size());
+    auto cardsIterator = cpy_cards.begin();
+    for (std::vector<Card*>::iterator it = cardsIterator; it != cards.end(); ++it) {
+		cards.push_back(new Card(**it));
     }
 }
 
 Deck::~Deck() {
-	delete cards;
-	cards = nullptr;
+	delete this;
 }
 
 int Deck::get_DeckSize() {
-	return this->cards->size();
+	return cards.size();
 }
 
 Card Deck::draw(){
-	Card card(*(cards->back()));
-	cards->pop_back();
+	Card card(*(cards.back()));
+	cards.pop_back();
 	return card;
 }
 

@@ -29,7 +29,7 @@ public:
 
 	void play();
 private:
-	CardType *val;
+	CardType val;
 };
 
 class Deck {
@@ -56,7 +56,7 @@ public:
 	// stream operator
 	friend ostream& operator << (std::ostream& out, const Deck &deck);
 
-	vector<Card*> *cards;
+	vector<Card*> cards;
 	void printDeck();
 	
 	Card draw();
