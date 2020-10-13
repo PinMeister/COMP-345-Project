@@ -19,6 +19,23 @@ Map::Map(vector<Territory*> territories, vector<Continent*> continents) {
 Map::Map(const Map &map) {
     this->territories = map.territories;
     this->continents = map.continents;
+
+}// Assignment operator
+Map& Map::operator=(const Map &map) {
+    this->territories = map.territories;
+    this->continents = map.continents;
+    return *this;
+}
+
+// Stream insertion operator
+ostream& operator<<(ostream& out, Map map) {
+    vector<Territory*> territories = map.getTerritories();
+    vector<Continent*> continents = map.getContinents();
+    for (int i = 0; i < territories.size(); i++)
+        out << "Territory name: " + territories[i]->getName();
+    for (int i = 0; i < continents.size(); i++)
+        out << "Continent name: " + continents[i]->getName();
+    return out;
 }
 
 // Add continent to map
@@ -207,6 +224,21 @@ Territory::Territory(const Territory &territory) {
     this->visited = territory.visited;
 }
 
+// Assignment operator
+Territory& Territory::operator=(const Territory &territory) {
+    this->name = territory.name;
+    this->continent = territory.continent;
+    this->neighbours = territory.neighbours;
+    this->visited = territory.visited;
+    return *this;
+}
+
+// Stream insertion operator     
+ostream& operator << (ostream &out, Territory territory) {
+    out << "Name: " << territory.getName() << " Continent: " << territory.getContinent();
+    return out;
+}
+
 // Return name of territory
 string Territory::getName() {
     return name;
@@ -238,6 +270,21 @@ Continent::Continent(const Continent &continent) {
     this->name = continent.name;
     this->numOfArmies = continent.numOfArmies;
     this->members = continent.members;
+}
+
+
+// Assignment operator
+Continent& Continent::operator=(const Continent &continent) {
+    this->name = continent.name;
+    this->numOfArmies = continent.numOfArmies;
+    this->members = continent.members;
+    return *this;
+}
+
+// Stream insertion operator     
+ostream& operator << (ostream &out, Continent continent) {
+    out << "Name: " << continent.getName();
+    return out;
 }
 
 // Add territory as a member of the continent

@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
 
-    //Hardcoded map
+    // Hardcoded map
     vector<Territory*> territories;
     vector<Continent*> continents;
     Map map(territories, continents);
