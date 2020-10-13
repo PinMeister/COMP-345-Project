@@ -38,9 +38,8 @@ class OrdersList{
         void move(int start, int end);
 
     private:
-        vector<Order*> orders;
+        vector<Order*> orders; //list of orders
     
-
 };
 
 class Deploy : public Order { //class Deploy inherits from Order
@@ -57,6 +56,8 @@ class Deploy : public Order { //class Deploy inherits from Order
     private:
         int armies;
         string location;
+        void validate(); 
+        void execute();
         
 };
 
@@ -71,10 +72,11 @@ class Advance : public Order{
         friend ostream& operator << (ostream &os, const Advance &advance); //stream insertion operator for Advance  
 
     private:
-         string source;
-         string target;
-         int armies;
-
+        string source;
+        string target;
+        int armies;
+        void validate(); 
+        void execute();
 
 };
 
@@ -90,7 +92,8 @@ class Bomb : public Order{
 
     private:
         string target;
-
+        void validate(); 
+        void execute();
 };
 
 class Blockade : public Order{
@@ -105,7 +108,8 @@ class Blockade : public Order{
 
     private:
         string territory;
-
+        void validate(); 
+        void execute();
 };
 
 class Airlift : public Order{
@@ -122,7 +126,8 @@ class Airlift : public Order{
             string origin;
             string destination;
             int armies;
-
+            void validate(); 
+            void execute();
 };
 
 class Negotiate : public Order{
@@ -137,7 +142,8 @@ class Negotiate : public Order{
 
        private:
         int playerID;
-
+        void validate(); 
+        void execute();
 };
 
 #endif

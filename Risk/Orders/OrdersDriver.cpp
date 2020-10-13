@@ -15,7 +15,7 @@ int main(){
     Bomb *bmb = new Bomb("mexico");
     Blockade *blckd = new Blockade("canada");
     Airlift *alt= new Airlift("canada", "usa", 2); 
-    Negotiate *ngt = new Negotiate(6);
+    Negotiate *ngt = new Negotiate(6); 
 
     //creating vector of Order* objects
 
@@ -28,20 +28,22 @@ int main(){
     vec.push_back(bmb);
     vec.push_back(blckd);
     vec.push_back(alt);
-    vec.push_back(ngt);
+    vec.push_back(ngt); 
 
-    //placing the list in OrdersList object (which is a pointer type)
+   //placing the list in OrdersList object
 
-    OrdersList *olist = new OrdersList(vec);
-   
+   OrdersList *olist = new OrdersList(vec);
+
    //deleting the pointers
+
     delete depl; 
-    delete adv;
+    delete adv; 
     delete bmb;
     delete blckd;
     delete alt;
     delete ngt;
-    delete olist; 
+
+    delete olist;  
 
 
     return 0;

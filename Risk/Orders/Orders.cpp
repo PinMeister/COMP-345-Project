@@ -21,12 +21,6 @@ using namespace std;
           orders.clear();
      }
 
-    void OrdersList::Delete(int index){
-
-          orders.erase (orders.begin()+(index-1));
-
-     } 
-
      OrdersList& OrdersList::operator=(const OrdersList &ordersList){ //assignment operator
 
           orders = ordersList.orders;
@@ -34,8 +28,13 @@ using namespace std;
           return *this;
      }
 
+    void OrdersList::Delete(int index){                          //Delete method
 
-    void OrdersList::move(int start, int end){
+          orders.erase(orders.begin()+(index-1));
+
+     } 
+
+    void OrdersList::move(int start, int end){                   //move method
 
         //first iterator for the order that has to be moved
 
@@ -50,13 +49,33 @@ using namespace std;
 
         std::iter_swap(*itr1, *itr2);
 
-        }
+        } 
 
      ostream& operator << (ostream &os, const OrdersList &ordersList){ //stream insertion operator for OrdersList
-          return os << "Order List contains " << ordersList.orders<< endl;
+
+               for(int i=0;i<ordersList.orders.size();i++)
+               cout << ordersList.orders[i];
+               return os;
+         
      }
 
      // for Order
+
+     Order::Order(){ //constructor
+           
+       }
+
+     Order::Order(const Order &order){ //copy constructor
+          
+     }
+
+     Order::~Order(){  //destructor
+          
+     }
+     
+     Order& Order::operator=(const Order &order){ //assignment operator
+           return *this;
+     }
 
      ostream& operator << (ostream &os, const Order &order){ //stream insertion operator for Order
           return os << "Order"<< endl;
@@ -88,6 +107,14 @@ using namespace std;
 
      ostream& operator << (ostream & os, const Deploy &deploy){  //stream insertion operator for Deploy
           return os << "Deploy " << deploy.armies << " to " << deploy.location << endl;
+     }
+
+     void Deploy  :: validate() {
+          
+     }
+
+     void Deploy  :: execute() {
+          
      }
 
 
@@ -124,6 +151,14 @@ using namespace std;
           return os << "Advance " << advance.armies << " armies from " << advance.source << " to " << advance.target <<endl;
      }
 
+     void Advance  :: validate() {
+          
+     }
+
+     void Advance  :: execute() {
+          
+     }
+
      // for Bomb
 
      Bomb::Bomb(string t){ //constructor
@@ -148,6 +183,14 @@ using namespace std;
           return os << "Bomb "<< bomb.target <<endl;
      }
 
+     void Bomb  :: validate() {
+          
+     }  
+
+     void Bomb  :: execute() {
+          
+     }   
+
      // for Blockade
 
      Blockade::Blockade(string t){ //constructor
@@ -171,6 +214,14 @@ using namespace std;
      ostream& operator << (ostream &os, const Blockade &blockade){ //stream insertion operator for Blockade
                return os << "Blockade "<< blockade.territory <<endl;
           }
+
+     void Blockade  :: validate() {
+          
+     }  
+
+     void Blockade  :: execute() {
+          
+     }   
 
      // for Airlift
 
@@ -204,6 +255,15 @@ using namespace std;
                return os << "Airlift "<< airlift.armies<< " from " << airlift.origin << " to "<< airlift.destination <<endl;
           }
 
+
+     void Airlift  :: validate() {
+          
+     }  
+
+     void Airlift  :: execute() {
+          
+     }   
+
      // for Negotiate
 
      Negotiate::Negotiate(int p){ //constructor
@@ -227,3 +287,11 @@ using namespace std;
      ostream& operator << (ostream &os, const Negotiate &negotiate){ //stream insertion operator for Negotiate
                return os << "Negotiate "<< " with " << negotiate.playerID <<endl;
           }
+
+     void Negotiate  :: validate() {
+          
+     }  
+
+     void Negotiate  :: execute() {
+          
+     }   
