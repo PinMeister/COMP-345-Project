@@ -15,7 +15,16 @@ int main(){
     Bomb *bmb = new Bomb("mexico");
     Blockade *blckd = new Blockade("canada");
     Airlift *alt= new Airlift("canada", "usa", 2); 
-    Negotiate *ngt = new Negotiate(6);  
+    Negotiate *ngt = new Negotiate(6); 
+
+    //describing the order
+
+    cout << *depl << endl;  
+    cout << *adv << endl; 
+    cout << *bmb << endl;
+    cout << *blckd << endl;
+    cout << *alt << endl;
+    cout << *ngt << endl; 
 
     //creating vector of Order* objects
 
