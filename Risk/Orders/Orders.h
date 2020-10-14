@@ -34,9 +34,8 @@ class OrdersList{
 
         friend ostream& operator << (ostream &os, const OrdersList &ordersList); //stream insertion operator for OrdersList
 
-        void Delete(int index);
-        void move(int start, int end);
-
+        void Delete(vector<Order*> ord, int index);
+        void move(vector<Order*> ord, int start, int end);
     private:
         vector<Order*> orders; //list of orders
     
