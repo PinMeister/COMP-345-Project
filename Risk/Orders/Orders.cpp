@@ -28,21 +28,21 @@ using namespace std;
           return *this;
      }
 
-    void OrdersList::Delete(int index){                          //Delete method
+    void OrdersList::Delete(vector<Order*> ord, int index){                          //Delete method
 
-          orders.erase(orders.begin()+(index-1));
+          ord.erase(ord.begin() + index);
 
      } 
 
-    void OrdersList::move(int start, int end){                   //move method
+    void OrdersList::move(vector<Order*> ord, int start, int end){                   //move method
 
         //first iterator for the order that has to be moved
 
-        std::vector<Order *>::iterator itr1 = orders.begin();
+        std::vector<Order *>::iterator itr1 = ord.begin();
         std::advance(itr1, start-1);
 
         //second iterator for the order that is to be swapped with
-        std::vector<Order *>::iterator itr2 = orders.begin();
+        std::vector<Order *>::iterator itr2 = ord.begin();
         std::advance(itr2, end-1);
 
         //swapping the two orders the iterators point to
@@ -53,9 +53,14 @@ using namespace std;
 
      ostream& operator << (ostream &os, const OrdersList &ordersList){ //stream insertion operator for OrdersList
 
-               for(int i=0;i<ordersList.orders.size();i++)
-               cout << ordersList.orders[i];
-               return os;
+               os << "["; 
+                    for (int i = 0; i < ordersList.orders.size(); ++i) { 
+                         os << ordersList.orders[i]; 
+                         if (i != ordersList.orders.size() - 1) 
+                              os << ", "; 
+                    } 
+               os << "]\n"; 
+               return os; 
          
      }
 

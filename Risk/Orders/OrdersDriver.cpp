@@ -15,7 +15,7 @@ int main(){
     Bomb *bmb = new Bomb("mexico");
     Blockade *blckd = new Blockade("canada");
     Airlift *alt= new Airlift("canada", "usa", 2); 
-    Negotiate *ngt = new Negotiate(6); 
+    Negotiate *ngt = new Negotiate(6);  
 
     //creating vector of Order* objects
 
@@ -41,7 +41,7 @@ int main(){
     delete bmb;
     delete blckd;
     delete alt;
-    delete ngt;
+    delete ngt; 
 
     delete olist;  
 
