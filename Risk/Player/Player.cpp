@@ -5,50 +5,50 @@
 using namespace std;
 
 // default constructor
-Player::Player(list<Territory*> territories, Hand* hand, list<Orders*> orders, int playerID) {
-       this.territories = new list<Territory*>;
-	   this.hand = hand;
-	   this.orders = new list<Orders*>;
-	   this.playerID = playerID;
+Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID) {
+       this->territories = territories;
+	   this->hand = hand;
+	   this->orders = orders;
+	   this->playerID = playerID;
 }
 
 // copy constructor
 Player::Player(const Player &player){
-	   this.territories = player._territories;
-	   this.hand = player._hand;
-	   this.orders = player._orders;
-	   this.playerID = player.playerID;
+	   this->territories = player.territories;
+	   this->hand = player.hand;
+	   this->orders = player.orders;
+	   this->playerID = player.playerID;
 }
 
 //assignment operator
 Player& Player::operator=(const Player &player){ 
-	   this.territories = player._territories;
-	   this.hand = player._hand;
-	   this.orders = player._orders;
-	   this.playerID = player.playerID;
+	   this->territories = player.territories;
+	   this->hand = player.hand;
+	   this->orders = player.orders;
+	   this->playerID = player.playerID;
 	
 	return *this;
 }
 
 //stream insertion operator for Player
 ostream& operator << (ostream &os, const Player &player){ 
-	return os << "Player:" << player.playerID << endl << "Player territories: " << player._territories << endl << "Player hand: " << player._hand << endl << "Player orders: " << player._orders;
+	return os << "Player:" << player.playerID << " Player territories: " << player.territories.size()  << " Player hand: " << player.hand  << "Player orders: " << player.orders.size();
 }
 
-list toDefend() {
-	list<Territory*> toDefendTerritory;
+vector<Territory*> Player::toDefend() {
+	// list<Territory*> toDefendTerritory;
 	// MAKE A LOOP WITH THE LOGIC WHEN territories is impletemented
 	// to check which have the flag to defend
-	return toDefendTerritory;
+	return this->toDefendTerritory;
 }
 
-list toAttack() {
-	list<Territory*> toAttackTerritory;
+vector<Territory*> Player::toAttack() {
+	// list<Territory*> toAttackTerritory;
 	// MAKE A LOOP WITH THE LOGIC WHEN territories is impletemented
 	// to check which have the flag to attack
-	return toAttackTerritory;
+	return this->toAttackTerritory;
 }
 
-void issueOrder(Orders* order) {
-	this.orders.push_back(order);
+void Player::issueOrder(Order* order) {
+	this->orders.push_back(order);
 }
