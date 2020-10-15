@@ -1,90 +1,185 @@
 #include "Cards.h"
-#include "../Orders/Orders.h"
-//#include "../Player/Player.h"
+#include "..\Orders\Orders.h"
+
 using namespace std;
+
+class Deck;
 
 // constructor and copy constructor
 Card::Card(CardType type) {
-	this->val = new CardType;
+	this->val = type;
 }
 
 Card::Card(const Card &card) {
 	this->val = card.val;
 }
 
+Card& Card::operator=(const Card &card){
+	this->val = card.val;
+	return *this;
+}
+
 Card::~Card() {
-	delete val;
-	val = nullptr;
+	delete this;
 }
 
 Card::CardType Card::getCardType() {
-	return *val;
+	return this->val;
 }
 
 ostream& operator<<(ostream& out, const Card &card){
-    return out << "Card Type: " << card.val << endl;
+    return out << "Card Type: " << card.val;
 }
 
-// void Card::play() {
-// 	this.card
-// }
+void Card::play(vector<Order*> &ol, Deck &deck) {
+	Order* o;
+	if(this->val == CardType::BOMB) {
+		// TODO: supposely player that issues the command, temporarily use OrdersList.
+    	o = new Bomb("mexico");
+	}
+	if(this->val == CardType::REINFORCEMENT) {
+		// TODO: supposely player that issues the command, temporarily use OrdersList.
+		o = new Deploy(2, "canada");
+    	o = new Advance("canada", "usa", 2);
+	}
+	if(this->val == CardType::BLOCKADE) {
+		// TODO: supposely player that issues the command, temporarily use OrdersList.
+    	o = new Blockade("canada");
+	}
+	if(this->val == CardType::AIRLIFT) {
+		// TODO: supposely player that issues the command, temporarily use OrdersList.
+	    o = new Airlift("canada", "usa", 2); 
+	}
+	if(this->val == CardType::DIPLOMACY) {
+		// TODO: supposely player that issues the command, temporarily use OrdersList.
+	    o = new Negotiate(6); 
+	}
+	ol.push_back(o);
+
+	cout<< "Play CardType:" << this->val << endl;
+
+	deck.addCardBack(*this);
+	return;
+}
 
 Deck::Deck() {
-	cards = new vector<Card*>;
+	for (auto i = 0; i < 56;  ++i)
+	{
+		int random = rand() % 5; // not really random... 
+		if(random % 5 == 0) {
+			cards.push_back(new Card(Card::BOMB)); 
+		}
+		else if(random % 4 == 1) {
+			cards.push_back(new Card(Card::REINFORCEMENT)); 
+		}
+		else if(random % 4 == 2) {
+			cards.push_back(new Card(Card::BLOCKADE)); 
+		}
+		else if(random % 4 == 3) {
+			cards.push_back(new Card(Card::AIRLIFT)); 
+		}
+		else{
+			cards.push_back(new Card(Card::DIPLOMACY)); 
+		}
+	}
+	cout<< this << endl;
 }
 
-Deck::Deck(vector<Card *> &cards) {
-    this->cards = new vector<Card *>(cards.size());
-    auto deckCardsIterator = this->cards->begin();
-    auto previousCardsIterator = cards.begin();
-    for (size_t i = 0; i < cards.size(); i++) {
-        *deckCardsIterator = new Card(**previousCardsIterator);
-        deckCardsIterator++;
-        previousCardsIterator++;
+Deck::Deck(vector<Card*> &cpy_cards) {
+    for (std::vector<Card*>::iterator it = cpy_cards.begin(); it != cpy_cards.end(); ++it) {
+		cards.push_back(new Card(**it));
     }
+	cout<< this << endl;
+}
+
+Deck& Deck::operator=(const Deck &deck){
+	this->cards = deck.cards;
+	return *this;
 }
 
 Deck::~Deck() {
-	delete cards;
-	cards = nullptr;
+	delete this;
 }
 
-int Deck::get_DeckSize() {
-	return this->cards->size();
+int Deck::getDeckSize() {
+	return this->cards.size();
+}
+
+void Deck::addCardBack(Card &card){
+	this->cards.push_back(&card);
 }
 
 Card Deck::draw(){
-	Card card(*(cards->back()));
-	cards->pop_back();
-	return card;
+	Card* draw = nullptr;
+	if(!cards.empty()){
+		draw = cards.back();
+		cards.pop_back();
+	}
+	else {
+		cout << "SOMETHING BAD HAPPENED EMPTY DECK" << endl;
+	}
+	cout<< "Draw CardType:" << draw->getCardType() << endl;
+
+	return *draw;
+}
+
+ostream& operator << (std::ostream& out, const Deck &deck) {
+	return out << "Deck has " << deck.cards.size() << " cards" ;
 }
 
 Hand::Hand() {
-	cards = new vector<Card*>;
+	// for (auto i = 0; i < 5; ++i){
+	// 	int random = rand() % 5;
+	// 	if(random % 4 == 0) {
+	// 		this->cards.push_back(new Card(Card::BOMB)); 
+	// 	}
+	// 	else if(random % 4 == 1) {
+	// 		this->cards.push_back(new Card(Card::REINFORCEMENT)); 
+	// 	}
+	// 	else if(random % 4 == 2) {
+	// 		this->cards.push_back(new Card(Card::BLOCKADE)); 
+	// 	}
+	// 	else if(random % 4 == 3) {
+	// 		this->cards.push_back(new Card(Card::AIRLIFT)); 
+	// 	}
+	// 	else{
+	// 		this->cards.push_back(new Card(Card::DIPLOMACY)); 
+	// 	}
+	// }
+	cout<< this << endl;
 }
 
 Hand::Hand( const Hand &hand) {
-	cards = hand.cards;
+	// copy each invidual cards
+	for ( size_t i = 0; i < hand.cards.size(); ++i ){
+		this->cards.push_back(new Card(*hand.cards[i]));
+	}
+
+	cout<< this << endl;
 }
 
 Hand::~Hand() {
-	delete cards;
-	cards = nullptr;
+	delete this;
 }
 
 Hand& Hand::operator=(const Hand &hand){
-          cards = hand.cards;
-          return *this;
-     }
+	this->cards = hand.cards;
+	this->numHandCards = hand.numHandCards;
+	return *this;
+}
 
 ostream& operator<<(ostream& out, const Hand &hand){
-    return out << "Hand has: " << hand << endl;
+    return out << "Hand has " << hand.cards.size() << " cards";
+}
+
+void Hand::addCard(Card &card){
+	this->cards.push_back(&card);
 }
 
 int Hand::getNumberHandCards(){
-	return cards->size();
+	return this->cards.size();
 }
 
-vector<Card*> * Hand::get_cards() {
-	return cards;
+vector<Card*> Hand::getCards(){
+	return this->cards;
 }

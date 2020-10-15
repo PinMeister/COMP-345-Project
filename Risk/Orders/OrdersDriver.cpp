@@ -17,6 +17,15 @@ int main(){
     Airlift *alt= new Airlift("canada", "usa", 2); 
     Negotiate *ngt = new Negotiate(6); 
 
+    //describing the order
+
+    cout << *depl << endl;  
+    cout << *adv << endl; 
+    cout << *bmb << endl;
+    cout << *blckd << endl;
+    cout << *alt << endl;
+    cout << *ngt << endl; 
+
     //creating vector of Order* objects
 
     vector<Order*> vec;
@@ -33,7 +42,7 @@ int main(){
    //placing the list in OrdersList object
 
    OrdersList *olist = new OrdersList(vec);
-
+   
    //deleting the pointers
 
     delete depl; 
@@ -41,7 +50,7 @@ int main(){
     delete bmb;
     delete blckd;
     delete alt;
-    delete ngt;
+    delete ngt; 
 
     delete olist;  
 

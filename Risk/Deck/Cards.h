@@ -1,9 +1,18 @@
-using namespace std;
+#ifndef CARD_H
+#define CARD_H
 
+using namespace std;
 
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../Orders/Orders.h"
+
+class Deck;
+class Card;
+class Hand;
+
+
 
 class Card {
 
@@ -26,10 +35,11 @@ public:
 
 	// getter function for card type
 	CardType getCardType();
+	// play the card, remove from hand and return to deck
+	void play(vector<Order*> &ol, Deck &deck);
 
-	void play();
 private:
-	CardType *val;
+	CardType val;
 };
 
 class Deck {
@@ -42,7 +52,6 @@ private:
 	// int numDiplomacy;
 	
 public: 
-
 	// constructor
 	Deck();
 	// copy constructor
@@ -56,38 +65,36 @@ public:
 	// stream operator
 	friend ostream& operator << (std::ostream& out, const Deck &deck);
 
-	vector<Card*> *cards;
-	void printDeck();
-	
+	vector<Card*> cards;
 	Card draw();
+	void addCardBack(Card &card);
 	// player draws card at random from cards remaining and puts into their hand
 	int getNumberOfCards(); 
-
-	int get_DeckSize();
+	int getDeckSize();
 };
 
 // hand has finite collection of cards, taken from deck. When played, cards leave hand and return to deck
 class Hand {
 private:
-	vector<Card*> *cards;
+	vector<Card*> cards;
 	int numHandCards;
-	int maxCards;
-public:
 
+public:
 	// constructor
 	Hand();
 	// copy constructor
-	Hand( const Hand &hand);
+	Hand(const Hand &hand);
 	// destructor
 	~Hand();
 	// assignment operator
 	Hand& operator = ( const Hand &hand);
 	// stream operator
-	friend ostream& operator << (std::ostream& out, const Deck &deck);
-	vector<Card*> * get_cards();
-	// void getHand();
+	friend ostream& operator << (std::ostream& out, const Hand &hand);
+	vector<Card*> getCards();
+	void addCard(Card &card);
 	// void printHand();
 	int getNumberHandCards();
 	// Card play();
-
 };
+
+#endif
