@@ -14,7 +14,7 @@ using namespace std;
 
 int main() {
 	vector<Territory*> territories;
-	Hand* hand;
+	Hand* hand = new Hand();
 	vector<Order*> orders;
 	int playerID = 1;
 	vector<Territory*> toDefendTerritory;
@@ -47,6 +47,12 @@ int main() {
 
 	cout << "Player orders list AFTER adding a new ORDER: " << endl;
 
+	cin.get();
+
+	delete canada;
+	delete us;
+	delete mexico;
+	delete hand;
 	delete player;
 
 	return 0;
