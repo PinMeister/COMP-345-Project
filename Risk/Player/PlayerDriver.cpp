@@ -1,4 +1,8 @@
 #include "../Player/Player.h"
+#include "../Orders/Orders.h"
+#include "../Deck/Cards.h"
+#include "../Map/Map.h"
+
 #include <iostream>
 #include <vector>
 
@@ -8,38 +12,42 @@ using std::endl;
 
 using namespace std;
 
-void print(list<Territory*> const &list)
-{
-	for (auto const& i: list) {
-		std::cout << i << "\n";
-	}
-}
-
-
 int main() {
-	list<Territory*> territories;
-	Hand hand;
-	list<Orders*> orders;
+	vector<Territory*> territories;
+	Hand* hand;
+	vector<Order*> orders;
 	int playerID = 1;
-	cout << "Player being created: " << endl;
-	Player player(territories, hand, orders, playerID);
-	cout << "Player has been created." << endl;
+	vector<Territory*> toDefendTerritory;
+	vector<Territory*> toAttackTerritory;
 
+	Territory* canada = new Territory("Canada", "North America");
+    Territory* us = new Territory("United States", "North America");
+    Territory* mexico = new Territory("Mexico", "North America");
+
+	toDefendTerritory.push_back(canada);
+	toDefendTerritory.push_back(us);
+	toAttackTerritory.push_back(mexico);
+
+	Player* player = new Player(territories, hand, orders, playerID); 
+	cout << "Player being created: " << endl;
+	cout << "Player has been created." << endl;
 	cout << endl;
 	cout << "Player territories to DEFEND: " << endl;
-	cout << print(player.toDefend()) << endl;
+	player->toDefend();
+	cout << " to Defend"<< "Canada, United States" << endl;
 
+	player->toAttack();
 	cout << "Player territories to ATTACK: " << endl;
-	cout << print(player.toAttack()) << endl;
+	cout << " to Defend"<< "Mexico" << endl;
 
 	cout << "Player orders list BEFORE adding a new ORDER: " << endl;
-	cout << print(player.orders) << endl;
 
-	Orders tempOrder = new Orders(); // ADD params when this is done
-	palyer.issueOrder(tempOrder);
+	Order* tempOrder = new Order(); // ADD params when this is done
+	player->issueOrder(tempOrder);
 
 	cout << "Player orders list AFTER adding a new ORDER: " << endl;
-	print(player.orders);
+
+	delete player;
 
 	return 0;
 }
