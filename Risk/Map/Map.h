@@ -12,6 +12,8 @@ public:
     Territory(string name, string continent);
     Territory(string name, string continent, vector<Territory*> neighbours);
     Territory(const Territory &territory);
+    Territory& operator=(const Territory &territory);
+    friend ostream& operator<<(ostream& out, Territory territory);
     string getName();
     string getContinent();
     vector<Territory*> neighbours;
@@ -27,6 +29,8 @@ public:
     Continent(string name, int armies);
     Continent(string name, int armies, vector<Territory*> members);
     Continent(const Continent &continent);
+    Continent& operator=(const Continent &continent);
+    friend ostream& operator<<(ostream& out, Continent continent);
     void addTerritory(Territory* territory);
     string getName();
     vector<Territory*> getMembers();
@@ -41,6 +45,8 @@ public:
     Map();
     Map(vector<Territory*> territories, vector<Continent*> continents);
     Map(const Map &map);
+    Map& operator=(const Map &map);
+    friend ostream& operator<<(ostream& out, Map map);
     void addContinent(Continent* continent);
     int getContinentIndex(Continent* continent);
     void addTerritoryToContinent(Territory* territory, int continentId);

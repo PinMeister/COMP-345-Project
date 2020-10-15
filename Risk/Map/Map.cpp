@@ -31,9 +31,9 @@ Map& Map::operator=(const Map &map) {
 ostream& operator<<(ostream& out, Map map) {
     vector<Territory*> territories = map.getTerritories();
     vector<Continent*> continents = map.getContinents();
-    for (int i = 0; i < territories.size(); i++)
+    for (size_t i = 0; i < territories.size(); i++)
         out << "Territory name: " + territories[i]->getName();
-    for (int i = 0; i < continents.size(); i++)
+    for (size_t i = 0; i < continents.size(); i++)
         out << "Continent name: " + continents[i]->getName();
     return out;
 }
