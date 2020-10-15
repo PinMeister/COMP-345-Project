@@ -55,7 +55,7 @@ using namespace std;
 
                os << "["; 
                     for (int i = 0; i < ordersList.orders.size(); ++i) { 
-                         os << ordersList.orders[i]; 
+                         cout << *(ordersList.orders[i]) << endl;
                          if (i != ordersList.orders.size() - 1) 
                               os << ", "; 
                     } 
