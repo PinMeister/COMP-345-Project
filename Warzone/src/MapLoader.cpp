@@ -3,9 +3,10 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 
-#include "Map.h"
-#include "MapLoader.h"
+#include "../include/Map.h"
+#include "../include/MapLoader.h"
 
 using namespace std;
 

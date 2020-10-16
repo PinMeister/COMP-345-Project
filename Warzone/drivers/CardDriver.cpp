@@ -1,5 +1,5 @@
-#include "../Deck/Cards.h"
-#include "../Orders/Orders.h"
+#include "../include/Cards.h"
+#include "../include/Orders.h"
 #include <iostream>
 #include <cstdlib>
 

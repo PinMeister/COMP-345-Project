@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Map.h"
+#include "../include/Map.h"
 
 using namespace std;
 
@@ -71,6 +71,4 @@ int main() {
     }
 
     map.mapValidate();
-
-    cin.get();
 }

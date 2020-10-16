@@ -2,7 +2,8 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Map.h"
+#include <algorithm>
+#include "../include/Map.h"
 
 using namespace std;
 

@@ -2,8 +2,8 @@
 #include <fstream>
 #include <vector>
 
-#include "MapLoader.cpp"
-#include "Map.cpp"
+#include "../include/MapLoader.h"
+#include "../include/Map.h"
 
 using namespace std;
 

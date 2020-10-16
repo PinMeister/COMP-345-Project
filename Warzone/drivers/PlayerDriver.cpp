@@ -1,7 +1,7 @@
-#include "../Player/Player.h"
-#include "../Orders/Orders.h"
-#include "../Deck/Cards.h"
-#include "../Map/Map.h"
+#include "../include/Player.h"
+#include "../include/Orders.h"
+#include "../include/Cards.h"
+#include "../include/Map.h"
 
 #include <iostream>
 #include <vector>
@@ -14,7 +14,7 @@ using namespace std;
 
 int main() {
 	vector<Territory*> territories;
-	Hand* hand = new Hand();
+	Hand* hand;
 	vector<Order*> orders;
 	int playerID = 1;
 	vector<Territory*> toDefendTerritory;
@@ -46,8 +46,6 @@ int main() {
 	player->issueOrder(tempOrder);
 
 	cout << "Player orders list AFTER adding a new ORDER: " << endl;
-
-	cin.get();
 
 	delete canada;
 	delete us;

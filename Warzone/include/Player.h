@@ -2,9 +2,9 @@
 #include <string>
 #include <vector>
 
-#include "../Orders/Orders.h"
-#include "../Deck/Cards.h"
-#include "../Map/Map.h"
+#include "../include/Orders.h"
+#include "../include/Cards.h"
+#include "../include/Map.h"
 
 
 using namespace std;
