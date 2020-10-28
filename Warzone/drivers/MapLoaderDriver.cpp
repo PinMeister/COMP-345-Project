@@ -9,7 +9,7 @@ using namespace std;
 
 int main(){
     // array of all file paths
-    vector<string> files = {"Risk/maps/artic.map", "Risk/maps/bigeurope.map", "Risk/maps/google.map", "Risk/maps/google_copy.map", "Risk/maps/solar.map"};
+    vector<string> files = {"Warzone/maps/artic.map", "Warzone/maps/bigeurope.map", "Warzone/maps/google.map", "Warzone/maps/google_copy.map", "Warzone/maps/solar.map"};
 
     // create a MapLoader obj for each file and parse
     for(int i = 0; i < files.size(); i++){

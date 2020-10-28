@@ -1,18 +1,16 @@
 #ifndef CARD_H
 #define CARD_H
 
-using namespace std;
-
 #include <iostream>
 #include <string>
 #include <vector>
 #include "../include/Orders.h"
 
+using namespace std;
+
 class Deck;
 class Card;
 class Hand;
-
-
 
 class Card {
 

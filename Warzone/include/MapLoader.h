@@ -5,6 +5,8 @@
 
 using namespace std;
 
+class Map;
+
 // Load a .map file and create a Map obj
 class MapLoader{
     public:
