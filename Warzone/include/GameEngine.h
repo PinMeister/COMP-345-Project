@@ -19,6 +19,7 @@ public:
     vector<Player*> players; // list of players for the game
     MapLoader* maploader; // to load the map
     Map* map; // choose map
+    Deck* deck; // default deck for the game
     // vector<Observer> observers*; // need Part 5 to complete
     GameEngine(); // default constructor
     ~GameEngine(); // destructor
@@ -26,8 +27,11 @@ public:
     GameEngine& operator=(const GameEngine &gameEngine); // overloading assignment
     friend ostream& operator<<(ostream& out, const GameEngine &gameEngine); // string insertion
     GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map);
-    void chooseMap(); // let user choose map from path
+    Map* chooseMap(); // let user choose map from path
+    void setMap(Map* map); // set the map after loading it
     void setPlayerNum(); // set the number of player (2 to 5 only)
+    int getPlayerNum(); // retrieve number of player
+    void createPlayers(); // create all players and required elements for the players
     void toggleObserver(); // turn on/off any observers
     // void addPlayer(Player* p);
     // void gameLoop(Map gameMap);
