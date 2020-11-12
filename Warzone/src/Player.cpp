@@ -5,27 +5,32 @@
 using namespace std;
 
 // default constructor
+Player::Player(int playerID){
+	playerID = playerID;
+}
+
+// construtor with parameters
 Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID) {
-       this->territories = territories;
-	   this->hand = hand;
-	   this->orders = orders;
-	   this->playerID = playerID;
+	this->territories = territories;
+	this->hand = hand;
+	this->orders = orders;
+	this->playerID = playerID;
 }
 
 // copy constructor
 Player::Player(const Player &player){
-	   this->territories = player.territories;
-	   this->hand = player.hand;
-	   this->orders = player.orders;
-	   this->playerID = player.playerID;
+	this->territories = player.territories;
+	this->hand = player.hand;
+	this->orders = player.orders;
+	this->playerID = player.playerID;
 }
 
 //assignment operator
 Player& Player::operator=(const Player &player){ 
-	   this->territories = player.territories;
-	   this->hand = player.hand;
-	   this->orders = player.orders;
-	   this->playerID = player.playerID;
+	this->territories = player.territories;
+	this->hand = player.hand;
+	this->orders = player.orders;
+	this->playerID = player.playerID;
 	
 	return *this;
 }
