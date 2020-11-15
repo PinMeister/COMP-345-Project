@@ -57,3 +57,7 @@ vector<Territory*> Player::toAttack() {
 void Player::issueOrder(Order* order) {
 	this->orders.push_back(order);
 }
+
+void Player::addTerritory(Territory* territory){
+	territories.push_back(territory);
+}

@@ -6,7 +6,6 @@
 #include "../include/Cards.h"
 #include "../include/Map.h"
 
-
 using namespace std;
 
 class Player {
@@ -17,8 +16,6 @@ class Player {
 		int playerID;
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
-
-
 	public:
 		vector<Territory*> toDefend();
 		vector<Territory*> toAttack();
@@ -28,4 +25,5 @@ class Player {
 		Player(const Player &player); // copy constructor
 		Player& operator=(const Player &player); //assignment operator
 		friend ostream& operator << (ostream &os, const Player &player); //stream insertion operator for Player
+		void addTerritory(Territory* territory);
 };

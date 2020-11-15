@@ -16,11 +16,14 @@ class Territory {
         friend ostream& operator<<(ostream& out, Territory territory);
         string getName();
         string getContinent();
+        void addArmyNum(int num);
+        int getArmyNum();
         vector<Territory*> neighbours;
         bool visited;
     private:
         string name;
         string continent;
+        int armies = 0;
 };
 
 class Continent {
