@@ -2,17 +2,32 @@
 #include <algorithm>
 #include <random>
 #include <stdlib.h>
+#include <time.h>
+#include <chrono>
 
 #include "../include/GameEngine.h"
 
 using namespace std;
 
-Startup::Startup(){
+GameEngine::GameEngine(){
+    
+}
 
+void GameEngine::setPlayers(vector<Player*> *players){
+    this->players = players;
+}
+
+void GameEngine::setMap(Map *map){
+    this->map = map;
+}
+
+Startup::Startup(vector<Player*> *players, Map *map){
+    setPlayerNum(players->size());
+    startupPhase(players, map);
 }
 
 Startup::Startup(const Startup& startup){
-
+    playerNum = startup.playerNum;
 }
 
 Startup::~Startup(){
@@ -33,9 +48,8 @@ int Startup::getInitialArmyNum(){
 
 void Startup::startupPhase(vector<Player*> *players, Map *map){
     // shuffle player order in vector
-    auto rng = std::default_random_engine{};
-    shuffle(players->begin(), players->end(), rng);
-
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    shuffle(players->begin(), players->end(), default_random_engine(seed));
     int initialArmyNum = getInitialArmyNum(); // get initial army num
 
     // assign territories
@@ -43,6 +57,7 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
     vector<int> randomTerritoryId;
     // get random territory id and push to the vector
     for(int i = 0; i < playerNum; i++){
+        srand(time(NULL));
         int temp = rand() % size;
         // find a match
         vector<int>::iterator it = find (randomTerritoryId.begin(), randomTerritoryId.end(), temp);
@@ -52,7 +67,7 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
             it = find (randomTerritoryId.begin(), randomTerritoryId.end(), temp);
         }
         randomTerritoryId.push_back(temp); // push it to the vector
-        players->at(i)->addTerritory(map->getTerritories()[i]); // give player the territory
-        map->getTerritories()[i]->addArmyNum(initialArmyNum); // assign army to territory
+        players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
+        map->getTerritories()[temp]->addArmyNum(initialArmyNum); // assign army to territory
     }
 }

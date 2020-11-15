@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -26,4 +28,6 @@ class Player {
 		Player& operator=(const Player &player); //assignment operator
 		friend ostream& operator << (ostream &os, const Player &player); //stream insertion operator for Player
 		void addTerritory(Territory* territory);
+		vector<Territory*> getTerritories();
+		int getPlayerID();
 };

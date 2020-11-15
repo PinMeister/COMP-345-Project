@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include "../include/Map.h"
 
 using namespace std;
 

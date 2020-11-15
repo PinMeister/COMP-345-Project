@@ -6,7 +6,7 @@ using namespace std;
 
 // default constructor
 Player::Player(int playerID){
-	playerID = playerID;
+	this->playerID = playerID;
 }
 
 // construtor with parameters
@@ -60,4 +60,12 @@ void Player::issueOrder(Order* order) {
 
 void Player::addTerritory(Territory* territory){
 	territories.push_back(territory);
+}
+
+vector<Territory*> Player::getTerritories(){
+	return territories;
+}
+
+int Player::getPlayerID(){
+	return playerID;
 }
