@@ -28,10 +28,6 @@ int main(){
 
     // create GameEngine
     cout << "\nCreating game" << "\n";
-    GameEngine *gameEngine = new GameEngine();
-    gameEngine->setMap(map); // create a ref to map
-    gameEngine->setPlayers(players); // create a ref to players
-
     Startup *startUp = new Startup(players, map);
     cout << "startup phase completed" << "\n\n";
 
