@@ -9,18 +9,6 @@
 
 using namespace std;
 
-GameEngine::GameEngine(){
-    
-}
-
-void GameEngine::setPlayers(vector<Player*> *players){
-    this->players = players;
-}
-
-void GameEngine::setMap(Map *map){
-    this->map = map;
-}
-
 Startup::Startup(vector<Player*> *players, Map *map){
     setPlayerNum(players->size());
     startupPhase(players, map);

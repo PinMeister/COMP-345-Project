@@ -17,10 +17,12 @@ int main(){
         cout << "Map created.\n";
     }
 
+    int playerNum = 5;
+
     // create players
     cout << "\nCreating players" << "\n";
     vector<Player*> *players = new vector<Player*>;
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < playerNum; i++){
         Player *player = new Player(i);
         players->push_back(player);
         cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
@@ -31,10 +33,11 @@ int main(){
     Startup *startUp = new Startup(players, map);
     cout << "startup phase completed" << "\n\n";
 
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < playerNum; i++){
         Territory* temp = players->at(i)->getTerritories()[0];
         cout << "Player " << i + 1 << " id: " << players->at(i)->getPlayerID() << "\n" << "In " << temp->getName() << " with " << temp->getArmyNum() << " armies \n";
         temp = NULL;
         delete temp;
     }
+    return 0;
 }
