@@ -129,3 +129,9 @@ void GameEngine::createPlayers() {
         Player* tempPlayer = new Player(defaultTerritories, defaultHand, defaultOrders, i);
     }
 }
+
+void GameEngine::reinforcementPhase() {}
+
+void GameEngine::issueOrdersPhase() {}
+
+void GameEngine::executeOrdersPhase() {}
