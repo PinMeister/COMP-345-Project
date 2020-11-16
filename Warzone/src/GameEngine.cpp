@@ -82,6 +82,7 @@ Map* GameEngine::chooseMap() {
     while(validMap != 1) {
         cout << "Which file do you want to use as the map?\n\n";
         string filePath;
+        cin >> filePath;
         MapLoader* mapL = new MapLoader(filePath); // load the file
         validMap = mapL->parse(); // check if it is a valid map
         map = mapL->createMap(); // get the map
