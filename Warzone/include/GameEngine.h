@@ -5,6 +5,9 @@
 #include "MapLoader.h"
 #include <vector>
 #include <iostream>
+#include <vector>
+#include "../include/Player.h"
+#include "../include/Orders.h"
 
 class GameEngine;
 
@@ -41,3 +44,19 @@ public:
     void issueOrdersPhase(); // issue order from player
     void executeOrdersPhase(); // execute order whe issuing is over
 };
+
+class Startup{
+    public:
+        Startup(vector<Player*> *players, Map *map);
+        Startup(const Startup& startup);
+        ~Startup();
+
+        void setPlayerNum(int num);
+        int getPlayerNum();
+        int getInitialArmyNum();
+
+    private:
+        int playerNum = 2;
+        void startupPhase(vector<Player*> *players, Map *map);      
+};
+
