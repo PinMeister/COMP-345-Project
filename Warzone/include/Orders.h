@@ -3,77 +3,64 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "../include/Map.h"
 
 using namespace std;
 
 class Order{
-
     public:
         Order(); //constructor
         Order(const Order &order); //copy constructor
         ~Order(); //destructor
         Order& operator=(const Order &order); //assignment operator 
-
         friend ostream& operator << (ostream &os, const Order &order); //stream insertion operator for Order
-         
-
         //validate and execute methods to be inherited by the Order subclasses
         void validate(); 
-        void execute();
-
+        virtual void execute() = 0;
+        Territory* territory;
+        Territory* start;
+        Territory* target;
+        vector<Territory*> territories;
+        int armies;
 };
 
 class OrdersList{
 
     public:
 
-        OrdersList(vector<Order*> ord); //constructor
+        OrdersList(vector<Order*> orderslist); //constructor
         OrdersList(const OrdersList &ordersList); //copy constructor
         ~OrdersList(); //destructor
         OrdersList& operator=(const OrdersList &ordersList); //assignment operator
 
         friend ostream& operator << (ostream &os, const OrdersList &ordersList); //stream insertion operator for OrdersList
 
-        void Delete(vector<Order*> ord, int index);
-        void move(vector<Order*> ord, int start, int end);
+        void Delete(vector<Order*> orderslist, int index);
+        void move(vector<Order*> orderslist, int start, int end);
     private:
-        vector<Order*> orders; //list of orders
+        vector<Order*> orderslist; //list of orders
     
 };
 
 class Deploy : public Order { //class Deploy inherits from Order
-
     public:
-        Deploy(int a, string l);  //constructor
+        Deploy(int armies, Territory* territory);  //constructor
         Deploy(const Deploy &deploy); //copy constructor
         ~Deploy(); //destructor
         Deploy& operator=(const Deploy &deploy); //assignment operator
-
         friend ostream& operator << (ostream &os, const Deploy &deploy); //stream insertion operator for Deploy 
-
-
-    private:
-        int armies;
-        string location;
         void validate(); 
-        void execute();
-        
+        void execute();         
 };
 
 class Advance : public Order{
 
     public:
-        Advance(string s, string t, int a); //constructor
+        Advance(Territory* start, Territory* target, int armies); //constructor
         Advance(const Advance &advance); //copy constructor
         ~Advance(); //destructor
         Advance& operator=(const Advance &advance); //assignment operator
-
         friend ostream& operator << (ostream &os, const Advance &advance); //stream insertion operator for Advance  
-
-    private:
-        string source;
-        string target;
-        int armies;
         void validate(); 
         void execute();
 

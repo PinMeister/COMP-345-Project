@@ -69,3 +69,8 @@ vector<Territory*> Player::getTerritories(){
 int Player::getPlayerID(){
 	return playerID;
 }
+
+vector<Order*> Player :: getPlayerOrders(){
+	return orders;
+}
+
