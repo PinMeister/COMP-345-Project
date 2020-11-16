@@ -223,6 +223,7 @@ Territory::Territory(const Territory &territory) {
     this->continent = territory.continent;
     this->neighbours = territory.neighbours;
     this->visited = territory.visited;
+    this->armies = territory.armies;
 }
 
 // Assignment operator
@@ -231,6 +232,7 @@ Territory& Territory::operator=(const Territory &territory) {
     this->continent = territory.continent;
     this->neighbours = territory.neighbours;
     this->visited = territory.visited;
+    this->armies = territory.armies;
     return *this;
 }
 
@@ -248,6 +250,14 @@ string Territory::getName() {
 // Return name of continent that territory is a part of
 string Territory::getContinent() {
     return continent;
+}
+
+void Territory::addArmyNum(int num){
+    armies += num;
+}
+
+int Territory::getArmyNum(){
+    return armies;
 }
 
 // Empty constructor

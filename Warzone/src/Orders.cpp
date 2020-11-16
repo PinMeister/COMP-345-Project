@@ -94,18 +94,18 @@ using namespace std;
        }
 
      Deploy::Deploy(const Deploy &deploy){ //copy constructor
-          armies= deploy.armies;
-          location=deploy.location;
+          armies = deploy.armies;
+          location = deploy.location;
      }
 
      Deploy::~Deploy(){  //destructor
           armies = 0;
-          location="";
+          location = "";
      }
 
      Deploy& Deploy::operator=(const Deploy &deploy){ //assignment operator
-          armies= deploy.armies;
-          location=deploy.location;
+          armies = deploy.armies;
+          location = deploy.location;
 
            return *this;
      }
@@ -132,22 +132,22 @@ using namespace std;
           }
 
      Advance::Advance(const Advance &advance){ //copy constructor
-          source= advance.source;
-          target=advance.target;
+          source = advance.source;
+          target = advance.target;
           armies = advance.armies;
 
      }
 
      Advance::~Advance(){  //destructor
           source = "";
-          target="";
-          armies=0;
+          target = "";
+          armies = 0;
      }
 
      Advance& Advance::operator=(const Advance &advance){ //assignment operator
-          source= advance.source;
-          target=advance.target;
-          armies=advance.armies;
+          source = advance.source;
+          target = advance.target;
+          armies = advance.armies;
 
           return *this;
      }
@@ -171,15 +171,15 @@ using namespace std;
           }
 
      Bomb::Bomb(const Bomb &bomb){ //copy constructor
-          target=bomb.target;
+          target = bomb.target;
      }
 
      Bomb::~Bomb(){  //destructor
-          target="";
+          target = "";
      }
 
      Bomb& Bomb::operator=(const Bomb &bomb){ //assignment operator
-          target=bomb.target;
+          target = bomb.target;
 
           return *this;
      }
@@ -203,15 +203,15 @@ using namespace std;
           }
 
      Blockade::Blockade(const Blockade &blockade){ //copy constructor
-          territory=blockade.territory;
+          territory = blockade.territory;
      }
 
      Blockade::~Blockade(){  //destructor
-          territory="";
+          territory = "";
      }
 
      Blockade& Blockade::operator=(const Blockade &blockade){ //assignment operator
-          territory=blockade.territory;
+          territory = blockade.territory;
 
           return *this;
      }
@@ -243,13 +243,13 @@ using namespace std;
      }
 
      Airlift::~Airlift(){  //destructor
-          origin="";
-          destination="";
+          origin = "";
+          destination = "";
           armies = 0;
      }
 
      Airlift& Airlift::operator=(const Airlift &airlift){ //assignment operator
-          origin=airlift.origin;
+          origin = airlift.origin;
           destination = airlift.destination;
           armies = airlift.armies;
 
@@ -280,7 +280,7 @@ using namespace std;
      }
 
      Negotiate::~Negotiate(){  //destructor
-          playerID= 0;
+          playerID = 0;
      }
 
      Negotiate& Negotiate::operator=(const Negotiate &negotiate){ //assignment operator

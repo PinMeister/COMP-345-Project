@@ -2,10 +2,10 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include "../include/Map.h"
 
 using namespace std;
-
-class Map;
 
 // Load a .map file and create a Map obj
 class MapLoader{
