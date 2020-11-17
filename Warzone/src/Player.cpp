@@ -69,3 +69,11 @@ vector<Territory*> Player::getTerritories(){
 int Player::getPlayerID(){
 	return playerID;
 }
+
+int Player::getReinforcementPool(){
+	return reinforcementPool;
+}
+
+void Player::setReinforcementPool(int i){
+	this->reinforcementPool = i;
+}
