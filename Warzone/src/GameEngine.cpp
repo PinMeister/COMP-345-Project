@@ -13,10 +13,10 @@ using namespace std;
 // main driver
 int main() {
     int numberOfPlayers = 0;
-    vector<Player*> players;
+    vector<Player*> tempPlayers;
     MapLoader* maploader;
     Map* map;
-    GameEngine* gameEngine = new GameEngine(numberOfPlayers, players, maploader, map);
+    GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
 
     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
     map = gameEngine->chooseMap(); // choose map to start the game
@@ -31,15 +31,15 @@ int main() {
     gameEngine->createPlayers();
     cout << "Players have been created" << endl;
 
-    // free memory and dangling ptr
-    for (auto p : players) { delete p; } 
-    delete maploader;
-    delete map;
-    delete gameEngine;
+    for (auto i = tempPlayers.begin(); i != tempPlayers.end(); ++i)
+        std::cout << *i << endl;
 
-    players.clear();
-    maploader = NULL;   
-    map = NULL;
+    cout << "Beginning reinforcement phase: " << endl;
+    gameEngine->reinforcementPhase();
+    cout << "Ending reinforcement phase: " << endl;
+
+    // free memory and dangling ptr
+    delete gameEngine;
     gameEngine = NULL;
 
 	return 0;
@@ -129,24 +129,26 @@ void GameEngine::setPlayerNum() {
 		cin >> tempnumberOfPlayers;
 	} while (tempnumberOfPlayers < 2 || tempnumberOfPlayers > 5);
 
-    numberOfPlayers = tempnumberOfPlayers;
+    this->numberOfPlayers = tempnumberOfPlayers;
 }
 
 void GameEngine::createPlayers() {
 
     vector<Territory*> defaultTerritories; // players have no territories at first
-    Hand* defaultHand = new  Hand(); // to make default empty hand
+    Hand* defaultHand = new Hand(); // to make default empty hand
     vector<Order*> defaultOrders; // default set of battle orders
     vector<Card*> defaultCards; // some cards
     Deck* defaultDeck = new Deck(); // default deck of cards
 
     this->deck = defaultDeck; // set the default deck to the new initialized one
 
-    for (int i = 1; i <= numberOfPlayers; i++){
+    for (int i = 1; i <= this->numberOfPlayers; i++){
         // last parameter i is the playerID
         // create new players
         Player* tempPlayer = new Player(defaultTerritories, defaultHand, defaultOrders, i);
         this->players.push_back(tempPlayer); // add the players into the GameEngine vector
+
+        cout << "Player " << i << " has been created " << endl;
 
         // free memory and dangling ptr
         delete tempPlayer;
@@ -154,17 +156,13 @@ void GameEngine::createPlayers() {
     }
 
     // free memory and dangling ptr
-    for (auto p : defaultTerritories) { delete p; } 
-    for (auto p : defaultOrders) { delete p; } 
-    for (auto p : defaultCards) { delete p; } 
+    defaultHand = NULL;
+    defaultDeck = NULL;
+
     delete defaultHand;
     delete defaultDeck;
 
-    defaultTerritories.clear();
-    defaultHand = NULL;
-    defaultOrders.clear();
-    defaultCards.clear();
-    defaultDeck = NULL;
+    cout << "TEST";
 }
 
 // TO DO
@@ -179,12 +177,16 @@ void GameEngine::reinforcementPhase() {
     int numOfArmies = 0;
     vector<Player*>::iterator it;
 
-    for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
+    for (int a = 0; a<3; a++){
+
+        cout << "Round " << a << endl;
+
+    for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
         numOfArmies = (*it)->getTerritories().size();
         numOfArmies = floor(numOfArmies/3);
 
-        vector<Continent*> mapContinents = map->getContinents(); // get all continents for current map
+        vector<Continent*> mapContinents = this->map->getContinents(); // get all continents for current map
         vector<Territory*> playerTerritories = (*it)->getTerritories(); // get the user's territories
         vector<string> playerTerritoriesName; // get the user's territories name
 
@@ -195,7 +197,6 @@ void GameEngine::reinforcementPhase() {
 
         // sort the vector for later processing
         sort(playerTerritoriesName.begin(), playerTerritoriesName.end());
-
 
         // check for each continent if user owns all territories
         for (auto continent : mapContinents){
@@ -228,9 +229,6 @@ void GameEngine::reinforcementPhase() {
             if ((st - v.begin()) == 0) {
                 numOfArmies += continent->getControlBonus();
             }
-
-            for (auto p : mapTerritories) { delete p; }
-            mapTerritories.clear();
         }
 
         // minimal number of reinforcement armies per turn for any player is 3. 
@@ -238,19 +236,15 @@ void GameEngine::reinforcementPhase() {
             numOfArmies = 3;
         }
 
+        cout << "Player " << (*it)->getPlayerID() << " will receive " << numOfArmies << " armies" << endl;
+
         // add new armie number to the user's pool
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
-        // free memory and dangling ptr
-        for (auto p : mapContinents) { delete p; }
-        mapContinents.clear();
-
-        for (auto p : playerTerritories) { delete p; }
-        playerTerritories.clear();
-        
-        playerTerritoriesName.clear();
+        cout << "Player " << (*it)->getPlayerID() << "has " << (*it)->getReinforcementPool() << " armies" << endl;
         }
+    }
 }
 
 void GameEngine::issueOrdersPhase() {}
