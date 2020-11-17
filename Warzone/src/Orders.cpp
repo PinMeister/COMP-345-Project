@@ -27,13 +27,13 @@ using namespace std;
           return *this;
      }
 
-    void OrdersList::Delete(vector<Order*> orderslist, int index){                          //Delete method
+    void OrdersList::Delete(vector<Order*> orderslist, int index){                         
 
           orderslist.erase(orderslist.begin() + index);
 
      } 
 
-    void OrdersList::move(vector<Order*> ord, int start, int end){                   //move method
+    void OrdersList::move(vector<Order*> ord, int start, int end){                  
 
         //first iterator for the order that has to be moved
 
@@ -85,17 +85,20 @@ using namespace std;
      }
 
      // for Deploy
-     Deploy::Deploy(int armies, Territory* territory){ //constructor
+     Deploy::Deploy(Player* player, int armies, Territory* territory){ //constructor
+           player = player;
            armies = armies;
            territory = territory;
        }
 
      Deploy::Deploy(const Deploy &deploy){ //copy constructor
+          this->player = deploy.player;
           armies = deploy.armies;
           this->territory = deploy.territory;
      }
 
      Deploy& Deploy::operator=(const Deploy &deploy){ //assignment operator
+          this->player = deploy.player;
           armies= deploy.armies;
           this->territory=deploy.territory;
 
@@ -107,7 +110,9 @@ using namespace std;
      }
 
      void Deploy  :: validate() {
-         if (std::find(territories.begin(), territories.end(), territory) != territories.end()){
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
             cout << "The deploy order is valid.";
          }
          else {
@@ -117,21 +122,27 @@ using namespace std;
 
      void Deploy  :: execute() {
           validate();
-          if (std::find(territories.begin(), territories.end(), territory) != territories.end()){
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
+          while(armies <= player->getReinforcementPool()){
+          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
             territory->addArmyNum(armies);
-         }         
+         }   
+       }      
      }
 
 
      // for Advance
 
-     Advance::Advance(Territory* start, Territory* target, int armies){ //constructor
+     Advance::Advance(Player* player, Territory* start, Territory* target, int armies){ //constructor
+               player = player;
                start = start;
                target = target;
                armies = armies;
           }
 
      Advance::Advance(const Advance &advance){ //copy constructor
+          player = advance.player;
           start = advance.start;
           target = advance.target;
           armies = advance.armies;
@@ -139,6 +150,7 @@ using namespace std;
      }
 
      Advance& Advance::operator=(const Advance &advance){ //assignment operator
+          player = advance.player;
           start = advance.start;
           target = advance.target;
           armies = advance.armies;
@@ -151,7 +163,9 @@ using namespace std;
      }
 
      void Advance  :: validate() {
-          if (std::find(territories.begin(), territories.end(), start) != territories.end()){
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories();
+          if (std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()){
             cout << "The advance order is valid.";
          }
           else {
@@ -161,8 +175,11 @@ using namespace std;
 
      void Advance  :: execute() {
           validate();
-          if ((std::find(territories.begin(), territories.end(), start) != territories.end()) && (std::find(territories.begin(), territories.end(), target) != territories.end())){
-            
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories();          
+          if ((std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()) && (std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end())){
+            target->addArmyNum(armies);
+            start->subtractArmyNum(armies);
          }          
      }
 

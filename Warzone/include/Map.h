@@ -17,6 +17,7 @@ class Territory {
         string getName();
         string getContinent();
         void addArmyNum(int num);
+        void subtractArmyNum(int num);
         int getArmyNum();
         vector<Territory*> neighbours;
         bool visited;

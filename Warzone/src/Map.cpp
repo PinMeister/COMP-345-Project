@@ -256,6 +256,10 @@ void Territory::addArmyNum(int num){
     armies += num;
 }
 
+void Territory::subtractArmyNum(int num){
+    armies -= num;
+}
+
 int Territory::getArmyNum(){
     return armies;
 }

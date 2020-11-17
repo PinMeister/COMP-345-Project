@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "../include/Map.h"
+#include "../include/Player.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ class Order{
         Territory* territory;
         Territory* start;
         Territory* target;
+        Player* player;
         vector<Territory*> territories;
         int armies;
 };
@@ -44,7 +46,7 @@ class OrdersList{
 
 class Deploy : public Order { //class Deploy inherits from Order
     public:
-        Deploy(int armies, Territory* territory);  //constructor
+        Deploy(Player* player, int armies, Territory* territory);  //constructor
         Deploy(const Deploy &deploy); //copy constructor
         ~Deploy(); //destructor
         Deploy& operator=(const Deploy &deploy); //assignment operator
@@ -56,7 +58,7 @@ class Deploy : public Order { //class Deploy inherits from Order
 class Advance : public Order{
 
     public:
-        Advance(Territory* start, Territory* target, int armies); //constructor
+        Advance(Player* player, Territory* start, Territory* target, int armies); //constructor
         Advance(const Advance &advance); //copy constructor
         ~Advance(); //destructor
         Advance& operator=(const Advance &advance); //assignment operator
