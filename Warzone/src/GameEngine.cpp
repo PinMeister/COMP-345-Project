@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <chrono>
+#include <cmath>
 
 using namespace std;
 
@@ -29,6 +30,17 @@ int main() {
     cout << "Creating the players and required items for the game: " << endl;
     gameEngine->createPlayers();
     cout << "Players have been created" << endl;
+
+    // free memory and dangling ptr
+    for (auto p : players) { delete p; } 
+    delete maploader;
+    delete map;
+    delete gameEngine;
+
+    players.clear();
+    maploader = NULL;   
+    map = NULL;
+    gameEngine = NULL;
 
 	return 0;
 }
@@ -132,8 +144,35 @@ void GameEngine::createPlayers() {
 
     for (int i = 1; i <= numberOfPlayers; i++){
         // last parameter i is the playerID
+        // create new players
         Player* tempPlayer = new Player(defaultTerritories, defaultHand, defaultOrders, i);
+        this->players.push_back(tempPlayer); // add the players into the GameEngine vector
+
+        // free memory and dangling ptr
+        delete tempPlayer;
+        tempPlayer = NULL;
     }
+
+    // free memory and dangling ptr
+    for (auto p : defaultTerritories) { delete p; } 
+    for (auto p : defaultOrders) { delete p; } 
+    for (auto p : defaultCards) { delete p; } 
+    delete defaultHand;
+    delete defaultDeck;
+
+    defaultTerritories.clear();
+    defaultHand = NULL;
+    defaultOrders.clear();
+    defaultCards.clear();
+    defaultDeck = NULL;
+}
+
+// TO DO
+
+void GameEngine::mainGameLoop() {
+// This loop shall continue until only one of the players owns all the territories in the map, at which point a winner is
+// announced and the game ends. The main game loop also checks for any player that does not control at least one
+// territory; if so, the player is removed from the game.    
 }
 
 const Player* GameEngine::getCurrentPlayer() {
@@ -144,7 +183,83 @@ const Order* GameEngine::getLastOrder(){
     return GetEngine().lastOrder;
 }
 
-void GameEngine::reinforcementPhase() {}
+void GameEngine::reinforcementPhase() {
+    int numOfArmies = 0;
+    vector<Player*>::iterator it;
+
+    for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
+        // (# of territories owned divided by 3, rounded down
+        numOfArmies = (*it)->getTerritories().size();
+        numOfArmies = floor(numOfArmies/3);
+
+        vector<Continent*> mapContinents = map->getContinents(); // get all continents for current map
+        vector<Territory*> playerTerritories = (*it)->getTerritories(); // get the user's territories
+        vector<string> playerTerritoriesName; // get the user's territories name
+
+        // iterate through player's territories and add their name
+        for (auto territory : playerTerritories) {
+            playerTerritoriesName.push_back(territory->getName());
+        }
+
+        // sort the vector for later processing
+        sort(playerTerritoriesName.begin(), playerTerritoriesName.end());
+
+
+        // check for each continent if user owns all territories
+        for (auto continent : mapContinents){
+            vector<Territory*> mapTerritories = continent->getMembers();
+            int n = mapTerritories.size();
+            vector<string> continentTerritoriesName;
+
+            // iterate through continent's territories and add their name
+            for (auto territory : mapTerritories) {
+                continentTerritoriesName.push_back(territory->getName());
+            }
+
+            // temp vector for set_difference
+            vector<string> v(n); 
+            vector<string>::iterator iter, st; 
+
+            // Sort vector to use set_difference
+            sort(continentTerritoriesName.begin(), continentTerritoriesName.end()); 
+
+            // compare both vector
+            iter = set_difference(continentTerritoriesName.begin(),
+                                continentTerritoriesName.end(), 
+                                playerTerritoriesName.begin(), 
+                                playerTerritoriesName.end(), v.begin());
+
+            for (st = v.begin(); st != iter; ++st) {} // add into st until it's not equal to iter            
+
+            // if the set difference has no element
+            // means the player owns the continent
+            if ((st - v.begin()) == 0) {
+                numOfArmies += continent->getControlBonus();
+            }
+
+            for (auto p : mapTerritories) { delete p; }
+            mapTerritories.clear();
+        }
+
+        // minimal number of reinforcement armies per turn for any player is 3. 
+        if (numOfArmies < 3) {
+            numOfArmies = 3;
+        }
+
+        // add new armie number to the user's pool
+        int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
+        (*it)->setReinforcementPool(totalArmySize);
+
+        // free memory and dangling ptr
+        for (auto p : mapContinents) { delete p; }
+        mapContinents.clear();
+
+        for (auto p : playerTerritories) { delete p; }
+        playerTerritories.clear();
+        
+        playerTerritoriesName.clear();
+        }
+}
 
 /* player determines territories to attack (listed in toAttack) and deploys orders to own territories (listed in toDefend)
 player can deploy if it still has armies to deploy before continuing to other orders, can issue advance orders and play a
@@ -185,7 +300,36 @@ void GameEngine::issueOrdersPhase() {
 
 }
 
-void GameEngine::executeOrdersPhase() {}
+void GameEngine::executeOrdersPhase() {
+    vector<Player*>::iterator it;
+    vector<Order*>::iterator iter;
+    vector<Order*> playerOrders;
+    for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
+        playerOrders = (*it)->getPlayerOrders();  //accessing each player's orders
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            if (typeid(*iter) != typeid(Deploy)){   //skips iteration if not deploy
+                continue;
+            }
+            (*iter)->execute();
+        }
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            if (typeid(*iter) != typeid(Airlift)){   //skips iteration if not airlift
+                continue;
+            }
+            (*iter)->execute();
+        } 
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            if (typeid(*iter) != typeid(Blockade)){   //skips iteration if not blockade
+                continue;
+            }
+            (*iter)->execute();
+        }
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            (*iter)->execute();     //executes the rest of the order types
+        }
+    }
+    reinforcementPhase();   //goes back to the reinforcement phase
+}
 
 Startup::Startup(vector<Player*> *players, Map *map){
     setPlayerNum(players->size());

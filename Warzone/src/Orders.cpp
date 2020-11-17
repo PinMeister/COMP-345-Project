@@ -1,48 +1,47 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include "../include/Orders.h"
 
 using namespace std;
 
-
      // for OrdersList
-
-    OrdersList::OrdersList(vector<Order*> ord){   //constructor
-         orders = ord;
+    OrdersList::OrdersList(vector<Order*> orderslist){   //constructor
+         orderslist = orderslist;
     }
 
 
      OrdersList::OrdersList(const OrdersList &ordersList){ //copy constructor
-          orders= ordersList.orders;
+          orderslist= ordersList.orderslist;
      }
 
      OrdersList::~OrdersList(){ //destructor
-          orders.clear();
+          orderslist.clear();
      }
 
      OrdersList& OrdersList::operator=(const OrdersList &ordersList){ //assignment operator
 
-          orders = ordersList.orders;
+          orderslist = ordersList.orderslist;
           
           return *this;
      }
 
-    void OrdersList::Delete(vector<Order*> ord, int index){                          //Delete method
+    void OrdersList::Delete(vector<Order*> orderslist, int index){                         
 
-          ord.erase(ord.begin() + index);
+          orderslist.erase(orderslist.begin() + index);
 
      } 
 
-    void OrdersList::move(vector<Order*> ord, int start, int end){                   //move method
+    void OrdersList::move(vector<Order*> ord, int start, int end){                  
 
         //first iterator for the order that has to be moved
 
-        std::vector<Order *>::iterator itr1 = ord.begin();
+        std::vector<Order *>::iterator itr1 = orderslist.begin();
         std::advance(itr1, start-1);
 
         //second iterator for the order that is to be swapped with
-        std::vector<Order *>::iterator itr2 = ord.begin();
+        std::vector<Order *>::iterator itr2 = orderslist.begin();
         std::advance(itr2, end-1);
 
         //swapping the two orders the iterators point to
@@ -54,9 +53,9 @@ using namespace std;
      ostream& operator << (ostream &os, const OrdersList &ordersList){ //stream insertion operator for OrdersList
 
                os << "["; 
-                    for (int i = 0; i < ordersList.orders.size(); ++i) { 
-                         cout << *(ordersList.orders[i]) << endl;
-                         if (i != ordersList.orders.size() - 1) 
+                    for (int i = 0; i < ordersList.orderslist.size(); ++i) { 
+                         cout << *(ordersList.orderslist[i]) << endl;
+                         if (i != ordersList.orderslist.size() - 1) 
                               os << ", "; 
                     } 
                os << "]\n"; 
@@ -65,7 +64,6 @@ using namespace std;
      }
 
      // for Order
-
      Order::Order(){ //constructor
            
        }
@@ -87,65 +85,73 @@ using namespace std;
      }
 
      // for Deploy
-
-     Deploy::Deploy(int a, string l){ //constructor
-           armies = a;
-           location = l;
+     Deploy::Deploy(Player* player, int armies, Territory* territory){ //constructor
+           player = player;
+           armies = armies;
+           territory = territory;
        }
 
      Deploy::Deploy(const Deploy &deploy){ //copy constructor
+          this->player = deploy.player;
           armies = deploy.armies;
-          location = deploy.location;
-     }
-
-     Deploy::~Deploy(){  //destructor
-          armies = 0;
-          location = "";
+          this->territory = deploy.territory;
      }
 
      Deploy& Deploy::operator=(const Deploy &deploy){ //assignment operator
-          armies = deploy.armies;
-          location = deploy.location;
+          this->player = deploy.player;
+          armies= deploy.armies;
+          this->territory=deploy.territory;
 
            return *this;
      }
 
      ostream& operator << (ostream & os, const Deploy &deploy){  //stream insertion operator for Deploy
-          return os << "Deploy " << deploy.armies << " to " << deploy.location << endl;
+          return os << "Deploy " << deploy.armies << " to " << deploy.territory << endl;
      }
 
      void Deploy  :: validate() {
-          
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
+            cout << "The deploy order is valid.";
+         }
+         else {
+           cout << "The deploy order is invalid.";
+         }
      }
 
      void Deploy  :: execute() {
-          
+          validate();
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
+          while(armies <= player->getReinforcementPool()){
+          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
+            territory->addArmyNum(armies);
+         }   
+       }      
      }
 
 
      // for Advance
 
-     Advance::Advance(string s, string t, int a){ //constructor
-               source = s;
-               target = t;
-               armies = a;
+     Advance::Advance(Player* player, Territory* start, Territory* target, int armies){ //constructor
+               player = player;
+               start = start;
+               target = target;
+               armies = armies;
           }
 
      Advance::Advance(const Advance &advance){ //copy constructor
-          source = advance.source;
+          player = advance.player;
+          start = advance.start;
           target = advance.target;
           armies = advance.armies;
 
      }
 
-     Advance::~Advance(){  //destructor
-          source = "";
-          target = "";
-          armies = 0;
-     }
-
      Advance& Advance::operator=(const Advance &advance){ //assignment operator
-          source = advance.source;
+          player = advance.player;
+          start = advance.start;
           target = advance.target;
           armies = advance.armies;
 
@@ -153,15 +159,28 @@ using namespace std;
      }
 
      ostream& operator << (ostream &os, const Advance &advance){ //stream insertion operator for Advance
-          return os << "Advance " << advance.armies << " armies from " << advance.source << " to " << advance.target <<endl;
+          return os << "Advance " << advance.armies << " armies from " << advance.start << " to " << advance.target <<endl;
      }
 
      void Advance  :: validate() {
-          
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories();
+          if (std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()){
+            cout << "The advance order is valid.";
+         }
+          else {
+           cout << "The advance order is invalid.";
+         }         
      }
 
      void Advance  :: execute() {
-          
+          validate();
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories();          
+          if ((std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()) && (std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end())){
+            target->addArmyNum(armies);
+            start->subtractArmyNum(armies);
+         }          
      }
 
      // for Bomb
@@ -171,15 +190,15 @@ using namespace std;
           }
 
      Bomb::Bomb(const Bomb &bomb){ //copy constructor
-          target = bomb.target;
+          target=bomb.target;
      }
 
      Bomb::~Bomb(){  //destructor
-          target = "";
+          target="";
      }
 
      Bomb& Bomb::operator=(const Bomb &bomb){ //assignment operator
-          target = bomb.target;
+          target=bomb.target;
 
           return *this;
      }
@@ -203,15 +222,15 @@ using namespace std;
           }
 
      Blockade::Blockade(const Blockade &blockade){ //copy constructor
-          territory = blockade.territory;
+          territory=blockade.territory;
      }
 
      Blockade::~Blockade(){  //destructor
-          territory = "";
+          territory="";
      }
 
      Blockade& Blockade::operator=(const Blockade &blockade){ //assignment operator
-          territory = blockade.territory;
+          territory=blockade.territory;
 
           return *this;
      }
@@ -243,13 +262,13 @@ using namespace std;
      }
 
      Airlift::~Airlift(){  //destructor
-          origin = "";
-          destination = "";
+          origin="";
+          destination="";
           armies = 0;
      }
 
      Airlift& Airlift::operator=(const Airlift &airlift){ //assignment operator
-          origin = airlift.origin;
+          origin=airlift.origin;
           destination = airlift.destination;
           armies = airlift.armies;
 
@@ -280,7 +299,7 @@ using namespace std;
      }
 
      Negotiate::~Negotiate(){  //destructor
-          playerID = 0;
+          playerID= 0;
      }
 
      Negotiate& Negotiate::operator=(const Negotiate &negotiate){ //assignment operator

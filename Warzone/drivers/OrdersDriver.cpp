@@ -5,12 +5,12 @@
 #include "../include/Orders.h"
 
 using namespace std;
-
+    //will be changed in assignment 2
 int main(){
 
     //creating pointers of user defined class type
 
-    Deploy *depl = new Deploy(2, "canada");
+   // Deploy *depl = new Deploy(2, "canada");
     Advance *adv = new Advance("canada", "usa", 2);
     Bomb *bmb = new Bomb("mexico");
     Blockade *blckd = new Blockade("canada");
@@ -19,7 +19,7 @@ int main(){
 
     //describing the order
 
-    cout << *depl << endl;  
+    //cout << *depl << endl;  
     cout << *adv << endl; 
     cout << *bmb << endl;
     cout << *blckd << endl;
@@ -32,7 +32,7 @@ int main(){
 
     // placing elements in list
 
-    vec.push_back(depl);
+    //vec.push_back(depl);
     vec.push_back(adv);
     vec.push_back(bmb);
     vec.push_back(blckd);
@@ -45,15 +45,23 @@ int main(){
    
    //deleting the pointers
 
-    delete depl; 
+    //delete depl; 
     delete adv; 
     delete bmb;
     delete blckd;
     delete alt;
     delete ngt; 
 
-    delete olist;  
+    delete olist; 
 
+    //depl = NULL;
+    adv = NULL;
+    bmb = NULL;
+    blckd = NULL;
+    alt = NULL;
+    ngt = NULL;
+
+    olist = NULL; 
 
     return 0;
 };

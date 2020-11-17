@@ -19,7 +19,7 @@ class Player {
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
 		int reinforcementPool;
-
+		
 	public:
 		vector<Territory*> toDefend();	// returns list of territories to be defended
 		vector<Territory*> toAttack();	// returns list of territories to be attacked		
@@ -33,7 +33,7 @@ class Player {
 		void addTerritory(Territory* territory);
 		vector<Territory*> getTerritories();
 		int getPlayerID();
+		vector<Order*> getPlayerOrders();
 		int getReinforcementPool();
 		void setReinforcementPool(int i);
-		
-		};
+};

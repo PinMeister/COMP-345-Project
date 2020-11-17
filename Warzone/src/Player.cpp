@@ -52,19 +52,6 @@ vector<Territory*> Player::getTerritories(){
 	return territories;
 }
 
-int Player::getPlayerID(){
-	return playerID;
-}
-
-int Player::getReinforcementPool(){
-	return reinforcementPool;
-}
-
-void Player::setReinforcementPool(int i){
-	this->reinforcementPool = i;
-}
-
-
 // returns picked list of territories to defend
 vector<Territory*> Player::toDefend() {
 
@@ -139,3 +126,18 @@ vector<Territory*> Player::toAttack() {
 
 // issue orders to deploy 
 void Player::issueOrder(Order* order) {}
+int Player::getPlayerID(){
+	return playerID;
+}
+
+vector<Order*> Player :: getPlayerOrders(){
+	return orders;
+}
+
+int Player::getReinforcementPool(){
+	return reinforcementPool;
+}
+
+void Player::setReinforcementPool(int i){
+	this->reinforcementPool = i;
+}
