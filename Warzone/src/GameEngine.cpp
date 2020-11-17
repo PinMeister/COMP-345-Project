@@ -221,9 +221,11 @@ void GameEngine::reinforcementPhase() {
                                 playerTerritoriesName.begin(), 
                                 playerTerritoriesName.end(), v.begin());
 
+            for (st = v.begin(); st != iter; ++st) {} // add into st until it's not equal to iter            
+
             // if the set difference has no element
             // means the player owns the continent
-            if (v.size() == 0) {
+            if ((st - v.begin()) == 0) {
                 numOfArmies += continent->getControlBonus();
             }
 
