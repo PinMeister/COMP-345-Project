@@ -162,7 +162,7 @@ void GameEngine::createPlayers() {
     delete defaultHand;
     delete defaultDeck;
 
-    cout << "TEST";
+    cout << "End of player creation" << endl;
 }
 
 // TO DO
