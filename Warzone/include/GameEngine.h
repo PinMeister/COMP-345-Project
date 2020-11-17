@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Map.h"
 #include "MapLoader.h"
+#include "Orders.h"
 #include <vector>
 #include <iostream>
 #include <vector>
@@ -23,6 +24,8 @@ public:
     MapLoader* maploader; // to load the map
     Map* map; // choose map
     Deck* deck; // default deck for the game
+    Player* currentPlayer; // current player
+    Order* lastOrder; // the last order
     // vector<Observer> observers*; // need Part 5 to complete
     GameEngine(); // default constructor
     ~GameEngine(); // destructor
@@ -31,6 +34,10 @@ public:
     friend ostream& operator<<(ostream& out, const GameEngine &gameEngine); // string insertion
     GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map);
     Map* chooseMap(); // let user choose map from path
+
+    static GameEngine& GetEngine(); // returns instance of game engine class
+    static const Player* getCurrentPlayer(); // gets current player
+    static const Order* getLastOrder(); // gets last order
     void setMap(Map* map); // set the map after loading it
     void setPlayerNum(); // set the number of player (2 to 5 only)
     int getPlayerNum(); // retrieve number of player
