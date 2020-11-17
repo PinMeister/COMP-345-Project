@@ -37,6 +37,7 @@ class Continent {
         void addTerritory(Territory* territory);
         string getName();
         vector<Territory*> getMembers();
+        int getNumOfArmies();
     private:
         string name;
         int numOfArmies;

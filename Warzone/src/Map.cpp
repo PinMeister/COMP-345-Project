@@ -312,3 +312,7 @@ string Continent::getName() {
 vector<Territory*> Continent::getMembers() {
     return members;
 }
+
+int Continent::getNumOfArmies() {
+    return numOfArmies;
+}
