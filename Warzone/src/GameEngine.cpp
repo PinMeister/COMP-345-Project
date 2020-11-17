@@ -31,8 +31,8 @@ int main() {
     gameEngine->createPlayers();
     cout << "Players have been created" << endl;
 
-    for (auto i = tempPlayers.begin(); i != tempPlayers.end(); ++i)
-        std::cout << *i << endl;
+    Startup* startUp = new Startup(gameEngine->players, gameEngine->map);
+
 
     cout << "Beginning reinforcement phase: " << endl;
     gameEngine->reinforcementPhase();
@@ -179,10 +179,13 @@ void GameEngine::reinforcementPhase() {
 
     for (int a = 0; a<3; a++){
 
-        cout << "Round " << a << endl;
+        cout << "Test Round " << a << endl;
 
     for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
+        cout << "Starting to loop throw each player" << endl;
+        cout << (*it)->getTerritories().size() << endl; 
+
         numOfArmies = (*it)->getTerritories().size();
         numOfArmies = floor(numOfArmies/3);
 
