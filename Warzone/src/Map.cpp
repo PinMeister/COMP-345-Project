@@ -266,20 +266,20 @@ Continent::Continent() {};
 // Partial constructor
 Continent::Continent(string name, int armies) {
     this->name = name;
-    numOfArmies = armies;
+    controlBonus = armies;
 }
 
 // Constructor with all arguments
 Continent::Continent(string name, int armies, vector<Territory*> members) {
     this->name = name;
-    numOfArmies = armies;
+    controlBonus = armies;
     this->members = members;
 }
 
 // Copy constructor
 Continent::Continent(const Continent &continent) {
     this->name = continent.name;
-    this->numOfArmies = continent.numOfArmies;
+    this->controlBonus = continent.controlBonus;
     this->members = continent.members;
 }
 
@@ -287,7 +287,7 @@ Continent::Continent(const Continent &continent) {
 // Assignment operator
 Continent& Continent::operator=(const Continent &continent) {
     this->name = continent.name;
-    this->numOfArmies = continent.numOfArmies;
+    this->controlBonus = continent.controlBonus;
     this->members = continent.members;
     return *this;
 }
@@ -313,6 +313,6 @@ vector<Territory*> Continent::getMembers() {
     return members;
 }
 
-int Continent::getNumOfArmies() {
-    return numOfArmies;
+int Continent::getControlBonus() {
+    return controlBonus;
 }

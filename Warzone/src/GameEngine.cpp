@@ -210,13 +210,13 @@ void GameEngine::reinforcementPhase() {
 
             // temp vector for set_difference
             vector<string> v(n); 
-            vector<string>::iterator it, st; 
+            vector<string>::iterator iter, st; 
 
             // Sort vector to use set_difference
             sort(continentTerritoriesName.begin(), continentTerritoriesName.end()); 
 
             // compare both vector
-            it = set_difference(continentTerritoriesName.begin(),
+            iter = set_difference(continentTerritoriesName.begin(),
                                 continentTerritoriesName.end(), 
                                 playerTerritoriesName.begin(), 
                                 playerTerritoriesName.end(), v.begin());
@@ -224,7 +224,7 @@ void GameEngine::reinforcementPhase() {
             // if the set difference has no element
             // means the player owns the continent
             if (v.size() == 0) {
-                numOfArmies += continent->getNumOfArmies();
+                numOfArmies += continent->getControlBonus();
             }
 
             for (auto p : mapTerritories) { delete p; }
