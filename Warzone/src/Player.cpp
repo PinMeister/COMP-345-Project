@@ -73,3 +73,10 @@ vector<Order*> Player :: getPlayerOrders(){
 	return orders;
 }
 
+int Player::getReinforcementPool(){
+	return reinforcementPool;
+}
+
+void Player::setReinforcementPool(int i){
+	this->reinforcementPool = i;
+}
