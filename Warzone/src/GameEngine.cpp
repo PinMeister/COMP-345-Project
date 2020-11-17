@@ -303,28 +303,28 @@ void GameEngine::issueOrdersPhase() {
 void GameEngine::executeOrdersPhase() {
     vector<Player*>::iterator it;
     vector<Order*>::iterator iter;
-    vector<Order*> orders;
+    vector<Order*> playerOrders;
     for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
-        orders = (*it)->getPlayerOrders();  //accessing each player's orders
-        for(iter = orders.begin(); iter != orders.end(); iter++){   //iterating through each player's list of orders
+        playerOrders = (*it)->getPlayerOrders();  //accessing each player's orders
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
             if (typeid(*iter) != typeid(Deploy)){   //skips iteration if not deploy
                 continue;
             }
             (*iter)->execute();
         }
-        for(iter = orders.begin(); iter != orders.end(); iter++){   //iterating through each player's list of orders
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
             if (typeid(*iter) != typeid(Airlift)){   //skips iteration if not airlift
                 continue;
             }
             (*iter)->execute();
         } 
-        for(iter = orders.begin(); iter != orders.end(); iter++){   //iterating through each player's list of orders
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
             if (typeid(*iter) != typeid(Blockade)){   //skips iteration if not blockade
                 continue;
             }
             (*iter)->execute();
         }
-        for(iter = orders.begin(); iter != orders.end(); iter++){   //iterating through each player's list of orders
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
             (*iter)->execute();     //executes the rest of the order types
         }
     }
