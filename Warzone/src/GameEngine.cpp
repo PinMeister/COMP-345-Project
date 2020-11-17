@@ -184,7 +184,6 @@ void GameEngine::reinforcementPhase() {
         numOfArmies = (*it)->getTerritories().size();
         numOfArmies = floor(numOfArmies/3);
 
-        vector<int> continentSize;
         vector<Continent*> mapContinents = map->getContinents(); // get all continents for current map
         vector<Territory*> playerTerritories = (*it)->getTerritories(); // get the user's territories
         vector<string> playerTerritoriesName; // get the user's territories name
@@ -200,7 +199,6 @@ void GameEngine::reinforcementPhase() {
 
         // check for each continent if user owns all territories
         for (auto continent : mapContinents){
-            // continentSize.push_back(continent->getMembers().size());
             vector<Territory*> mapTerritories = continent->getMembers();
             int n = mapTerritories.size();
             vector<string> continentTerritoriesName;
@@ -249,9 +247,8 @@ void GameEngine::reinforcementPhase() {
         for (auto p : playerTerritories) { delete p; }
         playerTerritories.clear();
         
-        continentSize.clear();
-        playerTerritories.clear();
-    }
+        playerTerritoriesName.clear();
+        }
 }
 
 void GameEngine::issueOrdersPhase() {}
