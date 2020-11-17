@@ -30,6 +30,17 @@ int main() {
     gameEngine->createPlayers();
     cout << "Players have been created" << endl;
 
+    // free memory and dangling ptr
+    for (auto p : players) { delete p; } 
+    delete maploader;
+    delete map;
+    delete gameEngine;
+
+    players.clear();
+    maploader = NULL;
+    map = NULL;
+    gameEngine = NULL;
+
 	return 0;
 }
 
@@ -132,8 +143,27 @@ void GameEngine::createPlayers() {
 
     for (int i = 1; i <= numberOfPlayers; i++){
         // last parameter i is the playerID
+        // create new players
         Player* tempPlayer = new Player(defaultTerritories, defaultHand, defaultOrders, i);
+        this->players.push_back(tempPlayer); // add the players into the GameEngine vector
+
+        // free memory and dangling ptr
+        delete tempPlayer;
+        tempPlayer = NULL;
     }
+
+    // free memory and dangling ptr
+    for (auto p : defaultTerritories) { delete p; } 
+    for (auto p : defaultOrders) { delete p; } 
+    for (auto p : defaultCards) { delete p; } 
+    delete defaultHand;
+    delete defaultDeck;
+
+    defaultTerritories.clear();
+    defaultHand = NULL;
+    defaultOrders.clear();
+    defaultCards.clear();
+    defaultDeck = NULL;
 }
 
 void GameEngine::reinforcementPhase() {}
