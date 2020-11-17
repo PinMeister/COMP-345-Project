@@ -40,20 +40,19 @@ ostream& operator << (ostream &os, const Player &player){
 	return os << "Player:" << player.playerID << " Player territories: " << player.territories.size()  << " Player hand: " << player.hand  << "Player orders: " << player.orders.size();
 }
 
+// list of territories to defend
 vector<Territory*> Player::toDefend() {
-	// list<Territory*> toDefendTerritory;
-	// MAKE A LOOP WITH THE LOGIC WHEN territories is impletemented
-	// to check which have the flag to defend
+
 	return this->toDefendTerritory;
 }
 
+// list of territories to attack
 vector<Territory*> Player::toAttack() {
-	// list<Territory*> toAttackTerritory;
-	// MAKE A LOOP WITH THE LOGIC WHEN territories is impletemented
-	// to check which have the flag to attack
+
 	return this->toAttackTerritory;
 }
 
+// issue orders to deploy 
 void Player::issueOrder(Order* order) {
 	this->orders.push_back(order);
 }
