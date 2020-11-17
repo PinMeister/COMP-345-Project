@@ -18,6 +18,7 @@ class Player {
 		int playerID;
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
+		int reinforcementPool;
 
 	public:
 		vector<Territory*> toDefend();	// returns list of territories to be defended
@@ -32,4 +33,7 @@ class Player {
 		void addTerritory(Territory* territory);
 		vector<Territory*> getTerritories();
 		int getPlayerID();
+		int getReinforcementPool();
+		void setReinforcementPool(int i);
+		
 		};
