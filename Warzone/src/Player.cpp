@@ -144,3 +144,10 @@ int Player::getReinforcementPool(){
 void Player::setReinforcementPool(int i){
 	this->reinforcementPool = i;
 }
+int Player::getPlayerID(){
+	return playerID;
+}
+
+void Player::setOrdersRef(vector<Order*> ordersRef){
+	orders = ordersRef;
+}

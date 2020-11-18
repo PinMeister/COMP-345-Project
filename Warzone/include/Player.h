@@ -14,7 +14,8 @@ using namespace std;
 class Player {
 	private:
 		vector<Territory*> territories;
-		Hand* hand; // or to change to deck cards to validate when Part 5 is done
+		Hand* hand; // player's cards
+		OrdersList* orderList;
 		vector<Order*> orders;
 		int playerID;
 		vector<Territory*> toDefendTerritory;
@@ -37,5 +38,8 @@ class Player {
 		vector<Order*> getPlayerOrders();
 		int getReinforcementPool();
 		void setReinforcementPool(int i);
+				void setOrdersRef(vector<Order*> orders);
+
 };
 #endif
+

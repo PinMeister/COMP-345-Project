@@ -1,3 +1,7 @@
+#include <random>
+#include <stdlib.h>
+#include <time.h>
+
 #include "../include/Cards.h"
 #include "../include/Orders.h"
 
@@ -65,7 +69,9 @@ void Card::play(vector<Order*> &ol, Deck &deck) {
 Deck::Deck() {
 	for (auto i = 0; i < 56;  ++i)
 	{
-		int random = rand() % 5; // not really random... 
+		srand(time(NULL)); // set seed a runtime value
+		int random = rand() % 5;
+
 		if(random % 5 == 0) {
 			cards.push_back(new Card(Card::BOMB)); 
 		}
