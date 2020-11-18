@@ -20,6 +20,7 @@ class Territory {
         void addArmyNum(int num);
         void subtractArmyNum(int num);
         int getArmyNum();
+        void setArmyNum(int num);
         vector<Territory*> neighbours;
         bool visited;
     private:

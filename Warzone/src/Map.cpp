@@ -264,6 +264,10 @@ int Territory::getArmyNum(){
     return armies;
 }
 
+void Territory::setArmyNum(int num){
+    armies = num;
+}
+
 // Empty constructor
 Continent::Continent() {};
 
