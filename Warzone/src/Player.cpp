@@ -69,3 +69,7 @@ vector<Territory*> Player::getTerritories(){
 int Player::getPlayerID(){
 	return playerID;
 }
+
+void Player::setOrdersRef(vector<Order*> ordersRef){
+	orders = ordersRef;
+}

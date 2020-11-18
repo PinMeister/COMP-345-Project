@@ -21,23 +21,27 @@ int main(){
 
     // create players
     cout << "\nCreating players" << "\n";
-    vector<Player*> *players = new vector<Player*>;
+    vector<Player*> players;
     for(int i = 0; i < playerNum; i++){
         Player *player = new Player(i);
-        players->push_back(player);
+        players.push_back(player);
         cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
     }
 
     // create GameEngine
     cout << "\nCreating game" << "\n";
-    Startup *startUp = new Startup(players, map);
+    Startup *startUp = new Startup(&players, map);
     cout << "startup phase completed" << "\n\n";
 
     for(int i = 0; i < playerNum; i++){
-        Territory* temp = players->at(i)->getTerritories()[0];
-        cout << "Player " << i + 1 << " id: " << players->at(i)->getPlayerID() << "\n" << "In " << temp->getName() << " with " << temp->getArmyNum() << " armies \n";
+        Territory* temp = players[i]->getTerritories()[0];
+        cout << "Player " << i + 1 << " id: " << players[i]->getPlayerID() << "\n" << "In " << temp->getName() << " with " << temp->getArmyNum() << " armies \n";
         temp = NULL;
         delete temp;
     }
+
+    cout << "\n" << *startUp;
+
+    delete startUp;
     return 0;
 }
