@@ -35,7 +35,7 @@ using namespace std;
 
      } 
 
-    void OrdersList::move(vector<Order*> ord, int start, int end){                  
+    void OrdersList::move(vector<Order*> orderslist, int start, int end){                  
 
         //first iterator for the order that has to be moved
 
@@ -234,6 +234,7 @@ using namespace std;
      }  
 
      void Bomb  :: execute() {
+          validate();
           bool neighbour = false;
           vector<Territory*> playerTerritories;
           vector<Territory*>::iterator iter;
@@ -282,11 +283,35 @@ using namespace std;
           }
 
      void Blockade  :: validate() {
-          
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
+            cout << "The blockade order is valid." << endl;
+         }
+         else{
+              cout << "The blockade order is invalid." << endl;
+         }    
      }  
 
      void Blockade  :: execute() {
-          
+          validate();
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
+          int territoryArmies = territory->getArmyNum(); //number of armies of target territory
+          vector<Territory*>::iterator iter; //iterator for territory vector
+          int i;    //int to record index of territory in player's territories vector
+          //only executes if territory is a player's territory
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
+               int newArmyNum = territoryArmies * 2;
+               territory->setArmyNum(newArmyNum);
+               for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){   //iterating through each player's list of orders
+                  if((*iter) == territory){
+                       i = iter;
+                         }
+                   break;
+                }
+                playerTerritories.erase(i); //erases the territory from the player's territories, making it neutral
+         }
      }   
 
      // for Airlift
