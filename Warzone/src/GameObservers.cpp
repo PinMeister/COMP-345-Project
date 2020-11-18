@@ -3,13 +3,41 @@
 #include <iostream>
 using namespace std;
 
+// Default constructor
 PhaseObserver::PhaseObserver() {};
 
+// Constructor with GameEngine parameter
 PhaseObserver::PhaseObserver(GameEngine* game) {
     subject = game;
     subject->Attach(this);
 }
 
+// Copy constructor
+PhaseObserver::PhaseObserver(const PhaseObserver &phaseObserver) {
+	   this->subject = phaseObserver.subject;
+	   this->player = phaseObserver.player;
+	   this->phase = phaseObserver.phase;
+       this->info = phaseObserver.info;
+}
+
+// Assignment operator
+PhaseObserver& PhaseObserver::operator = (const PhaseObserver &phaseObserver) { 
+	   this->subject = phaseObserver.subject;
+	   this->player = phaseObserver.player;
+	   this->phase = phaseObserver.phase;
+       this->info = phaseObserver.info;
+	return *this;
+}
+
+// Stream insertion operator
+ostream& operator << (ostream &os, PhaseObserver &phaseObserver) { 
+	return os << "\n Current game engine:" << phaseObserver.subject 
+    << "\n Current player: " << phaseObserver.player  
+    << "\n Current phase: " << phaseObserver.phase  
+    << "\n Relevent information: " << phaseObserver.info;
+}
+
+// Destructor
 PhaseObserver::~PhaseObserver() {
     subject->Detach(this);
 }
@@ -25,13 +53,48 @@ void PhaseObserver::Update(Player* player, string phase, string info) {
     cout << info << endl; // Display relevant information
 }
 
+GameEngine* PhaseObserver::getSubject() {
+    return subject;
+}
+
+Player* PhaseObserver::getPlayer() {
+    return player;
+};
+
+string PhaseObserver::getPhase() {
+    return phase;
+};
+
+string PhaseObserver::getInfo() {
+    return info;
+};
+
+// Default constructor
 StatsObserver::StatsObserver() {};
 
+// Constructor with GameEngine parameter
 StatsObserver::StatsObserver(GameEngine* game) {
     subject = game;
     subject->Attach(this);
 }
 
+// Copy constructor
+StatsObserver::StatsObserver(const StatsObserver &statsObserver) {
+	   this->subject = statsObserver.subject;
+}
+
+// Assignment operator
+StatsObserver& StatsObserver::operator = (const StatsObserver &statsObserver) { 
+	   this->subject = statsObserver.subject;
+	return *this;
+}
+
+// Stream insertion operator
+ostream& operator << (ostream &os, StatsObserver &statsObserver) { 
+	return os << "\n Current game engine:" << statsObserver.subject;
+}
+
+// Destructor
 StatsObserver::~StatsObserver() {
     subject->Detach(this);
 }
@@ -52,4 +115,8 @@ void StatsObserver::Update() {
             }
         }
     }
+}
+
+GameEngine* StatsObserver::getSubject() {
+    return subject;
 }
