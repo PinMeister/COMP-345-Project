@@ -9,10 +9,11 @@
 #include "../include/Player.h"
 #include "../include/Map.h"
 #include "../include/MapLoader.h"
+#include "../include/Subject.h"
 
 class GameEngine;
 
-class GameEngine {
+class GameEngine : public Subject {
 //private attributes for GameEngine class
 private:
 
