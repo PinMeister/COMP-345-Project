@@ -33,7 +33,7 @@ class OrdersList{
         OrdersList& operator=(const OrdersList &ordersList); //assignment operator
 
         friend ostream& operator << (ostream &os, const OrdersList &ordersList); //stream insertion operator for OrdersList
-
+        void add(Order* order);
         void Delete(vector<Order*> ord, int index);
         void move(vector<Order*> ord, int start, int end);
     private:
@@ -146,4 +146,3 @@ class Negotiate : public Order{
 };
 
 #endif
-
