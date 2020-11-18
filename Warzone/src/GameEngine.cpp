@@ -13,10 +13,10 @@ using namespace std;
 // main driver
 int main() {
     int numberOfPlayers = 0;
-    vector<Player*> players;
+    vector<Player*> tempPlayers;
     MapLoader* maploader;
     Map* map;
-    GameEngine* gameEngine = new GameEngine(numberOfPlayers, players, maploader, map);
+    GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
 
     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
     map = gameEngine->chooseMap(); // choose map to start the game
@@ -32,12 +32,9 @@ int main() {
     cout << "Players have been created" << endl;
 
     // free memory and dangling ptr
-    for (auto p : players) { delete p; } 
-    delete maploader;
-    delete map;
     delete gameEngine;
 
-    players.clear();
+    tempPlayers.clear();
     maploader = NULL;   
     map = NULL;
     gameEngine = NULL;
@@ -135,18 +132,20 @@ void GameEngine::setPlayerNum() {
 void GameEngine::createPlayers() {
 
     vector<Territory*> defaultTerritories; // players have no territories at first
-    Hand* defaultHand = new  Hand(); // to make default empty hand
+    Hand* defaultHand = new Hand(); // to make default empty hand
     vector<Order*> defaultOrders; // default set of battle orders
     vector<Card*> defaultCards; // some cards
     Deck* defaultDeck = new Deck(); // default deck of cards
 
     this->deck = defaultDeck; // set the default deck to the new initialized one
 
-    for (int i = 1; i <= numberOfPlayers; i++){
+    for (int i = 1; i <= this->numberOfPlayers; i++){
         // last parameter i is the playerID
         // create new players
         Player* tempPlayer = new Player(defaultTerritories, defaultHand, defaultOrders, i);
         this->players.push_back(tempPlayer); // add the players into the GameEngine vector
+
+        cout << "Player " << i << " has been created " << endl;
 
         // free memory and dangling ptr
         delete tempPlayer;
@@ -154,17 +153,13 @@ void GameEngine::createPlayers() {
     }
 
     // free memory and dangling ptr
-    for (auto p : defaultTerritories) { delete p; } 
-    for (auto p : defaultOrders) { delete p; } 
-    for (auto p : defaultCards) { delete p; } 
+    defaultHand = NULL;
+    defaultDeck = NULL;
+
     delete defaultHand;
     delete defaultDeck;
 
-    defaultTerritories.clear();
-    defaultHand = NULL;
-    defaultOrders.clear();
-    defaultCards.clear();
-    defaultDeck = NULL;
+    cout << "End of player creation" << endl;
 }
 
 // TO DO

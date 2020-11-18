@@ -1,14 +1,15 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
-#include "Player.h"
-#include "Map.h"
-#include "MapLoader.h"
-#include "Orders.h"
 #include <vector>
 #include <iostream>
 #include <vector>
 
+#include "../include/Player.h"
+#include "../include/Orders.h"
+#include "../include/Player.h"
+#include "../include/Map.h"
+#include "../include/MapLoader.h"
 
 class GameEngine;
 
@@ -68,6 +69,6 @@ class Startup{
     private:
         int playerNum = 2;
         bool started = false;
-        void startupPhase(vector<Player*> *players, Map *map); // start up function 
+        void startupPhase(vector<Player*> *players, Map *map); // start up function  
 };
 #endif
