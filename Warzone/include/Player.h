@@ -37,5 +37,7 @@ class Player {
 		void setOrdersRef(vector<Order*> orders);
 		int getReinforcementPool();
 		void setReinforcementPool(int i);
+		vector<Territory*> get_neighbour_territories(Player* p);
+
 };
 #endif 
