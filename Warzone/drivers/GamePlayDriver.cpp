@@ -31,7 +31,7 @@ int main() {
     gameEngine->createPlayers();
     cout << "Players have been created" << endl;
 
-    Startup* startUp = new Startup(gameEngine->players, gameEngine->map);
+    Startup* startUp = new Startup(&(gameEngine->players), gameEngine->map);
 
 
     cout << "Beginning reinforcement phase: " << endl;
