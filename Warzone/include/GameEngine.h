@@ -34,7 +34,6 @@ public:
     void setMap(Map* map); // set the map after loading it
     void setPlayerNum(); // set the number of player (2 to 5 only)
     int getPlayerNum(); // retrieve number of player
-    void createPlayers(); // create all players and required elements for the players
     void toggleObserver(); // turn on/off any observers
     // void addPlayer(Player* p);
     // void gameLoop(Map gameMap);

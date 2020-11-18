@@ -14,7 +14,16 @@
 using namespace std;
 
 // main driver
-int main() {
+#include <iostream>
+
+#include "../include/MapLoader.h"
+#include "../include/Map.h"
+#include "../include/Player.h"
+#include "../include/GameEngine.h"
+
+using namespace std;
+
+int main(){
     int numberOfPlayers = 0;
     vector<Player*> tempPlayers;
     MapLoader* maploader;
@@ -30,26 +39,58 @@ int main() {
     gameEngine->setPlayerNum(); // let user choose number of players
     cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
 
-    cout << "Creating the players and required items for the game: " << endl;
-    gameEngine->createPlayers();
-    cout << "Players have been created" << endl;
-    cout << "GameEngine player size " << gameEngine->players.size() << endl;
-
     // above code is the driver for game start - Part 1
 
     // below code is for gameplay and maingameloop - Part 3
-    // vector<Player*> *tempPlayersPointer = ;
-    cout << "Beginning of startup phase" << endl;
-    Startup *startUp = new Startup(&(gameEngine->players), gameEngine->map);
+    int playerNum = gameEngine->numberOfPlayers;
+
+    cout << "Creating the players and required items for the game: " << endl;
+
+    // objects for players
+    vector<Territory*> defaultTerritories; // players have no territories at first
+    Hand* defaultHand = new Hand(); // to make default empty hand
+    vector<Order*> defaultOrders; // default set of battle orders
+    vector<Card*> defaultCards; // some cards
+    Deck* defaultDeck = new Deck(); // default deck of cards
+
+    gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
+
+    // create players
+    vector<Player*> players;
+    for(int i = 0; i < playerNum; i++){
+        Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
+        players.push_back(player);
+        cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
+    }
+    
+    gameEngine->players = players;
+
+    cout << "Players have been created" << endl;
+    cout << "GameEngine player size " << gameEngine->players.size() << endl;
+
+    // create GameEngine
+    cout << "\nCreating game" << "\n";
+    Startup *startUp = new Startup(&players, map);
     cout << "startup phase completed" << "\n\n";
 
-    cout << "Beginning of reinforcement phase" << endl;
+    for(int i = 0; i < playerNum; i++){
+        cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
+    }
+
+    cout << endl << "Beginning of reinforcement phase " << endl;
     gameEngine->reinforcementPhase();
-    cout << "End of reinforcement phase" << endl;
+    cout << "End of reinforcement phase " << endl;
 
     // free memory and dangling ptr
+    delete startUp;
     delete gameEngine;
-    gameEngine = NULL;
+    delete defaultHand;
+    delete defaultDeck;
 
-	return 0;
+    startUp = NULL;
+    gameEngine = NULL;
+    defaultHand = NULL;
+    defaultDeck = NULL;
+
+    return 0;
 }
