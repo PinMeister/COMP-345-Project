@@ -11,6 +11,7 @@ using namespace std;
 class Deck;
 class Card;
 class Hand;
+class Order;
 
 class Card {
 

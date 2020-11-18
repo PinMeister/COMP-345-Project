@@ -10,6 +10,9 @@
 
 using namespace std;
 
+class Order;
+class Hand;
+
 class Player {
 	private:
 		vector<Territory*> territories;

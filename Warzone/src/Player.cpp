@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -81,8 +82,7 @@ vector<Territory*> Player::toDefend() {
 		{
 			// 1. check if picked already 
 			// 2. if not picked, push to toDefendTerritory vector
-			vector<Territory*>::iterator it;
-			it = find(this->toDefendTerritory.begin(), this->toDefendTerritory.end(), controlled[index]);
+			auto it = find(this->toDefendTerritory.begin(), this->toDefendTerritory.end(), controlled[index]);
 
 			if (it != this->toDefendTerritory.end())
 			{
