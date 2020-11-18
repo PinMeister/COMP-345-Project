@@ -1,12 +1,9 @@
 #ifndef MAP_H
 #define MAP_H
 
-
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../include/Player.h"
-
 
 using namespace std;
 
@@ -23,8 +20,6 @@ class Territory {
         void addArmyNum(int num);
         int getArmyNum();
         vector<Territory*> neighbours;
-        vector<Territory*> get_neighbours();
-
         bool visited;
     private:
         string name;
@@ -43,7 +38,6 @@ class Continent {
         void addTerritory(Territory* territory);
         string getName();
         vector<Territory*> getMembers();
-
     private:
         string name;
         int numOfArmies;
@@ -72,9 +66,6 @@ class Map {
         int visitNeighbours(Territory* territory, int visited);
         int visitContinentNeighbours(Territory* territory, string continent, int visited);
         void resetVisitedTerritories();
-        vector<Territory*> get_neighbour_territories(Player* p);
-
-
     private:
         vector<Territory*> territories;
         vector<Continent*> continents;

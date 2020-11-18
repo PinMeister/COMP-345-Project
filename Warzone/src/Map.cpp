@@ -252,34 +252,6 @@ string Territory::getContinent() {
     return continent;
 }
 
-vector<Territory*> Territory::get_neighbours() {
-    return neighbours; };
-
-vector<Territory*> Map::get_neighbour_territories(Player* p) {
-	vector<Territory*> controlled = territories; 
-	vector<Territory*> neighbouring_terrritories; 
-
-	// Get neighbour territories ( territories to attack )
-	for (Territory* c : controlled) {
-		vector<Territory*> attacking = c->get_neighbours();
-        
-        // for territories to attack find if it's controlled by you
-		for (Territory* neighbour : attacking) {
-			auto result = find(controlled.begin(), controlled.end(), neighbour);
-            if (result == controlled.end()) // vector doesn't contain element
-            {
-				neighbouring_terrritories.push_back(neighbour); // push to neighbouring territories vector
-            }
-            else 
-            {
-                continue;
-            }
-		}
-	}
-	return neighbouring_terrritories;
-}
-
-
 void Territory::addArmyNum(int num){
     armies += num;
 }
@@ -340,5 +312,3 @@ string Continent::getName() {
 vector<Territory*> Continent::getMembers() {
     return members;
 }
-
-
