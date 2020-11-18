@@ -10,10 +10,11 @@
 
 using namespace std;
 
+
 // default constructor auto generated
 
 // constructor with params 
-GameEngine::GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map)  {
+GameEngine::GameEngine(int numberOfPlayers, vector<Player*> *players, MapLoader* maploader, Map* map)  {
        this->numberOfPlayers = numberOfPlayers;
 	   this->players = players;
 	   this->maploader = maploader;
@@ -44,7 +45,7 @@ GameEngine& GameEngine::operator=(const GameEngine &gameEngine){
 //stream insertion operator for GameEngine
 ostream& operator << (ostream &os, const GameEngine &gameEngine){ 
 	return os << "\n GameEngine number of player:" << gameEngine.numberOfPlayers 
-    << "\n GameEngine player size: " << gameEngine.players.size()  
+    << "\n GameEngine player size: " << gameEngine.numberOfPlayers  
     << "\n GameEngine maploader: " << gameEngine.maploader  
     << "\n GameEngine map: " << gameEngine.map;
 }
@@ -52,7 +53,7 @@ ostream& operator << (ostream &os, const GameEngine &gameEngine){
 // destructor
 GameEngine::~GameEngine(){
     numberOfPlayers = 0;
-    players.clear(); // empty array
+    players->clear(); // empty array
     maploader = NULL;
     map = NULL;
 }
@@ -111,7 +112,7 @@ void GameEngine::createPlayers() {
         // last parameter i is the playerID
         // create new players
         Player* tempPlayer = new Player(defaultTerritories, defaultHand, defaultOrders, i);
-        this->players.push_back(tempPlayer); // add the players into the GameEngine vector
+        players->push_back(tempPlayer); // add the players into the GameEngine vector
 
         cout << "Player " << i << " has been created " << endl;
 
@@ -146,7 +147,7 @@ void GameEngine::reinforcementPhase() {
 
         cout << "Test Round " << a << endl;
 
-    for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
+    for(it = players->begin(); it != players->end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
         cout << "Starting to loop throw each player" << endl;
         cout << (*it)->getTerritories().size() << endl; 

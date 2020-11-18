@@ -19,7 +19,7 @@ private:
 public:
     int numberOfPlayers;
 	// int* numberOfRounds;
-    vector<Player*> players; // list of players for the game
+    vector<Player*> *players; // list of players for the game
     MapLoader* maploader; // to load the map
     Map* map; // choose map
     Deck* deck; // default deck for the game
@@ -29,7 +29,7 @@ public:
     GameEngine(const GameEngine &gameEngine); // copy constructor
     GameEngine& operator=(const GameEngine &gameEngine); // overloading assignment
     friend ostream& operator<<(ostream& out, const GameEngine &gameEngine); // string insertion
-    GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map);
+    GameEngine(int numberOfPlayers, vector<Player*> *players, MapLoader* maploader, Map* map);
     Map* chooseMap(); // let user choose map from path
     void setMap(Map* map); // set the map after loading it
     void setPlayerNum(); // set the number of player (2 to 5 only)

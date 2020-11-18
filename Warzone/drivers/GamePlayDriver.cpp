@@ -13,7 +13,7 @@ using namespace std;
 // main driver
 int main() {
     int numberOfPlayers = 0;
-    vector<Player*> tempPlayers;
+    vector<Player*> *tempPlayers;
     MapLoader* maploader;
     Map* map;
     GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
@@ -31,8 +31,7 @@ int main() {
     gameEngine->createPlayers();
     cout << "Players have been created" << endl;
 
-    Startup* startUp = new Startup(&(gameEngine->players), gameEngine->map);
-
+    Startup* startUp = new Startup(gameEngine->players, gameEngine->map);
 
     cout << "Beginning reinforcement phase: " << endl;
     gameEngine->reinforcementPhase();
