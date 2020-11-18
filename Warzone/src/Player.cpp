@@ -58,18 +58,22 @@ void Player::issueOrder(Order* order) {
 	this->orders.push_back(order);
 }
 
+// add territory to player
 void Player::addTerritory(Territory* territory){
 	territories.push_back(territory);
 }
 
+// return player's territories
 vector<Territory*> Player::getTerritories(){
 	return territories;
 }
 
+// return player ID
 int Player::getPlayerID(){
 	return playerID;
 }
 
+// copy the order ref to the orders
 void Player::setOrdersRef(vector<Order*> ordersRef){
 	orders = ordersRef;
 }
