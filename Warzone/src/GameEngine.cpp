@@ -6,6 +6,7 @@
 #include <chrono>
 
 #include "../include/GameEngine.h"
+#include "../include/Orders.h"
 
 using namespace std;
 
@@ -83,6 +84,23 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
         randomTerritoryId.push_back(temp); // push it to the vector
         players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
         map->getTerritories()[temp]->addArmyNum(initialArmyNum); // assign army to territory
+
+        // give player all the orders
+        Deploy *depl;
+        Advance *adv;
+        Bomb *bmb;
+        Blockade *blckd;
+        Airlift *alt; 
+        Negotiate *ngt; 
+        vector<Order*> orders;
+        orders.push_back(depl);
+        orders.push_back(adv);
+        orders.push_back(bmb);
+        orders.push_back(blckd);
+        orders.push_back(alt);
+        orders.push_back(ngt); 
+
+        players->at(i)->setOrdersRef(orders);
     }
     started = true;
 }

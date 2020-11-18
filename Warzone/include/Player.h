@@ -31,4 +31,5 @@ class Player {
 		void addTerritory(Territory* territory);
 		vector<Territory*> getTerritories();
 		int getPlayerID();
+		void setOrdersRef(vector<Order*> orders);
 };
