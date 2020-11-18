@@ -32,6 +32,16 @@ int main() {
     cout << "Players have been created" << endl;
     cout << "GameEngine player size " << gameEngine->players.size() << endl;
 
+    // above code is the driver for game start - Part 1
+
+    // below code is for gameplay and maingameloop - Part 3
+    cout << "Beginning of startup phase" << endl;
+    Startup *startUp = new Startup(&(gameEngine->players), gameEngine->map);
+    cout << "startup phase completed" << "\n\n";
+
+    cout << "Beginning of reinforcement phase" << endl;
+    gameEngine->reinforcementPhase();
+
     // free memory and dangling ptr
     delete gameEngine;
     gameEngine = NULL;
@@ -177,7 +187,7 @@ void GameEngine::reinforcementPhase() {
 
     for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
-        cout << "Starting to loop throw each player" << endl;
+        cout << "Starting to loop through each player" << endl;
         cout << (*it)->getTerritories().size() << endl; 
 
         numOfArmies = (*it)->getTerritories().size();
