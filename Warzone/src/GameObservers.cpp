@@ -1,5 +1,5 @@
-#include "GameObservers.h"
-#include "GameEngine.h"
+#include "../include/GameObservers.h"
+#include "../include/GameEngine.h"
 #include <iostream>
 using namespace std;
 
