@@ -5,40 +5,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <chrono>
-
 #include "../include/GameEngine.h"
 
 using namespace std;
 
-// main driver
-int main() {
-    int numberOfPlayers = 0;
-    vector<Player*> tempPlayers;
-    MapLoader* maploader;
-    Map* map;
-    GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
-
-    cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
-    map = gameEngine->chooseMap(); // choose map to start the game
-    gameEngine->setMap(map); // set the new map from the maploader
-    cout << "Map AFTER user chooses: " << gameEngine->map << endl;
-
-    cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
-    gameEngine->setPlayerNum(); // let user choose number of players
-    cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
-
-    cout << "Creating the players and required items for the game: " << endl;
-    gameEngine->createPlayers();
-    cout << "Players have been created" << endl;
-
-    // free memory and dangling ptr
-    delete gameEngine;
-    gameEngine = NULL;
-
-	return 0;
-}
-
 // default constructor auto generated
+
 
 // constructor with params 
 GameEngine::GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map)  {
@@ -84,6 +56,7 @@ GameEngine::~GameEngine(){
     maploader = NULL;
     map = NULL;
 }
+
 
 // let user choose map
 Map* GameEngine::chooseMap() {
@@ -158,9 +131,47 @@ void GameEngine::createPlayers() {
     cout << "End of player creation" << endl;
 }
 
+
 void GameEngine::reinforcementPhase() {}
 
-void GameEngine::issueOrdersPhase() {}
+/* player determines territories to attack (listed in toAttack) and deploys orders to own territories (listed in toDefend)
+player can deploy if it still has armies to deploy before continuing to other orders, can issue advance orders and play a
+card from their hand
+*/
+void GameEngine::issueOrdersPhase() {
+    // create list to defned and attack
+    for (Player* p: players)
+    {
+        p->getTerritories();
+    }
+    //TODO armies available on all territories 
+
+    vector<Player*> active = players;
+
+    // if have active players
+    while (!active.empty())
+    {
+        for (size_t i=0; i<active.size(); i++)
+        {
+            Order* newOrder;
+            active[i]-> issueOrder(newOrder);
+
+            // if no new order, go to next player
+            if (newOrder == nullptr)
+            {
+                active.erase(active.begin()+i);
+            }
+            // execute order
+            else 
+            {
+                currentPlayer = active[i];
+                lastOrder = newOrder;
+                active[i]->issueOrder(lastOrder);
+            }
+        }
+    }
+
+}
 
 void GameEngine::executeOrdersPhase() {}
 

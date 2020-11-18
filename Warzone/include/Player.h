@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <iostream>
 #include <string>
@@ -19,10 +20,12 @@ class Player {
 		int playerID;
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
+ 		int reinforcementPool; 
+
 	public:
-		vector<Territory*> toDefend();
-		vector<Territory*> toAttack();
-		void issueOrder(Order* order);
+		vector<Territory*> toDefend();	// returns list of territories to be defended
+		vector<Territory*> toAttack();	// returns list of territories to be attacked		
+		void issueOrder(Order* order);	// generates an order to add to order list
 		Player(int playerID);
 		Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID);
 		Player(const Player &player); // copy constructor
@@ -32,4 +35,7 @@ class Player {
 		vector<Territory*> getTerritories();
 		int getPlayerID();
 		void setOrdersRef(vector<Order*> orders);
+		int getReinforcementPool();
+		void setReinforcementPool(int i);
 };
+#endif 

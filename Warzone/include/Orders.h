@@ -1,5 +1,6 @@
-#ifndef HEADERFILE_H
-#define HEADERFILE_H
+#ifndef ORDER_H
+#define ORDER_H
+
 #include <iostream>
 #include <vector>
 #include <string>
