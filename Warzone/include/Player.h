@@ -34,4 +34,5 @@ class Player {
 		int getPlayerID();
 		int getReinforcementPool();
 		void setReinforcementPool(int i);
+		void setOrdersRef(vector<Order*> orders);
 };
