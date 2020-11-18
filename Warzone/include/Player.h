@@ -24,7 +24,7 @@ class Player {
 	public:
 		vector<Territory*> toDefend();	// returns list of territories to be defended
 		vector<Territory*> toAttack();	// returns list of territories to be attacked		
-		void issueOrder(Order* order);	// generates an order to add to order list
+		//void issueOrder();	// generates an order to add to order list
 		Player(int playerID);
 		Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID);
 		Player(const Player &player); // copy constructor
@@ -36,6 +36,7 @@ class Player {
 		int getReinforcementPool();
 		void setReinforcementPool(int i);
 		void setOrdersRef(vector<Order*> orders);
+		vector<Territory*> get_neighbour_territories(Player* p);
 
 };
 #endif 
