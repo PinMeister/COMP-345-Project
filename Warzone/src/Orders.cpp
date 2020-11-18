@@ -3,6 +3,8 @@
 #include <string>
 #include <algorithm>
 #include "../include/Orders.h"
+#include <time.h>
+#include <random>
 
 using namespace std;
 
@@ -113,10 +115,10 @@ using namespace std;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
-            cout << "The deploy order is valid.";
+            cout << "The deploy order is valid." << endl;
          }
          else {
-           cout << "The deploy order is invalid.";
+           cout << "The deploy order is invalid." << endl;
          }
      }
 
@@ -166,38 +168,51 @@ using namespace std;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories();
           if (std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()){
-            cout << "The advance order is valid.";
+            cout << "The advance order is valid." << endl;
          }
           else {
-           cout << "The advance order is invalid.";
+           cout << "The advance order is invalid." << endl;
          }         
      }
 
      void Advance  :: execute() {
           validate();
           vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories();          
-          if ((std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()) && (std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end())){
-            target->addArmyNum(armies);
-            start->subtractArmyNum(armies);
-         }          
+          playerTerritories = player->getTerritories();   //getting territories of player that issued the order
+          vector<Territory*> adjacent; 
+          adjacent = start->neighbours;       //getting the neighbouring territories of the start territory 
+          //executes if target territory is adjacent to start 
+          if(std::find(adjacent.begin(), adjacent.end(), target) != adjacent.end()){ 
+               //checks if the target is from the player's territories
+               if(std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()){
+                    target->addArmyNum(armies);
+                    start->subtractArmyNum(armies);
+               }
+               else{
+                  random_device rd;     //STILL HAVE TO DO THIS
+                  mt19937 gen(rd());
+                  uniform_real_distribution<> dis(0, 1);
+                  float randomNumber = dis(gen);
+                  if(randomNumber){
+
+                  }
+               }    
+          }         
      }
 
      // for Bomb
-
-     Bomb::Bomb(string t){ //constructor
-               target = t;
+     Bomb::Bomb(Player* player, Territory* target){ //constructor
+               player=player;
+               target=target;
           }
 
      Bomb::Bomb(const Bomb &bomb){ //copy constructor
+          player=bomb.player;
           target=bomb.target;
      }
 
-     Bomb::~Bomb(){  //destructor
-          target="";
-     }
-
      Bomb& Bomb::operator=(const Bomb &bomb){ //assignment operator
+          player=bomb.player;
           target=bomb.target;
 
           return *this;
@@ -208,11 +223,39 @@ using namespace std;
      }
 
      void Bomb  :: validate() {
-          
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()){
+            cout << "The bomb order is invalid." << endl;
+         }
+         else{
+              cout << "The bomb order is valid." << endl;
+         }
      }  
 
      void Bomb  :: execute() {
-          
+          bool neighbour = false;
+          vector<Territory*> playerTerritories;
+          vector<Territory*>::iterator iter;
+          playerTerritories = player->getTerritories();   //getting the territories of player issuing the order
+          vector<Territory*> adjacent; 
+          adjacent = target->neighbours;     //adjacent is the list of target's neighboring territories
+          int targetArmies = target->getArmyNum(); //number of armies of target territory
+
+          //executes if target is not part of player's territories
+         if (!(std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end())){
+            for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){ //looping through player's territories
+            //if the any of the player's territory is a neighbour of target territory
+               if(std::find(adjacent.begin(), adjacent.end(), (*iter)) != adjacent.end()){  
+                    neighbour = true;
+               }
+               break; 
+            }
+            if(neighbour){    //if it is a neighbour, it executes bomb order and sets a new army number for target territory
+               int newArmyNum = targetArmies/2;
+               target->setArmyNum(newArmyNum);
+            }
+         }
      }   
 
      // for Blockade

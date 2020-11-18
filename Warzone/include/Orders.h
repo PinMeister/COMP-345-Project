@@ -5,6 +5,7 @@
 #include <string>
 #include "../include/Map.h"
 #include "../include/Player.h"
+#include <time.h>
 
 using namespace std;
 
@@ -71,15 +72,11 @@ class Advance : public Order{
 class Bomb : public Order{
 
     public:
-        Bomb(string t); //constructor
+        Bomb(Player* player, Territory* target); //constructor
         Bomb(const Bomb &bomb); //copy constructor
         ~Bomb(); //destructor
         Bomb& operator=(const Bomb &bomb); //assignment operator
-
         friend ostream& operator << (ostream &os, const Bomb &bomb); //stream insertion operator for Bomb
-
-    private:
-        string target;
         void validate(); 
         void execute();
 };
