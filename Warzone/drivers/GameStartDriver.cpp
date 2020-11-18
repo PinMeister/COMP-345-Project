@@ -37,16 +37,6 @@ int main() {
 
     // above code is the driver for game start - Part 1
 
-    // below code is for gameplay and maingameloop - Part 3
-    // vector<Player*> *tempPlayersPointer = ;
-    cout << "Beginning of startup phase" << endl;
-    Startup *startUp = new Startup(&(gameEngine->players), gameEngine->map);
-    cout << "startup phase completed" << "\n\n";
-
-    cout << "Beginning of reinforcement phase" << endl;
-    gameEngine->reinforcementPhase();
-    cout << "End of reinforcement phase" << endl;
-
     // free memory and dangling ptr
     delete gameEngine;
     gameEngine = NULL;
