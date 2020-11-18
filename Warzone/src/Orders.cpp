@@ -260,19 +260,18 @@ using namespace std;
 
      // for Blockade
 
-     Blockade::Blockade(string t){ //constructor
-               territory = t;
+     Blockade::Blockade(Player* player, Territory* territory){ //constructor
+               player = player;
+               territory = territory;
           }
 
      Blockade::Blockade(const Blockade &blockade){ //copy constructor
-          territory=blockade.territory;
-     }
-
-     Blockade::~Blockade(){  //destructor
-          territory="";
+          player = blockade.player;
+          territory = blockade.territory;
      }
 
      Blockade& Blockade::operator=(const Blockade &blockade){ //assignment operator
+          player = blockade.player;
           territory=blockade.territory;
 
           return *this;
@@ -292,34 +291,31 @@ using namespace std;
 
      // for Airlift
 
-     Airlift::Airlift(string o, string d, int a){ //constructor
-               origin = o;
-               destination = d;
-               armies = a;
+     Airlift::Airlift(Player* player, Territory* start, Territory* target, int armies){ //constructor
+               player = player;
+               start = start;
+               target = target;
+               armies = armies;
           }
 
      Airlift::Airlift(const Airlift &airlift){ //copy constructor
-          origin = airlift.origin;
-          destination = airlift.destination;
+          player= airlift.player;
+          start = airlift.start;
+          target = airlift.target;
           armies = airlift.armies;
      }
 
-     Airlift::~Airlift(){  //destructor
-          origin="";
-          destination="";
-          armies = 0;
-     }
-
      Airlift& Airlift::operator=(const Airlift &airlift){ //assignment operator
-          origin=airlift.origin;
-          destination = airlift.destination;
+          player = airlift.player;
+          start = airlift.start;
+          target = airlift.target;
           armies = airlift.armies;
 
           return *this;
      }
 
      ostream& operator << (ostream &os, const Airlift &airlift){ //stream insertion operator for Airlift
-               return os << "Airlift "<< airlift.armies<< " from " << airlift.origin << " to "<< airlift.destination <<endl;
+               return os << "Airlift "<< airlift.armies<< " from " << airlift.start << " to "<< airlift.target <<endl;
           }
 
 
@@ -333,26 +329,25 @@ using namespace std;
 
      // for Negotiate
 
-     Negotiate::Negotiate(int p){ //constructor
-               playerID = p;
+     Negotiate::Negotiate(Player* player, Player* targetPlayer){ //constructor
+               player = player;
+               targetPlayer = targetPlayer;
           }
 
      Negotiate::Negotiate(const Negotiate &negotiate){ //copy constructor
-          playerID = negotiate.playerID;
-     }
-
-     Negotiate::~Negotiate(){  //destructor
-          playerID= 0;
+          player = negotiate.player;
+          targetPlayer = negotiate.targetPlayer;
      }
 
      Negotiate& Negotiate::operator=(const Negotiate &negotiate){ //assignment operator
-          playerID=negotiate.playerID;
+          player = negotiate.player;
+          targetPlayer = negotiate.targetPlayer;
 
           return *this;
      }
 
      ostream& operator << (ostream &os, const Negotiate &negotiate){ //stream insertion operator for Negotiate
-               return os << "Negotiate "<< " with " << negotiate.playerID <<endl;
+               return os << "Negotiate "<< " with " << negotiate.targetPlayer <<endl;
           }
 
      void Negotiate  :: validate() {
