@@ -47,16 +47,19 @@ public:
 
 class Startup{
     public:
-        Startup(vector<Player*> *players, Map *map);
-        Startup(const Startup& startup);
-        ~Startup();
+        Startup(); // default constructor
+        Startup(vector<Player*> *players, Map *map); // constructor
+        Startup(const Startup& startup); // copy constructor
+        ~Startup(); // destructor
+        // overloading assignment and string insertion
+        Startup& operator=(const Startup &startUp);
+        friend ostream& operator<<(ostream& out, const Startup &startUp);
 
         void setPlayerNum(int num);
         int getPlayerNum();
         int getInitialArmyNum();
-
     private:
         int playerNum = 2;
-        void startupPhase(vector<Player*> *players, Map *map);      
+        bool started = false;
+        void startupPhase(vector<Player*> *players, Map *map); // start up function 
 };
-
