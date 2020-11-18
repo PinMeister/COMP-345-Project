@@ -39,5 +39,9 @@ int main(){
         temp = NULL;
         delete temp;
     }
+
+    cout << "\n" << *startUp;
+
+    delete startUp;
     return 0;
 }
