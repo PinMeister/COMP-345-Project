@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAMEENGINE_H
+#define GAMEENGINE_H
 
 #include "Player.h"
 #include "Map.h"
@@ -7,8 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <vector>
-#include "../include/Player.h"
-#include "../include/Orders.h"
+
 
 class GameEngine;
 
@@ -67,3 +67,4 @@ class Startup{
         void startupPhase(vector<Player*> *players, Map *map);      
 };
 
+#endif

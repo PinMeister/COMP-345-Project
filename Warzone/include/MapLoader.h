@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAPLOADER_H
+#define MAPLOADER_H
 
 #include <iostream>
 #include <string>
@@ -46,3 +47,5 @@ class MapLoader{
         bool isDigit(const string &str); // check if a string is a number
         void clearData(); // clear arrays in data containers
 };
+
+#endif

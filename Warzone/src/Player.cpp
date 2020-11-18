@@ -1,5 +1,6 @@
 #include "../include/Player.h"
 #include <vector>
+#include <algorithm>
 #include <string>
 #include <iostream>
 #include <stdlib.h>
@@ -126,6 +127,8 @@ vector<Territory*> Player::toAttack() {
 
 // issue orders to deploy 
 void Player::issueOrder(Order* order) {}
+
+
 int Player::getPlayerID(){
 	return playerID;
 }

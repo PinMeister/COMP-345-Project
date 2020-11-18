@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <iostream>
 #include <string>
@@ -19,7 +20,7 @@ class Player {
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
 		int reinforcementPool;
-		
+
 	public:
 		vector<Territory*> toDefend();	// returns list of territories to be defended
 		vector<Territory*> toAttack();	// returns list of territories to be attacked		
@@ -37,3 +38,4 @@ class Player {
 		int getReinforcementPool();
 		void setReinforcementPool(int i);
 };
+#endif
