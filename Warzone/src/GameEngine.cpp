@@ -188,40 +188,38 @@ void GameEngine::reinforcementPhase() {
 player can deploy if it still has armies to deploy before continuing to other orders, can issue advance orders and play a
 card from their hand
 */
-// void GameEngine::issueOrdersPhase() {
-//     // create list to defned and attack
-//     for (Player* p: players)
-//     {
-//         p->getTerritories();
-//     }
-//     //TODO armies available on all territories 
+void GameEngine::issueOrdersPhase() {
+    // create list to defned and attack
+    for (Player* p: players)
+    {
+        p->getTerritories();
+    }
+    //TODO armies available on all territories 
 
-//     vector<Player*> active = players;
+    vector<Player*> active = players;
 
-//     // if have active players
-//     while (!active.empty())
-//     {
-//         for (size_t i=0; i<active.size(); i++)
-//         {
-//             Order* newOrder;
-//             active[i]-> issueOrder(newOrder);
+    // if have active players
+    // while (!active.empty())
+    // {
+        for (size_t i=0; i<active.size(); i++)
+        {
+            active[i]-> issueOrder();
+            // if no new order, go to next player
+            // if (newOrder == nullptr)
+            // {
+            //     active.erase(active.begin()+i);
+            // }
+            // // execute order
+            // else 
+            // {
+            //     currentPlayer = active[i];
+            //     lastOrder = newOrder;
+            //     active[i]->issueOrder();
+            // }
+        }
+    // }
 
-//             // if no new order, go to next player
-//             if (newOrder == nullptr)
-//             {
-//                 active.erase(active.begin()+i);
-//             }
-//             // execute order
-//             else 
-//             {
-//                 currentPlayer = active[i];
-//                 lastOrder = newOrder;
-//                 active[i]->issueOrder(lastOrder);
-//             }
-//         }
-//     }
-
-// }
+}
 
 void GameEngine::executeOrdersPhase() {}
 

@@ -72,6 +72,11 @@ int main(){
     gameEngine->reinforcementPhase();
     cout << "End of reinforcement phase " << endl;
 
+
+    cout << "\n\nBeginning of Order Issue Phase \n " << endl;
+    gameEngine->issueOrdersPhase();
+    cout << "\nEnd of Order Issue Phase " << endl;
+
     // free memory and dangling ptr
     delete startUp;
     delete gameEngine;
