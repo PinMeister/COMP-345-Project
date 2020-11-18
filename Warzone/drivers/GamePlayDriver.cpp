@@ -14,15 +14,6 @@
 using namespace std;
 
 // main driver
-#include <iostream>
-
-#include "../include/MapLoader.h"
-#include "../include/Map.h"
-#include "../include/Player.h"
-#include "../include/GameEngine.h"
-
-using namespace std;
-
 int main(){
     int numberOfPlayers = 0;
     vector<Player*> tempPlayers;
