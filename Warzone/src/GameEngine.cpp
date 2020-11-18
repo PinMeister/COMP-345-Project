@@ -71,7 +71,7 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
     vector<int> randomTerritoryId;
     // get random territory id and push to the vector
     for(int i = 0; i < playerNum; i++){
-        srand(time(NULL));
+        srand(time(NULL)); // set seed a runtime value
         int temp = rand() % size;
         // find a match
         vector<int>::iterator it = find (randomTerritoryId.begin(), randomTerritoryId.end(), temp);
