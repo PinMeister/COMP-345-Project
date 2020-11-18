@@ -69,6 +69,14 @@ string PhaseObserver::getInfo() {
     return info;
 };
 
+void PhaseObserver::setPhase(string phase) {
+    this->phase = phase;
+}
+
+void PhaseObserver::setInfo(string info) {
+    this->info = info;
+}
+
 // Default constructor
 StatsObserver::StatsObserver() {};
 

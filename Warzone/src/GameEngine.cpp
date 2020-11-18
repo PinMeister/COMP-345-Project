@@ -105,7 +105,7 @@ void GameEngine::mainGameLoop() {
 // territory; if so, the player is removed from the game.    
 }
 
-void GameEngine::reinforcementPhase() {
+void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
     int numOfArmies = 0;
     vector<Player*>::iterator it;
 
@@ -171,13 +171,17 @@ void GameEngine::reinforcementPhase() {
             numOfArmies = 3;
         }
 
-        cout << "Player " << (*it)->getPlayerID() + 1 << " will receive " << numOfArmies << " armies" << endl;
+        phaseObserver->setInfo("Player " + (*it)->getPlayerID() + 1 + " will receive " + numOfArmies + " armies.");
+        //cout << "Player " << (*it)->getPlayerID() + 1 << " will receive " << numOfArmies << " armies" << endl;
+        Notify();
 
-        // add new armie number to the user's pool
+        // add new army number to the user's pool
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
-        cout << "Player " << (*it)->getPlayerID() + 1 << " has " << (*it)->getReinforcementPool() << " armies" << endl;
+        phaseObserver->setInfo("Player " + (*it)->getPlayerID() + 1 + " has " + (*it)->getReinforcementPool() + " armies.");
+        //cout << "Player " << (*it)->getPlayerID() + 1 << " has " << (*it)->getReinforcementPool() << " armies" << endl;
+        Notify();
         }
     }
 }

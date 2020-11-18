@@ -2,6 +2,7 @@
 #include "../include/Map.h"
 #include "../include/Player.h"
 #include "../include/MapLoader.h"
+#include "../include/GameObservers.h"
 #include <iostream>
 #include <ctime>
 #include <algorithm>
@@ -20,6 +21,29 @@ int main(){
     MapLoader* maploader;
     Map* map;
     GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
+
+    PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
+    StatsObserver* statsObserver = new StatsObserver(gameEngine);
+
+    char phaseToggle; // Set phase 
+    do {
+        cout << "Turn off phase observer? (Y/N)";
+		cin >> phaseToggle;
+	} while (phaseToggle != 'Y' || phaseToggle != 'N');
+    if (phaseToggle == 'Y') {
+        delete phaseObserver;
+        phaseObserver = NULL;
+    }
+
+    char statsToggle;
+    do {
+        cout << "Turn off game stats observer? (Y/N)";
+		cin >> statsToggle;
+	} while (statsToggle != 'Y' || statsToggle != 'N');
+    if (statsToggle == 'Y') {
+        delete statsObserver;
+        statsObserver = NULL;
+    }
 
     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
     map = gameEngine->chooseMap(); // choose map to start the game
@@ -69,7 +93,10 @@ int main(){
     }
 
     cout << endl << "Beginning of reinforcement phase " << endl;
-    gameEngine->reinforcementPhase();
+    if (phaseObserver != NULL) {
+        phaseObserver->setPhase("Reinforcement Phase");
+        gameEngine->reinforcementPhase(phaseObserver);
+    }
     cout << "End of reinforcement phase " << endl;
 
     // free memory and dangling ptr

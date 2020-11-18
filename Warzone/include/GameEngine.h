@@ -10,6 +10,7 @@
 #include "../include/Map.h"
 #include "../include/MapLoader.h"
 #include "../include/Subject.h"
+#include "../include/GameObservers.h"
 
 class GameEngine;
 
@@ -25,7 +26,6 @@ public:
     MapLoader* maploader; // to load the map
     Map* map; // choose map
     Deck* deck; // default deck for the game
-    // vector<Observer> observers*; // need Part 5 to complete
     GameEngine(); // default constructor
     ~GameEngine(); // destructor
     GameEngine(const GameEngine &gameEngine); // copy constructor
@@ -41,7 +41,7 @@ public:
     // void gameLoop(Map gameMap);
 
     void mainGameLoop(); // main gameloop which will contain reinforcementPhase(), issueOrdersPhase(), executeOrdersPhase()
-    void reinforcementPhase(); // reinforce game with current game state
+    void reinforcementPhase(PhaseObserver* phaseObserver); // reinforce game with current game state
     void issueOrdersPhase(); // issue order from player
     void executeOrdersPhase(); // execute order whe issuing is over
 };
