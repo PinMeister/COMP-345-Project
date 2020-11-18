@@ -147,4 +147,3 @@ class Negotiate : public Order{
 };
 
 #endif
-

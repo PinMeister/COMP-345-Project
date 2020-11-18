@@ -10,6 +10,7 @@ using namespace std;
 // default constructor
 Player::Player(int playerID){
 	this->playerID = playerID;
+	this->reinforcementPool = 0;
 }
 
 // construtor with parameters
@@ -18,6 +19,7 @@ Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders
 	this->hand = hand;
 	this->orders = orders;
 	this->playerID = playerID;
+	this->reinforcementPool = 0;
 }
 
 // copy constructor
@@ -26,6 +28,7 @@ Player::Player(const Player &player){
 	this->hand = player.hand;
 	this->orders = player.orders;
 	this->playerID = player.playerID;
+	this->reinforcementPool = player.reinforcementPool;
 }
 
 //assignment operator
@@ -34,6 +37,7 @@ Player& Player::operator=(const Player &player){
 	this->hand = player.hand;
 	this->orders = player.orders;
 	this->playerID = player.playerID;
+	this->reinforcementPool = player.reinforcementPool;
 	return *this;
 }
 
@@ -130,14 +134,14 @@ int Player::getPlayerID(){
 	return playerID;
 }
 
-void Player::setOrdersRef(vector<Order*> ordersRef){
-	orders = ordersRef;
-}
-
 int Player::getReinforcementPool(){
 	return reinforcementPool;
 }
 
 void Player::setReinforcementPool(int i){
 	this->reinforcementPool = i;
+}
+
+void Player::setOrdersRef(vector<Order*> ordersRef){
+	orders = ordersRef;
 }
