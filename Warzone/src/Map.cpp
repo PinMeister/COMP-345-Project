@@ -260,6 +260,11 @@ int Territory::getArmyNum(){
     return armies;
 }
 
+vector<Territory*> Territory::getNeighbours() {
+    return neighbours; 
+}
+
+
 // Empty constructor
 Continent::Continent() {};
 
