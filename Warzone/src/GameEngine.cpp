@@ -105,7 +105,7 @@ void GameEngine::mainGameLoop(PhaseObserver* phaseObserver) {
 // This loop shall continue until only one of the players owns all the territories in the map, at which point a winner is
 // announced and the game ends. The main game loop also checks for any player that does not control at least one
 // territory; if so, the player is removed from the game.
-int round = 0
+int round = 0;
 string gameEnd;
     // this is to test and simulate rounds of only reinforcement
     
@@ -117,7 +117,7 @@ string gameEnd;
         this->reinforcementPhase(phaseObserver);
         this->issueOrdersPhase(phaseObserver);
         this->executeOrdersPhase(phaseObserver);
-	} while (gameEnd != 'Y');
+	} while (gameEnd != "Y");
 }
 
 void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
