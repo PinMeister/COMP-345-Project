@@ -17,7 +17,7 @@ class PhaseObserver;
 
 class GameEngine : public Subject {
 //private attributes for GameEngine class
-private:
+    private:
 
 // public attributes for GameEngine class
 public:
@@ -44,11 +44,9 @@ public:
     void toggleObserver(); // turn on/off any observers
     // void addPlayer(Player* p);
     // void gameLoop(Map gameMap);
-
     void mainGameLoop(); // main gameloop which will contain reinforcementPhase(), issueOrdersPhase(), executeOrdersPhase()
     void reinforcementPhase(PhaseObserver* phaseObserver); // reinforce game with current game state
     void issueOrdersPhase(PhaseObserver* phaseObserver); // issue order from player
-    void executeOrdersPhase(PhaseObserver* phaseObserver); // execute order whe issuing is over
 };
 
 class Startup{
