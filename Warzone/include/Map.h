@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAP_H
+#define MAP_H
 
 #include <iostream>
 #include <string>
@@ -21,6 +22,7 @@ class Territory {
         int getArmyNum();
         void setArmyNum(int num);
         vector<Territory*> neighbours;
+        vector<Territory*> getNeighbours();
         bool visited;
     private:
         string name;
@@ -72,3 +74,4 @@ class Map {
         vector<Territory*> territories;
         vector<Continent*> continents;
 };
+#endif 

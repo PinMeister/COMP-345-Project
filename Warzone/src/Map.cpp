@@ -91,6 +91,10 @@ bool Map::checkMapConnectedGraph() {
     for (size_t i = 0; i < territories.size(); i++) {
         if (territories[i]->visited == false) {
             territories[i]->visited = true;
+            if (territories[i]->neighbours.size() == 0) {
+                cout << "\n***Map is NOT a connected graph!***" << endl;
+                return false; 
+            }
             visited = visitNeighbours(territories[i], visited);
         }
     }
@@ -116,6 +120,10 @@ bool Map::checkContinentGraphs() {
         for (size_t j = 0; j < continentMembers.size(); j++) {
             if (continentMembers[j]->visited == false) {
                 continentMembers[j]->visited = true;
+                if (continentMembers[j]->neighbours.size() == 0) {
+                    cout << "\n***Continent " + continents[i]->getName() + " is NOT a connected subgraph!***" << endl;
+                    return false; 
+                }
                 visited = visitContinentNeighbours(continentMembers[j], continentName, visited);
             }
         }
@@ -266,6 +274,10 @@ int Territory::getArmyNum(){
 
 void Territory::setArmyNum(int num){
     armies = num;
+}
+
+vector<Territory*> Territory::getNeighbours() {
+    return neighbours; 
 }
 
 // Empty constructor

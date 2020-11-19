@@ -10,42 +10,8 @@
 
 using namespace std;
 
-// main driver
-// int main() {
-//     int numberOfPlayers = 0;
-//     vector<Player*> players;
-//     MapLoader* maploader;
-//     Map* map;
-//     GameEngine* gameEngine = new GameEngine(numberOfPlayers, players, maploader, map);
-
-//     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
-//     map = gameEngine->chooseMap(); // choose map to start the game
-//     gameEngine->setMap(map); // set the new map from the maploader
-//     cout << "Map AFTER user chooses: " << gameEngine->map << endl;
-
-//     cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
-//     gameEngine->setPlayerNum(); // let user choose number of players
-//     cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
-
-//     cout << "Creating the players and required items for the game: " << endl;
-//     gameEngine->createPlayers();
-//     cout << "Players have been created" << endl;
-
-//     // free memory and dangling ptr
-//     for (auto p : players) { delete p; } 
-//     delete maploader;
-//     delete map;
-//     delete gameEngine;
-
-//     players.clear();
-//     maploader = NULL;   
-//     map = NULL;
-//     gameEngine = NULL;
-
-// 	return 0;
-// }
-
 // default constructor auto generated
+
 
 // constructor with params 
 GameEngine::GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map)  {
@@ -92,6 +58,7 @@ GameEngine::~GameEngine(){
     map = NULL;
 }
 
+
 // let user choose map
 Map* GameEngine::chooseMap() {
     bool validMap = 0;
@@ -129,42 +96,7 @@ void GameEngine::setPlayerNum() {
 		cin >> tempnumberOfPlayers;
 	} while (tempnumberOfPlayers < 2 || tempnumberOfPlayers > 5);
 
-    numberOfPlayers = tempnumberOfPlayers;
-}
-
-void GameEngine::createPlayers() {
-
-    vector<Territory*> defaultTerritories; // players have no territories at first
-    Hand* defaultHand = new  Hand(); // to make default empty hand
-    vector<Order*> defaultOrders; // default set of battle orders
-    vector<Card*> defaultCards; // some cards
-    Deck* defaultDeck = new Deck(); // default deck of cards
-
-    this->deck = defaultDeck; // set the default deck to the new initialized one
-
-    for (int i = 1; i <= numberOfPlayers; i++){
-        // last parameter i is the playerID
-        // create new players
-        Player* tempPlayer = new Player(defaultTerritories, defaultHand, defaultOrders, i);
-        this->players.push_back(tempPlayer); // add the players into the GameEngine vector
-
-        // free memory and dangling ptr
-        delete tempPlayer;
-        tempPlayer = NULL;
-    }
-
-    // free memory and dangling ptr
-    for (auto p : defaultTerritories) { delete p; } 
-    for (auto p : defaultOrders) { delete p; } 
-    for (auto p : defaultCards) { delete p; } 
-    delete defaultHand;
-    delete defaultDeck;
-
-    defaultTerritories.clear();
-    defaultHand = NULL;
-    defaultOrders.clear();
-    defaultCards.clear();
-    defaultDeck = NULL;
+    this->numberOfPlayers = tempnumberOfPlayers;
 }
 
 // TO DO
@@ -175,24 +107,21 @@ void GameEngine::mainGameLoop() {
 // territory; if so, the player is removed from the game.    
 }
 
-// const Player* GameEngine::getCurrentPlayer() {
-//     return GetEngine().currentPlayer;
-// }
-
-// const Order* GameEngine::getLastOrder(){
-//     return GetEngine().lastOrder;
-// }
-
-void GameEngine::reinforcementPhase() {
+void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
     int numOfArmies = 0;
     vector<Player*>::iterator it;
 
-    for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
+    // this is to test and simulate rounds of only reinforcement
+    for (int a = 0; a<3; a++){
+
+        cout << endl << "Round: " << to_string(a + 1) << endl;
+
+    for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
         numOfArmies = (*it)->getTerritories().size();
         numOfArmies = floor(numOfArmies/3);
 
-        vector<Continent*> mapContinents = map->getContinents(); // get all continents for current map
+        vector<Continent*> mapContinents = this->map->getContinents(); // get all continents for current map
         vector<Territory*> playerTerritories = (*it)->getTerritories(); // get the user's territories
         vector<string> playerTerritoriesName; // get the user's territories name
 
@@ -203,7 +132,6 @@ void GameEngine::reinforcementPhase() {
 
         // sort the vector for later processing
         sort(playerTerritoriesName.begin(), playerTerritoriesName.end());
-
 
         // check for each continent if user owns all territories
         for (auto continent : mapContinents){
@@ -236,9 +164,6 @@ void GameEngine::reinforcementPhase() {
             if ((st - v.begin()) == 0) {
                 numOfArmies += continent->getControlBonus();
             }
-
-            for (auto p : mapTerritories) { delete p; }
-            mapTerritories.clear();
         }
 
         // minimal number of reinforcement armies per turn for any player is 3. 
@@ -246,61 +171,44 @@ void GameEngine::reinforcementPhase() {
             numOfArmies = 3;
         }
 
-        // add new armie number to the user's pool
+        if (phaseObserver != nullptr) {
+            phaseObserver->setPlayer(*it);
+            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.");
+            Notify(phaseObserver);
+        }
+
+        // add new army number to the user's pool
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
-        // free memory and dangling ptr
-        for (auto p : mapContinents) { delete p; }
-        mapContinents.clear();
-
-        for (auto p : playerTerritories) { delete p; }
-        playerTerritories.clear();
-        
-        playerTerritoriesName.clear();
+            if (phaseObserver != nullptr) {
+                phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
+                Notify(phaseObserver);
+            }
         }
+    }
 }
 
 /* player determines territories to attack (listed in toAttack) and deploys orders to own territories (listed in toDefend)
 player can deploy if it still has armies to deploy before continuing to other orders, can issue advance orders and play a
 card from their hand
 */
-void GameEngine::issueOrdersPhase() {
+void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
     // create list to defned and attack
     for (Player* p: players)
     {
         p->getTerritories();
     }
-    //TODO armies available on all territories 
-
     vector<Player*> active = players;
 
-    // if have active players
-    while (!active.empty())
-    {
+
         for (size_t i=0; i<active.size(); i++)
         {
-            Order* newOrder;
-            active[i]-> issueOrder(newOrder);
-
-            // if no new order, go to next player
-            if (newOrder == nullptr)
-            {
-                active.erase(active.begin()+i);
-            }
-            // execute order
-            else 
-            {
-                currentPlayer = active[i];
-                lastOrder = newOrder;
-                active[i]->issueOrder(lastOrder);
-            }
+            active[i]-> issueOrder();       
         }
-    }
-
 }
 
-void GameEngine::executeOrdersPhase() {
+void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {
     vector<Player*>::iterator it;
     vector<Order*>::iterator iter;
     vector<Order*> playerOrders;
@@ -328,56 +236,104 @@ void GameEngine::executeOrdersPhase() {
             (*iter)->execute();     //executes the rest of the order types
         }
     }
-    reinforcementPhase();   //goes back to the reinforcement phase
-}
+    reinforcementPhase(PhaseObserver* phaseObserver);   //goes back to the reinforcement phase
+  
+// constructor with no parameter
+Startup::Startup() {}
 
+// constructor takes in a vector pointer of player pointers and a pointer to map
 Startup::Startup(vector<Player*> *players, Map *map){
     setPlayerNum(players->size());
     startupPhase(players, map);
 }
 
+// copy constructor
 Startup::Startup(const Startup& startup){
-    playerNum = startup.playerNum;
+    Startup* copy = new Startup();
+    copy->playerNum = startup.playerNum;
+    copy->setPlayerNum(copy->playerNum);
 }
 
+// destructor
 Startup::~Startup(){
-
+    //nothing
 }
 
+// assignment operator
+Startup& Startup::operator=(const Startup &startUp){
+    playerNum = startUp.playerNum;
+    return *this;
+}
+
+// stream insertion operator
+ostream& operator<<(ostream& out, const Startup &startUp){
+    out << "Player Number: " << startUp.playerNum << "\nGame started: " << startUp.started << "\n";
+    return out;
+}
+
+// set player num to an int
 void Startup::setPlayerNum(int num){
     playerNum = num;
 }
 
+// return player num
 int Startup::getPlayerNum(){
     return playerNum;
 }
 
+// use player num to get initial army num
 int Startup::getInitialArmyNum(){
     return ((playerNum * 5) + 10 * (5 - playerNum));
 }
 
+// start up the game
 void Startup::startupPhase(vector<Player*> *players, Map *map){
     // shuffle player order in vector
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     shuffle(players->begin(), players->end(), default_random_engine(seed));
     int initialArmyNum = getInitialArmyNum(); // get initial army num
 
+    cout << "Initial army size for each player " << initialArmyNum << endl;
+
     // assign territories
     int size = map->getTerritories().size(); // get territory num
-    vector<int> randomTerritoryId;
-    // get random territory id and push to the vector
-    for(int i = 0; i < playerNum; i++){
-        srand(time(NULL));
-        int temp = rand() % size;
-        // find a match
-        vector<int>::iterator it = find (randomTerritoryId.begin(), randomTerritoryId.end(), temp);
-        // if num exists, repeat
-        while(it != randomTerritoryId.end()){
-            temp = rand() % size;
-            it = find (randomTerritoryId.begin(), randomTerritoryId.end(), temp);
+    vector<int> randTerritoryId;
+
+    // assign all territories to each player randomly
+    while(randTerritoryId.size() < size){
+        for(int i = 0; i < playerNum; i ++){
+            srand(time(NULL)); // set seed a runtime value
+            int temp = rand() % size;
+            // if num exists, repeat
+            while(find(randTerritoryId.begin(), randTerritoryId.end(), temp) != randTerritoryId.end()){
+                temp = rand() % size;
+            }
+            randTerritoryId.push_back(temp); // push it to the vector
+            players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
+            // break the loop if these's no more territory
+            if (randTerritoryId.size() >= size){
+                break;
+            }
         }
-        randomTerritoryId.push_back(temp); // push it to the vector
-        players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
-        map->getTerritories()[temp]->addArmyNum(initialArmyNum); // assign army to territory
     }
+    // give player all the orders and armies
+    for(int i = 0; i < playerNum; i++){
+        Deploy *depl;
+        Advance *adv;
+        Bomb *bmb;
+        Blockade *blckd;
+        Airlift *alt; 
+        Negotiate *ngt; 
+        vector<Order*> orders;
+        orders.push_back(depl);
+        orders.push_back(adv);
+        orders.push_back(bmb);
+        orders.push_back(blckd);
+        orders.push_back(alt);
+        orders.push_back(ngt); 
+
+        players->at(i)->setOrdersRef(orders);
+        players->at(i)->setReinforcementPool(initialArmyNum); // set player total army
+    }
+    started = true; // the game starts
 }
