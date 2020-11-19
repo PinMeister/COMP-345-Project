@@ -1,5 +1,6 @@
-#ifndef HEADERFILE_H
-#define HEADERFILE_H
+#ifndef ORDER_H
+#define ORDER_H
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -43,9 +44,9 @@ class OrdersList{
         OrdersList& operator=(const OrdersList &ordersList); //assignment operator
 
         friend ostream& operator << (ostream &os, const OrdersList &ordersList); //stream insertion operator for OrdersList
-
-        void Delete(vector<Order*> orderslist, int index);
-       // void move(vector<Order*> orderslist, int start, int end);
+        void add(Order* order);
+        void Delete(vector<Order*> ord, int index);
+        void move(vector<Order*> ord, int start, int end);
     private:
         vector<Order*> orderslist; //list of orders
     
@@ -124,4 +125,3 @@ class Negotiate : public Order{
 };
 
 #endif
-
