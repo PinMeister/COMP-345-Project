@@ -14,7 +14,7 @@ int main() {
     cout << "Deck content" << endl;
 	cout << "++++++++++++" << endl;
 	vector<Card*> deckCards;
-	for (auto i = 0; i < 46;  ++i)
+	for (auto i = 0; i < 52;  ++i)
 	{
 		if(i % 5 == 0) {
 			deckCards.push_back(new Card(Card::BOMB)); 

@@ -12,6 +12,7 @@ using namespace std;
 
 // default constructor auto generated
 
+
 // constructor with params 
 GameEngine::GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map)  {
        this->numberOfPlayers = numberOfPlayers;
@@ -56,6 +57,7 @@ GameEngine::~GameEngine(){
     maploader = NULL;
     map = NULL;
 }
+
 
 // let user choose map
 Map* GameEngine::chooseMap() {
@@ -187,7 +189,42 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
     }
 }
 
-void GameEngine::issueOrdersPhase() {}
+/* player determines territories to attack (listed in toAttack) and deploys orders to own territories (listed in toDefend)
+player can deploy if it still has armies to deploy before continuing to other orders, can issue advance orders and play a
+card from their hand
+*/
+void GameEngine::issueOrdersPhase() {
+    // create list to defned and attack
+    for (Player* p: players)
+    {
+        p->getTerritories();
+    }
+    //TODO armies available on all territories 
+
+    vector<Player*> active = players;
+
+    // if have active players
+    // while (!active.empty())
+    // {
+        for (size_t i=0; i<active.size(); i++)
+        {
+            active[i]-> issueOrder();
+            // if no new order, go to next player
+            // if (newOrder == nullptr)
+            // {
+            //     active.erase(active.begin()+i);
+            // }
+            // // execute order
+            // else 
+            // {
+            //     currentPlayer = active[i];
+            //     lastOrder = newOrder;
+            //     active[i]->issueOrder();
+            // }
+        }
+    // }
+
+}
 
 void GameEngine::executeOrdersPhase() {}
 
