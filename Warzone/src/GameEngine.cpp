@@ -107,19 +107,17 @@ void GameEngine::mainGameLoop() {
 // territory; if so, the player is removed from the game.    
 }
 
-void GameEngine::reinforcementPhase() {
+void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
     int numOfArmies = 0;
     vector<Player*>::iterator it;
 
     // this is to test and simulate rounds of only reinforcement
     for (int a = 0; a<3; a++){
 
-        cout << endl << "Round: " << a << endl;
+        cout << endl << "Round: " << to_string(a + 1) << endl;
 
     for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
-        cout << (*it)->getTerritories().size() << endl; 
-
         numOfArmies = (*it)->getTerritories().size();
         numOfArmies = floor(numOfArmies/3);
 
@@ -173,13 +171,20 @@ void GameEngine::reinforcementPhase() {
             numOfArmies = 3;
         }
 
-        cout << "Player " << (*it)->getPlayerID() + 1 << " will receive " << numOfArmies << " armies" << endl;
+        if (phaseObserver != nullptr) {
+            phaseObserver->setPlayer(*it);
+            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.");
+            Notify(phaseObserver);
+        }
 
-        // add new armie number to the user's pool
+        // add new army number to the user's pool
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
-        cout << "Player " << (*it)->getPlayerID() + 1 << " has " << (*it)->getReinforcementPool() << " armies" << endl;
+            if (phaseObserver != nullptr) {
+                phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
+                Notify(phaseObserver);
+            }
         }
     }
 }
@@ -188,40 +193,22 @@ void GameEngine::reinforcementPhase() {
 player can deploy if it still has armies to deploy before continuing to other orders, can issue advance orders and play a
 card from their hand
 */
-void GameEngine::issueOrdersPhase() {
+void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
     // create list to defned and attack
     for (Player* p: players)
     {
         p->getTerritories();
     }
-    //TODO armies available on all territories 
-
     vector<Player*> active = players;
 
-    // if have active players
-    // while (!active.empty())
-    // {
+
         for (size_t i=0; i<active.size(); i++)
         {
-            active[i]-> issueOrder();
-            // if no new order, go to next player
-            // if (newOrder == nullptr)
-            // {
-            //     active.erase(active.begin()+i);
-            // }
-            // // execute order
-            // else 
-            // {
-            //     currentPlayer = active[i];
-            //     lastOrder = newOrder;
-            //     active[i]->issueOrder();
-            // }
+            active[i]-> issueOrder();       
         }
-    // }
-
 }
 
-void GameEngine::executeOrdersPhase() {}
+void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {}
 
 // constructor with no parameter
 Startup::Startup(){
