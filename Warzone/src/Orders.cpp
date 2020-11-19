@@ -88,9 +88,9 @@ using namespace std;
 
      // for Deploy
      Deploy::Deploy(Player* player, int armies, Territory* territory){ //constructor
-           player = player;
-           armies = armies;
-           territory = territory;
+           this->player = player;
+           this->armies = armies;
+           this->territory = territory;
        }
 
      Deploy::Deploy(const Deploy &deploy){ //copy constructor
@@ -120,6 +120,19 @@ using namespace std;
          else {
            cout << "The deploy order is invalid." << endl;
          }
+          //vector<Territory*> playerTerritories = player->getTerritories();
+          /*
+          bool valid = 0;
+          for(int i = 0; i < playerTerritories.size(); i++){
+               if (playerTerritories[i]->getName() == territory->getName()){
+                    cout << "The deploy order is valid." << endl;
+                    valid = 1;
+                    break;
+               }
+          }
+          if (!valid){
+               cout << "The deploy order is invalid." << endl;
+          }*/
      }
 
      void Deploy  :: execute() {
@@ -314,7 +327,7 @@ using namespace std;
                int newArmyNum = territoryArmies * 2;
                territory->setArmyNum(newArmyNum);
              for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){   //iterating through each player's list of orders
-                    if((*iter) = territory){
+                    if((*iter) == territory){
                          playerTerritories.erase(iter);     //erase the territory from player's territories, making it neutral
                     }
                     break;    //ends loop after erasing the territory
