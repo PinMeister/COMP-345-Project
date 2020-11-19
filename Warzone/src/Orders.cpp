@@ -120,6 +120,19 @@ using namespace std;
          else {
            cout << "The deploy order is invalid." << endl;
          }
+          //vector<Territory*> playerTerritories = player->getTerritories();
+          /*
+          bool valid = 0;
+          for(int i = 0; i < playerTerritories.size(); i++){
+               if (playerTerritories[i]->getName() == territory->getName()){
+                    cout << "The deploy order is valid." << endl;
+                    valid = 1;
+                    break;
+               }
+          }
+          if (!valid){
+               cout << "The deploy order is invalid." << endl;
+          }*/
      }
 
      void Deploy  :: execute() {
