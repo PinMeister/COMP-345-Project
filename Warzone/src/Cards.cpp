@@ -60,7 +60,7 @@ void Card::play(vector<Order*> &ol, Deck &deck) {
 	}
 	ol.push_back(o);
 
-	cout<< "Play CardType:" << this->val << endl;
+	cout<< "Play CardType:" << this->getCardType() << endl;
 
 	deck.addCardBack(*this);
 	return;

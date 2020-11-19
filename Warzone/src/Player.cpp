@@ -261,7 +261,7 @@ void Player::issueOrder() {
 						// pop toAttack territory
 						cout << "Allied territory has armies to attack: " << result[0]->getArmyNum() << endl;
 						int attackNum = rand() % result[0]->getArmyNum() +1;
-						cout << "Deploying " << attackNum << " armies from: " << result[0]->getName() << " to : " <<toAttackTerritory[index]->getName() << endl;
+						cout << "To deploy " << attackNum << " armies from: " << result[0]->getName() << " to : " <<toAttackTerritory[index]->getName() << endl;
 						Advance* advanceAtk = new Advance(result[0]->getName(), toAttackTerritory[index]->getName(), attackNum);
 						this->orders.push_back(advanceAtk);
 						break;
@@ -296,7 +296,7 @@ void Player::issueOrder() {
 						// pop toDefend territory
 						cout << "Allied territory has armies to move: " << result[0]->getArmyNum() << endl;
 						int moveNum = rand() % result[0]->getArmyNum() +1;
-						cout << "Deploying " << moveNum << " armies from: " << result[0]->getName() << " to : " <<toDefendTerritory[index]->getName() << endl;
+						cout << "To deploy " << moveNum << " armies from: " << result[0]->getName() << " to : " <<toDefendTerritory[index]->getName() << endl;
 						Advance* advanceDef = new Advance(result[0]->getName(), toDefendTerritory[index]->getName(), moveNum);
 						this->orders.push_back(advanceDef);
 						break;
@@ -317,11 +317,11 @@ void Player::issueOrder() {
 	cout << "Player " << this->getPlayerID() << " has cards:"<< endl;
 	for (int i = 0; i < hand->getNumberHandCards(); i++)
 	{    
-		cout << this->hand->getCards()[i] << "   ";
+		cout << this->hand->getCards()[i]->getCardType() << "   ";
 	}
 	cout << "\n";
 
-	//this->hand->getCards()[rand() % hand->getNumberHandCards()]->play(orders, *deck);
+	this->hand->getCards()[rand() % hand->getNumberHandCards()]->play(orders, *deck);
 	cout << " ";
 
 	//this->orders.push_back(order);
