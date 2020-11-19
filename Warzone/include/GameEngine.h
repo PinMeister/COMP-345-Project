@@ -47,6 +47,7 @@ public:
     void mainGameLoop(); // main gameloop which will contain reinforcementPhase(), issueOrdersPhase(), executeOrdersPhase()
     void reinforcementPhase(PhaseObserver* phaseObserver); // reinforce game with current game state
     void issueOrdersPhase(PhaseObserver* phaseObserver); // issue order from player
+    void executeOrdersPhase(PhaseObserver* phaseObserver); // execute order when issuing is over
 };
 
 class Startup{
