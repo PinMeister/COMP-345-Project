@@ -11,6 +11,7 @@
 #include "../include/GameObservers.h"
 
 class GameEngine;
+class PhaseObserver;
 
 class GameEngine : public Subject {
 //private attributes for GameEngine class

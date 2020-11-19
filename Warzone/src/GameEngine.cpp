@@ -171,7 +171,7 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
             numOfArmies = 3;
         }
 
-        phaseObserver->setInfo("Player " + (*it)->getPlayerID() + 1 + " will receive " + numOfArmies + " armies.");
+        phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.");
         //cout << "Player " << (*it)->getPlayerID() + 1 << " will receive " << numOfArmies << " armies" << endl;
         Notify();
 
@@ -179,7 +179,7 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
-        phaseObserver->setInfo("Player " + (*it)->getPlayerID() + 1 + " has " + (*it)->getReinforcementPool() + " armies.");
+        phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
         //cout << "Player " << (*it)->getPlayerID() + 1 << " has " << (*it)->getReinforcementPool() << " armies" << endl;
         Notify();
         }
