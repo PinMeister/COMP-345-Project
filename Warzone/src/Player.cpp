@@ -314,6 +314,10 @@ void Player::issueOrder() {
 	// 3. use card
 	cout << "Choose a card from your hand to use (if you have one): " << endl;
 	Deck* deck = new Deck(); 
+	
+	// if player has cards, they'll play one card at random 
+	if (this->hand->getNumberHandCards() > 0) 
+	{
 	cout << "Player " << this->getPlayerID() << " has cards:"<< endl;
 	for (int i = 0; i < hand->getNumberHandCards(); i++)
 	{    
@@ -323,7 +327,10 @@ void Player::issueOrder() {
 
 	this->hand->getCards()[rand() % hand->getNumberHandCards()]->play(orders, *deck);
 	cout << " ";
-
+	}
+	else {
+		cout << "You don't have cards to play!"<< endl;
+	}
 	//this->orders.push_back(order);
 }
 
