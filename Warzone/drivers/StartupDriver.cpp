@@ -1,8 +1,5 @@
 #include <iostream>
 
-#include "../include/MapLoader.h"
-#include "../include/Map.h"
-#include "../include/Player.h"
 #include "../include/GameEngine.h"
 
 using namespace std;
@@ -33,15 +30,18 @@ int main(){
     Startup *startUp = new Startup(&players, map);
     cout << "startup phase completed" << "\n\n";
 
+    // output all players' army nums and owned territories
     for(int i = 0; i < playerNum; i++){
-        Territory* temp = players[i]->getTerritories()[0];
-        cout << "Player " << i + 1 << " id: " << players[i]->getPlayerID() << "\n" << "In " << temp->getName() << " with " << temp->getArmyNum() << " armies \n";
-        temp = NULL;
-        delete temp;
+        cout << "Player " << i + 1 << " id: " << players[i]->getPlayerID() << " with armies "  << players[i]->getReinforcementPool() << "\nTerritories: " << players[i]->getTerritories().size() << "\n";
+        for(int j = 0; j < players[i]->getTerritories().size(); j++){
+            cout << players[i]->getTerritories()[j]->getName() << " ";
+        }
+        cout << "\n\n";
     }
 
     cout << "\n" << *startUp;
 
     delete startUp;
+    startUp = NULL;
     return 0;
 }
