@@ -58,7 +58,7 @@ class Deploy : public Order { //class Deploy inherits from Order
         // ~Deploy(); //destructor
         Deploy& operator=(const Deploy &deploy); //assignment operator
         friend ostream& operator << (ostream &os, const Deploy &deploy); //stream insertion operator for Deploy 
-        void validate(); 
+        bool validate(); 
         void execute();         
 };
 

@@ -111,40 +111,32 @@ using namespace std;
           return os << "Deploy " << deploy.armies << " to " << deploy.territory << endl;
      }
 
-     void Deploy  :: validate() {
+     bool Deploy  :: validate() {
+          bool isValid;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
             cout << "The deploy order is valid." << endl;
+            isValid = true;
          }
          else {
            cout << "The deploy order is invalid." << endl;
+           isValid = false;
          }
-          //vector<Territory*> playerTerritories = player->getTerritories();
-          /*
-          bool valid = 0;
-          for(int i = 0; i < playerTerritories.size(); i++){
-               if (playerTerritories[i]->getName() == territory->getName()){
-                    cout << "The deploy order is valid." << endl;
-                    valid = 1;
-                    break;
-               }
-          }
-          if (!valid){
-               cout << "The deploy order is invalid." << endl;
-          }*/
+          return isValid;
      }
 
      void Deploy  :: execute() {
-          validate();
-          vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
-          while(armies <= player->getReinforcementPool()){
-          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
-            territory->addArmyNum(armies);
-         }   
+          bool orderValid = this->validate();
+          if (orderValid) {       
+               int pool = player->getReinforcementPool();
+		     this->territory->addArmyNum(armies);
+               pool -= armies; 
+		     player->setReinforcementPool(pool);
+		     cout << "Troops have been deployed" << endl;  
+               }
        }      
-     }
+     
 
 
      // for Advance

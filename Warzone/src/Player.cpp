@@ -49,12 +49,14 @@ ostream& operator << (ostream &os, const Player &player){
 
 vector<Territory*> Player::toDefend() {
 
+	time_t t;
+
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
 
 	// show territories controlled by player 
 	if (controlled.size() > 0)
 	{	
-		cout << "Currently controlled Territories and armies: ";
+		cout << "Currently controlled Territories and armies: "<< endl;
 		for (int i=0; i< controlled.size(); i++)
 		{
 			cout << " (" << i << ") "  + controlled[i]->getName()  + "   " << controlled[i]->getArmyNum() << endl;
@@ -86,28 +88,38 @@ vector<Territory*> Player::toDefend() {
 			{
 				cout << controlled[index]->getName() + " picked."<< endl;
 				this->toDefendTerritory.push_back(controlled[index]);
+				controlled.erase(find(controlled.begin(), controlled.end(), controlled[index])); // pop from the controlled list
+
 			}
 
 			// 1. if toDefendTerritory size is 0, pick another index and check
 			// 2. if toDefendTerritory size is 1*, make a decision (odd/even) to decide whether to continue picking or not
 			if (this->toDefendTerritory.size() < 1) {
+				srand((unsigned) time(&t));// different random outputs everytime it's run
 				index = rand() % controlled.size();
 				continue;
 			}
 			else 
 			{
 				int decision = rand() % 100;  // take a random number from 0 to 100
-				if (decision % 2 == 0) // if even, finish picking
+				cout << "Index is: " << decision << endl;
+				if (decision % 2 == 1 ) // if odd, finish picking
 				{
 					cout << "Finished Picking." << endl;
 					break;
 				}
-				else // if odd, continue picking
+				else if (decision % 2 == 0 && controlled.size() > 0)
 				{
 					cout << "Pick another territory." << endl;
 					index = rand() % controlled.size();
+				}				
+				else // if odd, continue picking
+				{
+					cout << "No more Territories to pick" << endl;
+					break;
 				}
-			}	
+			}
+				
 		}
 		return this->toDefendTerritory;
 }
@@ -119,7 +131,7 @@ vector<Territory*> Player::toDefend() {
 vector<Territory*> Player::toAttack() {
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
 	vector<Territory*> non_allied_neighbours = this->get_neighbour_territories(this); // neighbouring territories not controlled by player
-	
+	time_t t;
 	// 1. check if you have enough army to deploy to areas to add
 	// 2. if toAttackTerritory size is 0, pick index and check
 	// 3. if toAttackTerritory size is 1+, make decision (odd/even) to decide whether to continue picking or not
@@ -128,12 +140,12 @@ vector<Territory*> Player::toAttack() {
 	if (non_allied_neighbours.size() > 0) 
 	{
 		//	Show possible territories to attack
-		cout << " Territories to attack:";
+		cout << " Territories to attack:"<< endl;
 		for (int i = 0; i < non_allied_neighbours.size(); i++)
-			cout << "  (" << i << ") " + non_allied_neighbours[i]->getName() + "   " << non_allied_neighbours[i]->getArmyNum();
+			cout << "  (" << i << ") " + non_allied_neighbours[i]->getName() + "   " << non_allied_neighbours[i]->getArmyNum() << endl;
 		cout << endl;
 
-		cout << "Choose the territory to attack: ";
+		cout << "Choose the territory to attack: " <<endl;
 	}
 	else 
 	{
@@ -145,8 +157,7 @@ vector<Territory*> Player::toAttack() {
 	int index = rand() % non_allied_neighbours.size(); // generate random number
 	while (true)
 	{
-		if (this->toAttackTerritory.size() <1 && deploy_limit>0) // if toAttackTerritory size is 0 and have armies to deploy
-		{
+	
 			vector<Territory*>::iterator it;
 			it = find(this->toAttackTerritory.begin(), this->toAttackTerritory.end(), non_allied_neighbours[index]);
 
@@ -160,29 +171,37 @@ vector<Territory*> Player::toAttack() {
 			{
 				this->toAttackTerritory.push_back(non_allied_neighbours[index]);
 				cout << non_allied_neighbours[index]->getName() << " added to attacking territories." <<  endl;
+				non_allied_neighbours.erase(find(non_allied_neighbours.begin(), non_allied_neighbours.end(), non_allied_neighbours[index])); // pop from the non allied list
 				deploy_limit--;
 			}	
-		}
-		else if (deploy_limit == 0) // if none to deploy, break the loop
-		{
-			cout << "No more reinforcements to deploy, finished picking." << endl;
-			break;
-		}
-
-		else
+		
+		if (this->toAttackTerritory.size() > 1 && deploy_limit>0)
 		{
 			int decision = rand() % 100;  // take a random number from 0 to 100
-			if (decision % 2 == 0) // if even, finish picking
+			cout << "Decision is: " << decision << endl;
+			if (decision % 2 == 1) // if odd, finish picking
 			{
 				cout << "Finished Picking." << endl;
 				break;
 			}
-			else // if odd, continue picking
+			else if (decision % 2 == 0 && non_allied_neighbours.size()>0) // if odd, continue picking
 			{
 				cout << "Pick another territory." << endl;
 				index = rand() % non_allied_neighbours.size();
 			}
-		}	
+			else  // if odd, continue picking
+			{
+				cout << "No more Territories to pick" << endl;
+				break;
+			}
+		}
+
+		else if (deploy_limit==0)  // if none to deploy, break the loop
+		{
+			cout << "No more reinforcements to deploy, finished picking." << endl;
+			break;
+		}
+	
 	}
 	
 	return this->toAttackTerritory;
@@ -191,6 +210,7 @@ vector<Territory*> Player::toAttack() {
 // TODO issueOrder
 void Player::issueOrder() {
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
+	
 
 
     // tell whose player's orders
@@ -201,7 +221,7 @@ void Player::issueOrder() {
     toAttackTerritory = this->toAttack();
 
     int canDeploy = this->getReinforcementPool(); // get player's army pool
-    cout << "Player " << this->getPlayerID() << " currently has: " << canDeploy << " armies" << endl;
+    cout << "\n\nPlayer " << this->getPlayerID() << " currently has: " << canDeploy << " armies" << endl;
     // 1. while have armies, deploy them until none or stop
     while (canDeploy > 0)
     {
@@ -218,6 +238,7 @@ void Player::issueOrder() {
                     // TODO create deploy order issue
 					Deploy* deploy = new Deploy(this, toDeploy,toDefendTerritory[i]);
 					this->orders.push_back(deploy);
+					deploy->execute();
                     continue;
                 }
                 else
@@ -237,43 +258,52 @@ void Player::issueOrder() {
 	// 2. advanced orders
 		vector<Territory*> allied_neighbours; // neighbouring territories controlled by player
 		vector<Territory*> enemy_neighbours; // neighbouring territories hostile to player
+
 		
 		int decision = rand() % 100;  // take a random number from 0 to 100
 			if (decision % 2 == 0  || toDefendTerritory.size() < 2) // if even, attack
 			{
 				cout << "Player: "<< this->getPlayerID()<<  " chooses to attack" << endl;
 				int index = rand() % toAttackTerritory.size();
-				auto all_neighbours = toAttackTerritory[index]->getNeighbours(); // get neighbours of this territory
+				auto all_neighbours = toAttackTerritory[index]->getNeighbours(); // get neighbours of enemy territory
 				cout << "Chosen enemy to attack: " << toAttackTerritory[index]->getName() << endl;
 				cout << "\nEnemies's neighbours: ";
 				for (auto n : all_neighbours) {cout << n->getName() << "   ";}
-				cout << "\nEnemies: " ;
+				cout << "\nYour Enemies: " ;
 				auto all_hostile = this->get_neighbour_territories(this); // get unfriendly
 				for (auto n : all_hostile) {cout << n->getName() << "   ";}
 				cout << "\n" ;
 				cout << "\n" ;
 				for (Territory* neighbour : all_neighbours) {
-					auto result = find(controlled.begin(), controlled.end(), neighbour);
-            		if (result != controlled.end()) // vector contains the element (get own territory close to hostile territory)
+					auto result = find(toDefendTerritory.begin(), toDefendTerritory.end(), neighbour); 
+            		if (result != toDefendTerritory.end()) // vector contains the element (get own territory close to hostile territory)
            			{
 						cout << "Player: "<< this->getPlayerID()<< " chooses to deploy armies from: " << result[0]->getName() <<" to attack " << toAttackTerritory[index]->getName()<<endl; 
-						if (result[0]->getArmyNum() > 0) // if own territory has army
+						if (result[0]->getArmyNum() > 0) // if own territory has army  (TODO remove the equal later on for check)
 						{// move random amount of army up to max number in that territory to toAttack Territory
 						// pop toAttack territory
 						cout << "Allied territory has armies to attack: " << result[0]->getArmyNum() << endl;
-						int attackNum = rand() % result[0]->getArmyNum() +1;
-						cout << "To deploy " << attackNum << " armies from: " << result[0]->getName() << " to : " <<toAttackTerritory[index]->getName() << endl;
+						int attackNum = rand() % result[0]->getArmyNum() +1; 
+						cout << "To deploy " << attackNum << " armies from: " << result[0]->getName() << " to attack: " <<toAttackTerritory[index]->getName() << endl;
 						Advance* advanceAtk = new Advance(this, result[0], toAttackTerritory[index], attackNum);
 						this->orders.push_back(advanceAtk);
+						cout << "Attack order added" << endl;
 						break;
+						}
+						else  // if you don't have armies, redundant for now but will be implemented later
+						{ // test to see if it will break
+							cout << "Don't have armies in " << result[0]->getName() << " to deploy to " << toAttackTerritory[index]->getName() << endl;
+							toDefendTerritory.erase(find(toDefendTerritory.begin(), toDefendTerritory.end(), result[0])); // pop from the defend list
+							continue;
 						}
             		}
             		else  // vector does not contain element
             		{
-						cout << "Finding match (attack) " << endl;
+						cout <<"You don't own: " << neighbour->getName()<< endl;
                			continue;
             		}
 				}
+				cout <<"\nAttacking Ended" << endl;
 			}
 			else // if odd, defend
 			
@@ -284,30 +314,39 @@ void Player::issueOrder() {
 				cout << "Chosen territory to defend: " << toDefendTerritory[index]->getName() << endl;
 
 				auto all_friendly = this->get_friendly_neighbour(this); // get all allied neighbours of player
-				for (auto n : all_friendly) {cout << "allies: " << n->getName() << "   ";}
+				cout << "Your Allied territories:" << endl;
+				for (auto n : all_friendly) {cout << n->getName() << "   ";}
 				cout << "\n" ;
 
 				for (Territory* neighbour : all_neighbours) {
 					auto result = find(controlled.begin(), controlled.end(), neighbour);
             		if (result != controlled.end()) // vector contains the element
            			{
-						cout << "Player: "<< this->getPlayerID()<< " chooses to deploy armies from: " << result[0]->getName()<< " to defend" << toDefendTerritory[index]->getName() << endl; 
-						if (result[0]->getArmyNum() > 0)
+						cout << "Player: "<< this->getPlayerID()<< " chooses to deploy armies from: " << result[0]->getName()<< " to defend " << toDefendTerritory[index]->getName() << endl; 
+						if (result[0]->getArmyNum() > 0) // TODO remove equal later when execution
 						{// move random amount of army up to max number in that territory to toDefend Territory
 						// pop toDefend territory
 						cout << "Allied territory has armies to move: " << result[0]->getArmyNum() << endl;
 						int moveNum = rand() % result[0]->getArmyNum() +1;
-						cout << "To deploy " << moveNum << " armies from: " << result[0]->getName() << " to : " <<toDefendTerritory[index]->getName() << endl;
+						cout << "To deploy " << moveNum << " armies from: " << result[0]->getName() << " to defend: " <<toDefendTerritory[index]->getName() << endl;
 						Advance* advanceDef = new Advance(this, result[0], toDefendTerritory[index], moveNum);
 						this->orders.push_back(advanceDef);
+						cout << "Defend order added" << endl;
 						break;
+						}
+						else // if don't have armies in that area (redundant for now but will be useful later)
+						{ // test to see if it'll break
+							cout << "Don't have armies in " << result[0]->getName() << " to deploy to " << toDefendTerritory[index]->getName() << endl;
+							toDefendTerritory.erase(find(toDefendTerritory.begin(), toDefendTerritory.end(), result[0])); // pop from the defend list	
+							continue;
 						}
             		}
             		else  // vector does not contain element
             		{
-						cout << "Finding match (defend)" << endl;
+						cout <<"You don't control " << neighbour->getName() <<endl;
                			continue;
             		}
+					cout << "\nDefending Ended" << endl;
 				}
 			}
 
