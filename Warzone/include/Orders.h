@@ -27,6 +27,7 @@ class Order{
         Player* player;
         Player* targetPlayer;
         vector<Territory*> territories;
+        vector<Territory*> playerTerritories;
         int armies;
         int armyNumAttack;
         int armyNumDefend;

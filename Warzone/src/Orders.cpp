@@ -114,36 +114,21 @@ using namespace std;
      void Deploy  :: validate() {
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), this->territory) != playerTerritories.end()){
             cout << "The deploy order is valid." << endl;
          }
          else {
            cout << "The deploy order is invalid." << endl;
          }
-          //vector<Territory*> playerTerritories = player->getTerritories();
-          /*
-          bool valid = 0;
-          for(int i = 0; i < playerTerritories.size(); i++){
-               if (playerTerritories[i]->getName() == territory->getName()){
-                    cout << "The deploy order is valid." << endl;
-                    valid = 1;
-                    break;
-               }
-          }
-          if (!valid){
-               cout << "The deploy order is invalid." << endl;
-          }*/
      }
 
      void Deploy  :: execute() {
           validate();
-          vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
-          while(armies <= player->getReinforcementPool()){
-          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
-            territory->addArmyNum(armies);
-         }   
-       }      
+          int pool = player->getReinforcementPool();
+          this->territory->addArmyNum(armies);
+          pool -= armies; 
+        player->setReinforcementPool(pool);
+        cout << "Troops have been deployed" << endl;
      }
 
 
@@ -225,18 +210,18 @@ using namespace std;
 
      // for Bomb
      Bomb::Bomb(Player* player, Territory* target){ //constructor
-               player=player;
-               target=target;
+               this->player=player;
+               this->target=target;
           }
 
      Bomb::Bomb(const Bomb &bomb){ //copy constructor
-          player=bomb.player;
-          target=bomb.target;
+          this->player=bomb.player;
+          this->target=bomb.target;
      }
 
      Bomb& Bomb::operator=(const Bomb &bomb){ //assignment operator
-          player=bomb.player;
-          target=bomb.target;
+          this->player=bomb.player;
+          this->target=bomb.target;
 
           return *this;
      }
@@ -248,7 +233,7 @@ using namespace std;
      void Bomb  :: validate() {
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()){
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end()){
             cout << "The bomb order is invalid." << endl;
          }
          else{
@@ -285,18 +270,18 @@ using namespace std;
      // for Blockade
 
      Blockade::Blockade(Player* player, Territory* territory){ //constructor
-               player = player;
-               territory = territory;
+               this->player = player;
+               this->territory = territory;
           }
 
      Blockade::Blockade(const Blockade &blockade){ //copy constructor
-          player = blockade.player;
-          territory = blockade.territory;
+          this->player = blockade.player;
+          this->territory = blockade.territory;
      }
 
      Blockade& Blockade::operator=(const Blockade &blockade){ //assignment operator
-          player = blockade.player;
-          territory=blockade.territory;
+          this->player = blockade.player;
+          this->territory=blockade.territory;
 
           return *this;
      }
@@ -338,24 +323,24 @@ using namespace std;
      // for Airlift
 
      Airlift::Airlift(Player* player, Territory* start, Territory* target, int armies){ //constructor
-               player = player;
-               start = start;
-               target = target;
-               armies = armies;
+               this->player = player;
+               this->start = start;
+               this->target = target;
+               this->armies = armies;
           }
 
      Airlift::Airlift(const Airlift &airlift){ //copy constructor
-          player= airlift.player;
-          start = airlift.start;
-          target = airlift.target;
-          armies = airlift.armies;
+          this->player= airlift.player;
+          this->start = airlift.start;
+          this->target = airlift.target;
+          this->armies = airlift.armies;
      }
 
      Airlift& Airlift::operator=(const Airlift &airlift){ //assignment operator
-          player = airlift.player;
-          start = airlift.start;
-          target = airlift.target;
-          armies = airlift.armies;
+          this->player = airlift.player;
+          this->start = airlift.start;
+          this->target = airlift.target;
+          this->armies = airlift.armies;
 
           return *this;
      }
@@ -383,18 +368,18 @@ using namespace std;
      // for Negotiate
 
      Negotiate::Negotiate(Player* player, Player* targetPlayer){ //constructor
-               player = player;
-               targetPlayer = targetPlayer;
+               this->player = player;
+               this->targetPlayer = targetPlayer;
           }
 
      Negotiate::Negotiate(const Negotiate &negotiate){ //copy constructor
-          player = negotiate.player;
-          targetPlayer = negotiate.targetPlayer;
+          this->player = negotiate.player;
+          this->targetPlayer = negotiate.targetPlayer;
      }
 
      Negotiate& Negotiate::operator=(const Negotiate &negotiate){ //assignment operator
-          player = negotiate.player;
-          targetPlayer = negotiate.targetPlayer;
+          this->player = negotiate.player;
+          this->targetPlayer = negotiate.targetPlayer;
 
           return *this;
      }
