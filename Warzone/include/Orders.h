@@ -28,6 +28,8 @@ class Order{
         Player* targetPlayer;
         vector<Territory*> territories;
         int armies;
+        int armyNumAttack;
+        int armyNumDefend;
 };
 
 class OrdersList{
@@ -42,7 +44,7 @@ class OrdersList{
         friend ostream& operator << (ostream &os, const OrdersList &ordersList); //stream insertion operator for OrdersList
 
         void Delete(vector<Order*> orderslist, int index);
-        void move(vector<Order*> orderslist, int start, int end);
+       // void move(vector<Order*> orderslist, int start, int end);
     private:
         vector<Order*> orderslist; //list of orders
     
@@ -52,7 +54,7 @@ class Deploy : public Order { //class Deploy inherits from Order
     public:
         Deploy(Player* player, int armies, Territory* territory);  //constructor
         Deploy(const Deploy &deploy); //copy constructor
-        ~Deploy(); //destructor
+        // ~Deploy(); //destructor
         Deploy& operator=(const Deploy &deploy); //assignment operator
         friend ostream& operator << (ostream &os, const Deploy &deploy); //stream insertion operator for Deploy 
         void validate(); 

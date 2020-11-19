@@ -9,6 +9,7 @@
 #include <vector>
 #include "../include/Player.h"
 #include "../include/Orders.h"
+#include "../include/Cards.h"
 
 class GameEngine;
 
@@ -35,7 +36,7 @@ public:
     GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map);
     Map* chooseMap(); // let user choose map from path
 
-    static GameEngine& GetEngine(); // returns instance of game engine class
+    //static GameEngine& GetEngine(); // returns instance of game engine class
     static const Player* getCurrentPlayer(); // gets current player
     static const Order* getLastOrder(); // gets last order
     void setMap(Map* map); // set the map after loading it

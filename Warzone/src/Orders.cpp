@@ -35,22 +35,22 @@ using namespace std;
 
      } 
 
-    void OrdersList::move(vector<Order*> orderslist, int start, int end){                  
+//     void OrdersList::move(vector<Order*> orderslist, int start, int end){                  
 
-        //first iterator for the order that has to be moved
+//         //first iterator for the order that has to be moved
 
-        std::vector<Order *>::iterator itr1 = orderslist.begin();
-        std::advance(itr1, start-1);
+//         std::vector<Order *>::iterator itr1 = orderslist.begin();
+//         std::advance(itr1, start-1);
 
-        //second iterator for the order that is to be swapped with
-        std::vector<Order *>::iterator itr2 = orderslist.begin();
-        std::advance(itr2, end-1);
+//         //second iterator for the order that is to be swapped with
+//         std::vector<Order *>::iterator itr2 = orderslist.begin();
+//         std::advance(itr2, end-1);
 
-        //swapping the two orders the iterators point to
+//         //swapping the two orders the iterators point to
 
-        std::iter_swap(*itr1, *itr2);
+//         std::iter_swap(*itr1, *itr2);
 
-        } 
+//         } 
 
      ostream& operator << (ostream &os, const OrdersList &ordersList){ //stream insertion operator for OrdersList
 
@@ -181,6 +181,8 @@ using namespace std;
           playerTerritories = player->getTerritories();   //getting territories of player that issued the order
           vector<Territory*> adjacent; 
           adjacent = start->neighbours;       //getting the neighbouring territories of the start territory 
+          armyNumAttack = start ->getArmyNum();    //getting number of armies of player that issued the order
+          armyNumDefend = target ->getArmyNum();
           //executes if target territory is adjacent to start 
           if(std::find(adjacent.begin(), adjacent.end(), target) != adjacent.end()){ 
                //checks if the target is from the player's territories
@@ -189,13 +191,21 @@ using namespace std;
                     start->subtractArmyNum(armies);
                }
                else{
-                  random_device rd;     //STILL HAVE TO DO THIS
-                  mt19937 gen(rd());
-                  uniform_real_distribution<> dis(0, 1);
-                  float randomNumber = dis(gen);
-                  if(randomNumber){
-
-                  }
+                    if(armyNumAttack > armyNumDefend){
+                         for(int i = 0; i < armyNumAttack; i++){
+                         random_device rd;     
+                         mt19937 gen(rd());
+                         uniform_real_distribution<> dis(0, 1);
+                         float randomNumberAttack = dis(gen);
+                         if(randomNumberAttack > 0.4){
+                              target->setArmyNum(armyNumDefend-1);
+                         }
+                         float randomNumberDefend = dis(gen);
+                         if(randomNumberDefend > 0.3){
+                              start->subtractArmyNum(armyNumAttack-1);
+                            }
+                         }
+                    }
                }    
           }         
      }
@@ -343,7 +353,14 @@ using namespace std;
 
 
      void Airlift  :: validate() {
-          
+          vector<Territory*> playerTerritories;
+          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
+         if ((!(std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()))||(!(std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()))){
+              cout << "The airlift order is invalid." << endl;
+         }
+         else{
+             cout << "The airlift order is valid." << endl; 
+         }
      }  
 
      void Airlift  :: execute() {

@@ -11,39 +11,39 @@
 using namespace std;
 
 // main driver
-int main() {
-    int numberOfPlayers = 0;
-    vector<Player*> players;
-    MapLoader* maploader;
-    Map* map;
-    GameEngine* gameEngine = new GameEngine(numberOfPlayers, players, maploader, map);
+// int main() {
+//     int numberOfPlayers = 0;
+//     vector<Player*> players;
+//     MapLoader* maploader;
+//     Map* map;
+//     GameEngine* gameEngine = new GameEngine(numberOfPlayers, players, maploader, map);
 
-    cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
-    map = gameEngine->chooseMap(); // choose map to start the game
-    gameEngine->setMap(map); // set the new map from the maploader
-    cout << "Map AFTER user chooses: " << gameEngine->map << endl;
+//     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
+//     map = gameEngine->chooseMap(); // choose map to start the game
+//     gameEngine->setMap(map); // set the new map from the maploader
+//     cout << "Map AFTER user chooses: " << gameEngine->map << endl;
 
-    cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
-    gameEngine->setPlayerNum(); // let user choose number of players
-    cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
+//     cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
+//     gameEngine->setPlayerNum(); // let user choose number of players
+//     cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
 
-    cout << "Creating the players and required items for the game: " << endl;
-    gameEngine->createPlayers();
-    cout << "Players have been created" << endl;
+//     cout << "Creating the players and required items for the game: " << endl;
+//     gameEngine->createPlayers();
+//     cout << "Players have been created" << endl;
 
-    // free memory and dangling ptr
-    for (auto p : players) { delete p; } 
-    delete maploader;
-    delete map;
-    delete gameEngine;
+//     // free memory and dangling ptr
+//     for (auto p : players) { delete p; } 
+//     delete maploader;
+//     delete map;
+//     delete gameEngine;
 
-    players.clear();
-    maploader = NULL;   
-    map = NULL;
-    gameEngine = NULL;
+//     players.clear();
+//     maploader = NULL;   
+//     map = NULL;
+//     gameEngine = NULL;
 
-	return 0;
-}
+// 	return 0;
+// }
 
 // default constructor auto generated
 
@@ -175,13 +175,13 @@ void GameEngine::mainGameLoop() {
 // territory; if so, the player is removed from the game.    
 }
 
-const Player* GameEngine::getCurrentPlayer() {
-    return GetEngine().currentPlayer;
-}
+// const Player* GameEngine::getCurrentPlayer() {
+//     return GetEngine().currentPlayer;
+// }
 
-const Order* GameEngine::getLastOrder(){
-    return GetEngine().lastOrder;
-}
+// const Order* GameEngine::getLastOrder(){
+//     return GetEngine().lastOrder;
+// }
 
 void GameEngine::reinforcementPhase() {
     int numOfArmies = 0;
