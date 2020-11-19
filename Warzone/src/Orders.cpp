@@ -136,11 +136,8 @@ using namespace std;
 		     cout << "Troops have been deployed" << endl;  
                }
        }      
-     
-
 
      // for Advance
-
      Advance::Advance(Player* player, Territory* start, Territory* target, int armies){ //constructor
                this->player = player;
                this->start = start;
@@ -237,15 +234,28 @@ using namespace std;
           return os << "Bomb "<< bomb.target <<endl;
      }
 
-     void Bomb  :: validate() {
+     bool Bomb  :: validate() {
+     //      vector<Territory*> playerTerritories;
+     //      playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
+     //     if (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end()){
+     //        cout << "The bomb order is invalid." << endl;
+     //     }
+     //     else{
+     //          cout << "The bomb order is valid." << endl;
+     //     }
+          bool isValid;
+          isValid = true;
           vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()){
+          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end()){
             cout << "The bomb order is invalid." << endl;
+            isValid = false;
          }
          else{
               cout << "The bomb order is valid." << endl;
+              isValid = true;
          }
+          return isValid;
      }  
 
      void Bomb  :: execute() {

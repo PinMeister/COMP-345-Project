@@ -83,7 +83,7 @@ class Bomb : public Order{
         ~Bomb(); //destructor
         Bomb& operator=(const Bomb &bomb); //assignment operator
         friend ostream& operator << (ostream &os, const Bomb &bomb); //stream insertion operator for Bomb
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 
