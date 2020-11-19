@@ -101,20 +101,29 @@ void GameEngine::setPlayerNum() {
 
 // TO DO
 
-void GameEngine::mainGameLoop() {
+void GameEngine::mainGameLoop(PhaseObserver* phaseObserver) {
 // This loop shall continue until only one of the players owns all the territories in the map, at which point a winner is
 // announced and the game ends. The main game loop also checks for any player that does not control at least one
-// territory; if so, the player is removed from the game.    
+// territory; if so, the player is removed from the game.
+int round = 0
+string gameEnd;
+    // this is to test and simulate rounds of only reinforcement
+    
+    do {
+        cout << endl << "Round: " << to_string(round + 1) << endl;
+        cout << "End game? (Y/N)";
+		cin >> gameEnd;
+        round++;
+        this->reinforcementPhase(phaseObserver);
+        this->issueOrdersPhase(phaseObserver);
+        this->executeOrdersPhase(phaseObserver);
+	} while (gameEnd != 'Y');
 }
 
 void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
     int numOfArmies = 0;
     vector<Player*>::iterator it;
-
-    // this is to test and simulate rounds of only reinforcement
-    for (int a = 0; a<3; a++){
-
-        cout << endl << "Round: " << to_string(a + 1) << endl;
+        
 
     for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
@@ -181,10 +190,9 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
-            if (phaseObserver != nullptr) {
-                phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
-                Notify(phaseObserver);
-            }
+        if (phaseObserver != nullptr) {
+            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
+            Notify(phaseObserver);
         }
     }
 }
