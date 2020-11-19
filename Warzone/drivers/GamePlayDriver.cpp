@@ -75,8 +75,6 @@ int main(){
     // create players
     vector<Player*> players;
     for(int i = 0; i < playerNum; i++){
-        
-
         Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
         players.push_back(player);
         cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
@@ -100,13 +98,15 @@ int main(){
 
     if (phaseObserver != nullptr) {
         phaseObserver->setPhase("Reinforcement Phase");
-        gameEngine->reinforcementPhase(phaseObserver);
+        gameEngine->mainGameLoop(nullptr);
+        // gameEngine->reinforcementPhase(phaseObserver);
         phaseObserver->setPhase("Orders Issuing Phase");
-        gameEngine->issueOrdersPhase(phaseObserver);
+        // gameEngine->issueOrdersPhase(phaseObserver);
     }
     else {
-        gameEngine->reinforcementPhase(nullptr);
-        gameEngine->issueOrdersPhase(nullptr);
+        gameEngine->mainGameLoop(nullptr);
+        // gameEngine->reinforcementPhase(nullptr);
+        // gameEngine->issueOrdersPhase(nullptr);
     }
 
     // free memory and dangling ptr

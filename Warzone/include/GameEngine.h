@@ -41,7 +41,8 @@ public:
     void toggleObserver(); // turn on/off any observers
     // void addPlayer(Player* p);
     // void gameLoop(Map gameMap);
-    void mainGameLoop(); // main gameloop which will contain reinforcementPhase(), issueOrdersPhase(), executeOrdersPhase()
+
+    void mainGameLoop(PhaseObserver* phaseObserver); // main gameloop which will contain reinforcementPhase(), issueOrdersPhase(), executeOrdersPhase()
     void reinforcementPhase(PhaseObserver* phaseObserver); // reinforce game with current game state
     void issueOrdersPhase(PhaseObserver* phaseObserver); // issue order from player
     void executeOrdersPhase(PhaseObserver* phaseObserver); // execute order when issuing is over
