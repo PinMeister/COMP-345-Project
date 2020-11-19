@@ -11,6 +11,9 @@
 
 using namespace std;
 
+class Order;
+class OrdersList;
+
 class Player {
 	private:
 		vector<Territory*> territories;
