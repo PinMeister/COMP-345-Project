@@ -357,31 +357,13 @@ void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
     {
         p->getTerritories();
     }
-    //TODO armies available on all territories 
-
     vector<Player*> active = players;
 
-    // if have active players
-    // while (!active.empty())
-    // {
+
         for (size_t i=0; i<active.size(); i++)
         {
-            active[i]-> issueOrder();
-            // if no new order, go to next player
-            // if (newOrder == nullptr)
-            // {
-            //     active.erase(active.begin()+i);
-            // }
-            // // execute order
-            // else 
-            // {
-            //     currentPlayer = active[i];
-            //     lastOrder = newOrder;
-            //     active[i]->issueOrder();
-            // }
+            active[i]-> issueOrder();       
         }
-    // }
-
 }
 
 void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {}
@@ -447,24 +429,27 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
 
     // assign territories
     int size = map->getTerritories().size(); // get territory num
-    vector<int> randomTerritoryId;
-    // get random territory id and push to the vector
-    for(int i = 0; i < playerNum; i++){
-        srand(time(NULL)); // set seed a runtime value
-        int temp = rand() % size;
-        // find a match
-        vector<int>::iterator it = find (randomTerritoryId.begin(), randomTerritoryId.end(), temp);
-        // if num exists, repeat
-        while(it != randomTerritoryId.end()){
-            temp = rand() % size;
-            it = find (randomTerritoryId.begin(), randomTerritoryId.end(), temp);
+    vector<int> randTerritoryId;
+
+    // assign all territories to each player randomly
+    while(randTerritoryId.size() < size){
+        for(int i = 0; i < playerNum; i ++){
+            srand(time(NULL)); // set seed a runtime value
+            int temp = rand() % size;
+            // if num exists, repeat
+            while(find(randTerritoryId.begin(), randTerritoryId.end(), temp) != randTerritoryId.end()){
+                temp = rand() % size;
+            }
+            randTerritoryId.push_back(temp); // push it to the vector
+            players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
+            // break the loop if these's no more territory
+            if (randTerritoryId.size() >= size){
+                break;
+            }
         }
-        randomTerritoryId.push_back(temp); // push it to the vector
-        players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
-        map->getTerritories()[temp]->addArmyNum(initialArmyNum); // assign army to territory
-        players->at(i)->setReinforcementPool(initialArmyNum); // set palyer total army
-      
-        // give player all the orders
+    }
+    // give player all the orders and armies
+    for(int i = 0; i < playerNum; i++){
         Deploy *depl;
         Advance *adv;
         Bomb *bmb;
@@ -480,6 +465,7 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
         orders.push_back(ngt); 
 
         players->at(i)->setOrdersRef(orders);
+        players->at(i)->setReinforcementPool(initialArmyNum); // set player total army
     }
-    started = true;
+    started = true; // the game starts
 }
