@@ -153,10 +153,10 @@ int main(){
     delete defaultHand;
     delete defaultDeck;
 
-    startUp = nullptr;
-    gameEngine = nullptr;
-    defaultHand = nullptr;
-    defaultDeck = nullptr;
+    startUp = NULL;
+    gameEngine = NULL;
+    defaultHand = NULL;
+    defaultDeck = NULL;
 
     if (phaseObserver != nullptr) {
         delete phaseObserver;
