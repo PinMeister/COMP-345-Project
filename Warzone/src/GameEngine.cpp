@@ -193,7 +193,7 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
 player can deploy if it still has armies to deploy before continuing to other orders, can issue advance orders and play a
 card from their hand
 */
-void GameEngine::issueOrdersPhase() {
+void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
     // create list to defned and attack
     for (Player* p: players)
     {
@@ -226,7 +226,7 @@ void GameEngine::issueOrdersPhase() {
 
 }
 
-void GameEngine::executeOrdersPhase() {}
+void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {}
 
 // constructor with no parameter
 Startup::Startup(){

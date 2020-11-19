@@ -137,15 +137,13 @@ int main(){
     if (phaseObserver != nullptr) {
         phaseObserver->setPhase("Reinforcement Phase");
         gameEngine->reinforcementPhase(phaseObserver);
+        phaseObserver->setPhase("Orders Issuing Phase");
+        gameEngine->issueOrdersPhase(phaseObserver);
     }
     else {
         gameEngine->reinforcementPhase(nullptr);
+        gameEngine->issueOrdersPhase(nullptr);
     }
-
-
-    cout << "\n\nBeginning of Order Issue Phase \n " << endl;
-    gameEngine->issueOrdersPhase();
-    cout << "\nEnd of Order Issue Phase " << endl;
 
     // free memory and dangling ptr
     delete startUp;
