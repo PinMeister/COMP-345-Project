@@ -66,29 +66,26 @@ void Card::play(vector<Order*> &ol, Deck &deck) {
 	return;
 }
 
+// start deck with cards
 Deck::Deck() {
-	for (auto i = 0; i < 56;  ++i)
-	{
-		srand(time(NULL)); // set seed a runtime value
-		int random = rand() % 5;
-
-		if(random % 5 == 0) {
+		for (auto i = 0; i < 52;  ++i)   
+	{   
+		if(i % 5 == 0) {
 			cards.push_back(new Card(Card::BOMB)); 
 		}
-		else if(random % 4 == 1) {
+		else if(i % 5 == 1) {
 			cards.push_back(new Card(Card::REINFORCEMENT)); 
 		}
-		else if(random % 4 == 2) {
+		else if(i % 5 == 2) {
 			cards.push_back(new Card(Card::BLOCKADE)); 
 		}
-		else if(random % 4 == 3) {
+		else if(i % 5 == 3) {
 			cards.push_back(new Card(Card::AIRLIFT)); 
 		}
 		else{
 			cards.push_back(new Card(Card::DIPLOMACY)); 
 		}
 	}
-	cout<< this << endl;
 }
 
 Deck::Deck(vector<Card*> &cpy_cards) {
@@ -129,13 +126,31 @@ Card Deck::draw(){
 	return *draw;
 }
 
+
 ostream& operator << (std::ostream& out, const Deck &deck) {
 	return out << "Deck has " << deck.cards.size() << " cards" ;
 }
 
+// start hand with cards
 Hand::Hand() {
-// change this part to start hand off with different number of cards
-	cout<< this << endl;
+for (auto i = 0; i < 5; ++i){
+		int random = rand() % 5;
+		if(random % 4 == 0) {
+			this->cards.push_back(new Card(Card::BOMB)); 
+		}
+		else if(random % 4 == 1) {
+			this->cards.push_back(new Card(Card::REINFORCEMENT)); 
+		}
+		else if(random % 4 == 2) {
+			this->cards.push_back(new Card(Card::BLOCKADE)); 
+		}
+		else if(random % 4 == 3) {
+			this->cards.push_back(new Card(Card::AIRLIFT)); 
+		}
+		else{
+			this->cards.push_back(new Card(Card::DIPLOMACY)); 
+		}
+	}	
 }
 
 Hand::Hand( const Hand &hand) {

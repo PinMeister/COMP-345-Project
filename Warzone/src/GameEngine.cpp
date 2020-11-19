@@ -194,31 +194,13 @@ void GameEngine::issueOrdersPhase() {
     {
         p->getTerritories();
     }
-    //TODO armies available on all territories 
-
     vector<Player*> active = players;
 
-    // if have active players
-    // while (!active.empty())
-    // {
+
         for (size_t i=0; i<active.size(); i++)
         {
-            active[i]-> issueOrder();
-            // if no new order, go to next player
-            // if (newOrder == nullptr)
-            // {
-            //     active.erase(active.begin()+i);
-            // }
-            // // execute order
-            // else 
-            // {
-            //     currentPlayer = active[i];
-            //     lastOrder = newOrder;
-            //     active[i]->issueOrder();
-            // }
+            active[i]-> issueOrder();       
         }
-    // }
-
 }
 
 void GameEngine::executeOrdersPhase() {}
