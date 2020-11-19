@@ -217,18 +217,18 @@ using namespace std;
 
      // for Bomb
      Bomb::Bomb(Player* player, Territory* target){ //constructor
-               player=player;
-               target=target;
+               this->player=player;
+               this->target=target;
           }
 
      Bomb::Bomb(const Bomb &bomb){ //copy constructor
-          player=bomb.player;
-          target=bomb.target;
+          this->player=bomb.player;
+          this->target=bomb.target;
      }
 
      Bomb& Bomb::operator=(const Bomb &bomb){ //assignment operator
-          player=bomb.player;
-          target=bomb.target;
+          this->player=bomb.player;
+          this->target=bomb.target;
 
           return *this;
      }
@@ -277,18 +277,18 @@ using namespace std;
      // for Blockade
 
      Blockade::Blockade(Player* player, Territory* territory){ //constructor
-               player = player;
-               territory = territory;
+               this->player = player;
+               this->territory = territory;
           }
 
      Blockade::Blockade(const Blockade &blockade){ //copy constructor
-          player = blockade.player;
-          territory = blockade.territory;
+          this->player = blockade.player;
+          this->territory = blockade.territory;
      }
 
      Blockade& Blockade::operator=(const Blockade &blockade){ //assignment operator
-          player = blockade.player;
-          territory=blockade.territory;
+          this->player = blockade.player;
+          this->territory=blockade.territory;
 
           return *this;
      }
@@ -330,24 +330,24 @@ using namespace std;
      // for Airlift
 
      Airlift::Airlift(Player* player, Territory* start, Territory* target, int armies){ //constructor
-               player = player;
-               start = start;
-               target = target;
-               armies = armies;
+               this->player = player;
+               this->start = start;
+               this->target = target;
+               this->armies = armies;
           }
 
      Airlift::Airlift(const Airlift &airlift){ //copy constructor
-          player= airlift.player;
-          start = airlift.start;
-          target = airlift.target;
-          armies = airlift.armies;
+          this->player= airlift.player;
+          this->start = airlift.start;
+          this->target = airlift.target;
+          this->armies = airlift.armies;
      }
 
      Airlift& Airlift::operator=(const Airlift &airlift){ //assignment operator
-          player = airlift.player;
-          start = airlift.start;
-          target = airlift.target;
-          armies = airlift.armies;
+          this->player = airlift.player;
+          this->start = airlift.start;
+          this->target = airlift.target;
+          this->armies = airlift.armies;
 
           return *this;
      }
@@ -375,18 +375,18 @@ using namespace std;
      // for Negotiate
 
      Negotiate::Negotiate(Player* player, Player* targetPlayer){ //constructor
-               player = player;
-               targetPlayer = targetPlayer;
+               this->player = player;
+               this->targetPlayer = targetPlayer;
           }
 
      Negotiate::Negotiate(const Negotiate &negotiate){ //copy constructor
-          player = negotiate.player;
-          targetPlayer = negotiate.targetPlayer;
+          this->player = negotiate.player;
+          this->targetPlayer = negotiate.targetPlayer;
      }
 
      Negotiate& Negotiate::operator=(const Negotiate &negotiate){ //assignment operator
-          player = negotiate.player;
-          targetPlayer = negotiate.targetPlayer;
+          this->player = negotiate.player;
+          this->targetPlayer = negotiate.targetPlayer;
 
           return *this;
      }
