@@ -235,14 +235,6 @@ using namespace std;
      }
 
      bool Bomb  :: validate() {
-     //      vector<Territory*> playerTerritories;
-     //      playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-     //     if (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end()){
-     //        cout << "The bomb order is invalid." << endl;
-     //     }
-     //     else{
-     //          cout << "The bomb order is valid." << endl;
-     //     }
           bool isValid;
           isValid = true;
           vector<Territory*> playerTerritories;
