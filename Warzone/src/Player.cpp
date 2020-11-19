@@ -331,7 +331,6 @@ void Player::issueOrder() {
 	else {
 		cout << "You don't have cards to play!"<< endl;
 	}
-	//this->orders.push_back(order);
 }
 
 void Player::addTerritory(Territory* territory){
