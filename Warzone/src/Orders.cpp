@@ -10,21 +10,21 @@ using namespace std;
 
      // for OrdersList
     OrdersList::OrdersList(vector<Order*> orderslist){   //constructor
-         orderslist = orderslist;
+         this->orderslist = orderslist;
     }
 
 
      OrdersList::OrdersList(const OrdersList &ordersList){ //copy constructor
-          orderslist= ordersList.orderslist;
+          this->orderslist= ordersList.orderslist;
      }
 
      OrdersList::~OrdersList(){ //destructor
-          orderslist.clear();
+          this->orderslist.clear();
      }
 
      OrdersList& OrdersList::operator=(const OrdersList &ordersList){ //assignment operator
 
-          orderslist = ordersList.orderslist;
+          this->orderslist = ordersList.orderslist;
           
           return *this;
      }
@@ -88,20 +88,20 @@ using namespace std;
 
      // for Deploy
      Deploy::Deploy(Player* player, int armies, Territory* territory){ //constructor
-           player = player;
-           armies = armies;
-           territory = territory;
+           this->player = player;
+           this->armies = armies;
+           this->territory = territory;
        }
 
      Deploy::Deploy(const Deploy &deploy){ //copy constructor
           this->player = deploy.player;
-          armies = deploy.armies;
+          this->armies = deploy.armies;
           this->territory = deploy.territory;
      }
 
      Deploy& Deploy::operator=(const Deploy &deploy){ //assignment operator
           this->player = deploy.player;
-          armies= deploy.armies;
+          this->armies= deploy.armies;
           this->territory=deploy.territory;
 
            return *this;
@@ -137,25 +137,25 @@ using namespace std;
      // for Advance
 
      Advance::Advance(Player* player, Territory* start, Territory* target, int armies){ //constructor
-               player = player;
-               start = start;
-               target = target;
+               this->player = player;
+               this->start = start;
+               this->target = target;
                armies = armies;
           }
 
      Advance::Advance(const Advance &advance){ //copy constructor
-          player = advance.player;
-          start = advance.start;
-          target = advance.target;
-          armies = advance.armies;
+          this->player = advance.player;
+          this->start = advance.start;
+          this->target = advance.target;
+          this->armies = advance.armies;
 
      }
 
      Advance& Advance::operator=(const Advance &advance){ //assignment operator
-          player = advance.player;
-          start = advance.start;
-          target = advance.target;
-          armies = advance.armies;
+          this->player = advance.player;
+          this->start = advance.start;
+          this->target = advance.target;
+          this->armies = advance.armies;
 
           return *this;
      }
@@ -314,7 +314,7 @@ using namespace std;
                int newArmyNum = territoryArmies * 2;
                territory->setArmyNum(newArmyNum);
              for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){   //iterating through each player's list of orders
-                    if((*iter) = territory){
+                    if((*iter) == territory){
                          playerTerritories.erase(iter);     //erase the territory from player's territories, making it neutral
                     }
                     break;    //ends loop after erasing the territory
