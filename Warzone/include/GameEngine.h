@@ -2,9 +2,7 @@
 
 #include <vector>
 #include <iostream>
-#include <vector>
 
-#include "../include/Player.h"
 #include "../include/Orders.h"
 #include "../include/Player.h"
 #include "../include/Map.h"

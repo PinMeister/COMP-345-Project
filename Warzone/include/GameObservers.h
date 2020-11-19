@@ -3,6 +3,8 @@
 #include "GameEngine.h"
 using namespace std;
 
+class GameEngine;
+
 class PhaseObserver : public Observer {
     public:
         PhaseObserver();
