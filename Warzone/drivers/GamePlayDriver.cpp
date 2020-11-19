@@ -2,6 +2,7 @@
 #include "../include/Map.h"
 #include "../include/Player.h"
 #include "../include/MapLoader.h"
+#include "../include/GameObservers.h"
 #include <iostream>
 #include <ctime>
 #include <algorithm>
@@ -20,6 +21,29 @@ int main(){
     MapLoader* maploader;
     Map* map;
     GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
+
+    StatsObserver* statsObserver = new StatsObserver(gameEngine);
+    PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
+
+    string phaseToggle; // Set phase 
+    do {
+        cout << "Turn off phase observer? (Y/N)" << endl;
+		cin >> phaseToggle;
+	} while (phaseToggle != "Y" && phaseToggle != "N");
+    if (phaseToggle == "Y") {
+        delete phaseObserver;
+        phaseObserver = nullptr;
+    }
+
+    string statsToggle;
+    do {
+        cout << "Turn off game stats observer? (Y/N)" << endl;
+		cin >> statsToggle;
+	} while (statsToggle != "Y" && statsToggle != "N");
+    if (statsToggle == "Y") {
+        delete statsObserver;
+        statsObserver = nullptr;
+    }
 
     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
     map = gameEngine->chooseMap(); // choose map to start the game
@@ -107,15 +131,19 @@ int main(){
     for(int i = 0; i < playerNum; i++){
         cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
     }
+    
+    gameEngine->Notify(statsObserver);
 
-    cout << endl << "Beginning of reinforcement phase " << endl;
-    gameEngine->reinforcementPhase();
-    cout << "End of reinforcement phase " << endl;
-
-
-    cout << "\n\nBeginning of Order Issue Phase \n " << endl;
-    gameEngine->issueOrdersPhase();
-    cout << "\nEnd of Order Issue Phase " << endl;
+    if (phaseObserver != nullptr) {
+        phaseObserver->setPhase("Reinforcement Phase");
+        gameEngine->reinforcementPhase(phaseObserver);
+        phaseObserver->setPhase("Orders Issuing Phase");
+        gameEngine->issueOrdersPhase(phaseObserver);
+    }
+    else {
+        gameEngine->reinforcementPhase(nullptr);
+        gameEngine->issueOrdersPhase(nullptr);
+    }
 
     // free memory and dangling ptr
     delete startUp;
@@ -127,6 +155,15 @@ int main(){
     gameEngine = NULL;
     defaultHand = NULL;
     defaultDeck = NULL;
+
+    if (phaseObserver != nullptr) {
+        delete phaseObserver;
+        phaseObserver = nullptr;
+    }
+    if (statsObserver != nullptr) {
+        delete statsObserver;
+        statsObserver = nullptr;
+    }
 
     return 0;
 }

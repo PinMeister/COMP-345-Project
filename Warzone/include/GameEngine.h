@@ -3,18 +3,19 @@
 
 #include <vector>
 #include <iostream>
-#include <vector>
 
-#include "../include/Player.h"
 #include "../include/Orders.h"
 #include "../include/Player.h"
 #include "../include/Orders.h"
 #include "../include/Map.h"
 #include "../include/MapLoader.h"
+#include "../include/Subject.h"
+#include "../include/GameObservers.h"
 
 class GameEngine;
+class PhaseObserver;
 
-class GameEngine {
+class GameEngine : public Subject {
 //private attributes for GameEngine class
 private:
 
@@ -28,8 +29,6 @@ public:
     Deck* deck; // default deck for the game
     Player* currentPlayer; // current player
     Order* lastOrder; // the last order
-
-    // vector<Observer> observers*; // need Part 5 to complete
     GameEngine(); // default constructor
     ~GameEngine(); // destructor
     GameEngine(const GameEngine &gameEngine); // copy constructor
@@ -47,9 +46,9 @@ public:
     // void gameLoop(Map gameMap);
 
     void mainGameLoop(); // main gameloop which will contain reinforcementPhase(), issueOrdersPhase(), executeOrdersPhase()
-    void reinforcementPhase(); // reinforce game with current game state
-    void issueOrdersPhase(); // issue order from player
-    void executeOrdersPhase(); // execute order whe issuing is over
+    void reinforcementPhase(PhaseObserver* phaseObserver); // reinforce game with current game state
+    void issueOrdersPhase(PhaseObserver* phaseObserver); // issue order from player
+    void executeOrdersPhase(PhaseObserver* phaseObserver); // execute order whe issuing is over
 };
 
 class Startup{
