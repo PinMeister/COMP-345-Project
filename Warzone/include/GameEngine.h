@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAMEENGINE_H
+#define GAMEENGINE_H
 
 #include <vector>
 #include <iostream>
@@ -6,6 +7,7 @@
 
 #include "../include/Orders.h"
 #include "../include/Player.h"
+#include "../include/Orders.h"
 #include "../include/Map.h"
 #include "../include/MapLoader.h"
 
@@ -23,6 +25,9 @@ public:
     MapLoader* maploader; // to load the map
     Map* map; // choose map
     Deck* deck; // default deck for the game
+    Player* currentPlayer; // current player
+    Order* lastOrder; // the last order
+
     // vector<Observer> observers*; // need Part 5 to complete
     GameEngine(); // default constructor
     ~GameEngine(); // destructor
@@ -31,6 +36,8 @@ public:
     friend ostream& operator<<(ostream& out, const GameEngine &gameEngine); // string insertion
     GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map);
     Map* chooseMap(); // let user choose map from path
+
+
     void setMap(Map* map); // set the map after loading it
     void setPlayerNum(); // set the number of player (2 to 5 only)
     int getPlayerNum(); // retrieve number of player
@@ -62,3 +69,4 @@ class Startup{
         bool started = false;
         void startupPhase(vector<Player*> *players, Map *map); // start up function 
 };
+ #endif 

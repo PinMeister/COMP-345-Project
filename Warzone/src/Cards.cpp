@@ -60,7 +60,7 @@ void Card::play(vector<Order*> &ol, Deck &deck) {
 	}
 	ol.push_back(o);
 
-	cout<< "Play CardType:" << this->val << endl;
+	cout<< "Play CardType:" << this->getCardType() << endl;
 
 	deck.addCardBack(*this);
 	return;
@@ -134,24 +134,7 @@ ostream& operator << (std::ostream& out, const Deck &deck) {
 }
 
 Hand::Hand() {
-	// for (auto i = 0; i < 5; ++i){
-	// 	int random = rand() % 5;
-	// 	if(random % 4 == 0) {
-	// 		this->cards.push_back(new Card(Card::BOMB)); 
-	// 	}
-	// 	else if(random % 4 == 1) {
-	// 		this->cards.push_back(new Card(Card::REINFORCEMENT)); 
-	// 	}
-	// 	else if(random % 4 == 2) {
-	// 		this->cards.push_back(new Card(Card::BLOCKADE)); 
-	// 	}
-	// 	else if(random % 4 == 3) {
-	// 		this->cards.push_back(new Card(Card::AIRLIFT)); 
-	// 	}
-	// 	else{
-	// 		this->cards.push_back(new Card(Card::DIPLOMACY)); 
-	// 	}
-	// }
+// change this part to start hand off with different number of cards
 	cout<< this << endl;
 }
 
