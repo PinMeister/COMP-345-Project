@@ -112,7 +112,7 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
     // this is to test and simulate rounds of only reinforcement
     for (int a = 0; a<3; a++){
 
-        cout << endl << "Round: " << a << endl;
+        cout << endl << "Round: " << to_string(a + 1) << endl;
 
     for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
@@ -173,7 +173,7 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
 
         phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.");
         //cout << "Player " << (*it)->getPlayerID() + 1 << " will receive " << numOfArmies << " armies" << endl;
-        Notify();
+        Notify(phaseObserver);
 
         // add new army number to the user's pool
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
@@ -181,7 +181,7 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
 
         phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
         //cout << "Player " << (*it)->getPlayerID() + 1 << " has " << (*it)->getReinforcementPool() << " armies" << endl;
-        Notify();
+        Notify(phaseObserver);
         }
     }
 }

@@ -113,6 +113,7 @@ StatsObserver::~StatsObserver() {
 void StatsObserver::Update() { 
     vector<Player*> players = subject->players;
     int totalTerritories = subject->map->getTerritories().size();
+    cout << endl << "-- GAME STATISTICS --" << endl;
     for (int i; i < players.size(); i++) {
         if (players[i]->getTerritories().size() > 0) { // Display player name only if they possess at least one territory
             float percentage = (float)(players[i]->getTerritories().size()) / (float)(totalTerritories) * 100;

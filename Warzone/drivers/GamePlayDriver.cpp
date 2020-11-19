@@ -22,8 +22,8 @@ int main(){
     Map* map;
     GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
 
-    PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
     StatsObserver* statsObserver = new StatsObserver(gameEngine);
+    PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
 
     string phaseToggle; // Set phase 
     do {
@@ -91,13 +91,13 @@ int main(){
     for(int i = 0; i < playerNum; i++){
         cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
     }
+    
+    gameEngine->Notify(statsObserver);
 
-    cout << endl << "Beginning of reinforcement phase " << endl;
     if (phaseObserver != NULL) {
         phaseObserver->setPhase("Reinforcement Phase");
         gameEngine->reinforcementPhase(phaseObserver);
     }
-    cout << "End of reinforcement phase " << endl;
 
     // free memory and dangling ptr
     delete startUp;
@@ -109,6 +109,15 @@ int main(){
     gameEngine = NULL;
     defaultHand = NULL;
     defaultDeck = NULL;
+
+    if (phaseObserver != NULL) {
+        delete phaseObserver;
+        phaseObserver = NULL;
+    }
+    if (statsObserver != NULL) {
+        delete statsObserver;
+        statsObserver = NULL;
+    }
 
     return 0;
 }
