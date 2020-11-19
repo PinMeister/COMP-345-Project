@@ -333,10 +333,12 @@ void Player::issueOrder() {
 	}
 }
 
+// add territory to player
 void Player::addTerritory(Territory* territory){
 	territories.push_back(territory);
 }
 
+// return player's territories
 vector<Territory*> Player::getTerritories(){
 	return territories;
 }
