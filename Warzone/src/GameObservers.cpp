@@ -113,15 +113,17 @@ StatsObserver::~StatsObserver() {
 void StatsObserver::Update() { 
     vector<Player*> players = subject->players;
     int totalTerritories = subject->map->getTerritories().size();
+    cout << "Total territories in map: " + to_string(totalTerritories) << endl;
     for (int i; i < players.size(); i++) {
         if (players[i]->getTerritories().size() > 0) { // Display player name only if they possess at least one territory
-            int percentage = players[i]->getTerritories().size() / totalTerritories * 100;
-            if (percentage = 100) { // Return if capture percentage is 100
-                cout << endl << "Player " + to_string(players[i]->getPlayerID()) + " has captured the whole map! Congratulations!" << endl;
+            cout << "Player " + to_string(players[i]->getPlayerID() + 1) + " owns " + to_string(players[i]->getTerritories().size()) + " territories." << endl;
+            float percentage = (float)(players[i]->getTerritories().size()) / (float)(totalTerritories) * 100;
+            if (percentage == 100) { // Return if capture percentage is 100
+                cout << endl << "Player " + to_string(players[i]->getPlayerID() + 1) + " has captured the whole map! Congratulations!" << endl;
                 return;
             }
             else {
-                cout << endl << "Player " + to_string(players[i]->getPlayerID()) + "'s capture percentage: " + to_string(percentage) + "%" << endl;
+                cout << "Player " + to_string(players[i]->getPlayerID() + 1) + "'s capture percentage: " + to_string(percentage) + "%" << endl;
             }
         }
     }

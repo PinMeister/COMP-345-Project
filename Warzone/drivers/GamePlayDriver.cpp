@@ -25,22 +25,22 @@ int main(){
     PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
     StatsObserver* statsObserver = new StatsObserver(gameEngine);
 
-    char phaseToggle; // Set phase 
+    string phaseToggle; // Set phase 
     do {
-        cout << "Turn off phase observer? (Y/N)";
+        cout << "Turn off phase observer? (Y/N)" << endl;
 		cin >> phaseToggle;
-	} while (phaseToggle != 'Y' || phaseToggle != 'N');
-    if (phaseToggle == 'Y') {
+	} while (phaseToggle != "Y" && phaseToggle != "N");
+    if (phaseToggle == "Y") {
         delete phaseObserver;
         phaseObserver = NULL;
     }
 
-    char statsToggle;
+    string statsToggle;
     do {
-        cout << "Turn off game stats observer? (Y/N)";
+        cout << "Turn off game stats observer? (Y/N)" << endl;
 		cin >> statsToggle;
-	} while (statsToggle != 'Y' || statsToggle != 'N');
-    if (statsToggle == 'Y') {
+	} while (statsToggle != "Y" && statsToggle != "N");
+    if (statsToggle == "Y") {
         delete statsObserver;
         statsObserver = NULL;
     }
