@@ -216,7 +216,7 @@ void Player::issueOrder() {
                     canDeploy -= toDeploy;                   // subtract deploying armies from total pool
                     cout << "Deploying " << toDeploy << " armies to " << toDefendTerritory[i]->getName() << endl;
                     // TODO create deploy order issue
-					Deploy* deploy = new Deploy(toDeploy,toDefendTerritory[i]->getName());
+					Deploy* deploy = new Deploy(this, toDeploy,toDefendTerritory[i]);
 					this->orders.push_back(deploy);
                     continue;
                 }
@@ -263,7 +263,7 @@ void Player::issueOrder() {
 						cout << "Allied territory has armies to attack: " << result[0]->getArmyNum() << endl;
 						int attackNum = rand() % result[0]->getArmyNum() +1;
 						cout << "To deploy " << attackNum << " armies from: " << result[0]->getName() << " to : " <<toAttackTerritory[index]->getName() << endl;
-						Advance* advanceAtk = new Advance(result[0]->getName(), toAttackTerritory[index]->getName(), attackNum);
+						Advance* advanceAtk = new Advance(this, result[0], toAttackTerritory[index], attackNum);
 						this->orders.push_back(advanceAtk);
 						break;
 						}
@@ -298,7 +298,7 @@ void Player::issueOrder() {
 						cout << "Allied territory has armies to move: " << result[0]->getArmyNum() << endl;
 						int moveNum = rand() % result[0]->getArmyNum() +1;
 						cout << "To deploy " << moveNum << " armies from: " << result[0]->getName() << " to : " <<toDefendTerritory[index]->getName() << endl;
-						Advance* advanceDef = new Advance(result[0]->getName(), toDefendTerritory[index]->getName(), moveNum);
+						Advance* advanceDef = new Advance(this, result[0], toDefendTerritory[index], moveNum);
 						this->orders.push_back(advanceDef);
 						break;
 						}

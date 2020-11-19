@@ -63,44 +63,6 @@ int main(){
     vector<Order*> defaultOrders; // default set of battle orders
     vector<Card*> defaultCards; // some cards
     Deck* defaultDeck = new Deck(); // default deck of cards
-    cout << "Deck content" << endl; // populating deck
-	cout << "++++++++++++" << endl;
-	for (auto i = 0; i < 52;  ++i)
-	{
-		if(i % 5 == 0) {
-			defaultCards.push_back(new Card(Card::BOMB)); 
-		}
-		else if(i % 4 == 1) {
-			defaultCards.push_back(new Card(Card::REINFORCEMENT)); 
-		}
-		else if(i % 4 == 2) {
-			defaultCards.push_back(new Card(Card::BLOCKADE)); 
-		}
-		else if(i % 4 == 3) {
-			defaultCards.push_back(new Card(Card::AIRLIFT)); 
-		}
-		else{
-			defaultCards.push_back(new Card(Card::DIPLOMACY)); 
-		}
-	}
-    // players get cards (5 to start)
-    cout << *defaultDeck << endl;
-    srand(time(NULL)); // set seed a runtime value
-    Card c = defaultDeck->draw();
-    defaultHand->addCard(c);
-    srand(time(NULL)); // set seed a runtime value
-    Card d = defaultDeck->draw();
-    defaultHand->addCard(d);
-    srand(time(NULL)); // set seed a runtime value
-    Card e = defaultDeck->draw();
-    defaultHand->addCard(e);
-    srand(time(NULL)); // set seed a runtime value 
-    Card f = defaultDeck->draw();
-    defaultHand->addCard(f);
-    srand(time(NULL)); // set seed a runtime value 
-    Card g = defaultDeck->draw();
-    defaultHand->addCard(g); 
-
 
     gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
 
@@ -394,7 +356,7 @@ void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {
             (*iter)->execute();     //executes the rest of the order types
         }
     }
-    reinforcementPhase(PhaseObserver* phaseObserver);   //goes back to the reinforcement phase
+}
   
 // constructor with no parameter
 Startup::Startup() {}
