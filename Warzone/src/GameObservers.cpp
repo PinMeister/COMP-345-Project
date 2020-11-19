@@ -4,7 +4,7 @@
 using namespace std;
 
 // Default constructor
-PhaseObserver::PhaseObserver() {};
+PhaseObserver::PhaseObserver() {}
 
 // Constructor with GameEngine parameter
 PhaseObserver::PhaseObserver(GameEngine* game) {
@@ -41,6 +41,8 @@ ostream& operator << (ostream &os, PhaseObserver &phaseObserver) {
 PhaseObserver::~PhaseObserver() {
     subject->Detach(this);
 }
+
+void PhaseObserver::Update() {}
 
 // Update observer every time some new info comes up
 void PhaseObserver::Update(Player* player, string phase, string info) { 
