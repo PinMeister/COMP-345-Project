@@ -4,31 +4,40 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "../include/Map.h"
+#include "../include/Player.h"
+#include <time.h>
 
 using namespace std;
 
+class Territory;
+class Player;
 class Order{
-
     public:
         Order(); //constructor
         Order(const Order &order); //copy constructor
         ~Order(); //destructor
         Order& operator=(const Order &order); //assignment operator 
-
         friend ostream& operator << (ostream &os, const Order &order); //stream insertion operator for Order
-         
-
         //validate and execute methods to be inherited by the Order subclasses
         void validate(); 
-        void execute();
-
+        virtual void execute() = 0;
+        Territory* territory;
+        Territory* start;
+        Territory* target;
+        Player* player;
+        Player* targetPlayer;
+        vector<Territory*> territories;
+        int armies;
+        int armyNumAttack;
+        int armyNumDefend;
 };
 
 class OrdersList{
 
     public:
 
-        OrdersList(vector<Order*> ord); //constructor
+        OrdersList(vector<Order*> orderslist); //constructor
         OrdersList(const OrdersList &ordersList); //copy constructor
         ~OrdersList(); //destructor
         OrdersList& operator=(const OrdersList &ordersList); //assignment operator
@@ -38,43 +47,29 @@ class OrdersList{
         void Delete(vector<Order*> ord, int index);
         void move(vector<Order*> ord, int start, int end);
     private:
-        vector<Order*> orders; //list of orders
+        vector<Order*> orderslist; //list of orders
     
 };
 
 class Deploy : public Order { //class Deploy inherits from Order
-
     public:
-        Deploy(int a, string l);  //constructor
+        Deploy(Player* player, int armies, Territory* territory);  //constructor
         Deploy(const Deploy &deploy); //copy constructor
-        ~Deploy(); //destructor
+        // ~Deploy(); //destructor
         Deploy& operator=(const Deploy &deploy); //assignment operator
-
         friend ostream& operator << (ostream &os, const Deploy &deploy); //stream insertion operator for Deploy 
-
-
-    private:
-        int armies;
-        string location;
         void validate(); 
-        void execute();
-        
+        void execute();         
 };
 
 class Advance : public Order{
 
     public:
-        Advance(string s, string t, int a); //constructor
+        Advance(Player* player, Territory* start, Territory* target, int armies); //constructor
         Advance(const Advance &advance); //copy constructor
         ~Advance(); //destructor
         Advance& operator=(const Advance &advance); //assignment operator
-
         friend ostream& operator << (ostream &os, const Advance &advance); //stream insertion operator for Advance  
-
-    private:
-        string source;
-        string target;
-        int armies;
         void validate(); 
         void execute();
 
@@ -83,15 +78,11 @@ class Advance : public Order{
 class Bomb : public Order{
 
     public:
-        Bomb(string t); //constructor
+        Bomb(Player* player, Territory* target); //constructor
         Bomb(const Bomb &bomb); //copy constructor
         ~Bomb(); //destructor
         Bomb& operator=(const Bomb &bomb); //assignment operator
-
         friend ostream& operator << (ostream &os, const Bomb &bomb); //stream insertion operator for Bomb
-
-    private:
-        string target;
         void validate(); 
         void execute();
 };
@@ -99,15 +90,11 @@ class Bomb : public Order{
 class Blockade : public Order{
 
     public:
-        Blockade(string t); //constructor
+        Blockade(Player* player, Territory* territory); //constructor
         Blockade(const Blockade &blockade); //copy constructor
         ~Blockade(); //destructor
         Blockade& operator=(const Blockade &blockade); //assignment operator
-        
         friend ostream& operator << (ostream &os, const Blockade &blockade); //stream insertion operator for Blockade
-
-    private:
-        string territory;
         void validate(); 
         void execute();
 };
@@ -115,33 +102,23 @@ class Blockade : public Order{
 class Airlift : public Order{
 
     public:
-        Airlift(string o, string d, int a); //constructor
+        Airlift(Player* player, Territory* start, Territory* target, int armies); //constructor
         Airlift(const Airlift &airlift); //copy constructor
         ~Airlift(); //destructor
         Airlift& operator=(const Airlift &airlift); //assignment operator
-
         friend ostream& operator << (ostream &os, const Airlift &airlift); //stream insertion operator for Airlift
-
-        private:
-            string origin;
-            string destination;
-            int armies;
-            void validate(); 
-            void execute();
+        void validate(); 
+        void execute();
 };
 
 class Negotiate : public Order{
 
     public:
-       Negotiate(int p); //constructor
+       Negotiate(Player* player, Player* targetPlayer); //constructor
        Negotiate(const Negotiate &negotiate); //copy constructor
        ~Negotiate(); //destructor
        Negotiate& operator=(const Negotiate &negotiate); //assignment operator
-
        friend ostream& operator << (ostream &os, const Negotiate &negotiate); //stream insertion operator for Negotiate
-
-       private:
-        int playerID;
         void validate(); 
         void execute();
 };

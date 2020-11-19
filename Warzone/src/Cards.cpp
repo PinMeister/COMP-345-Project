@@ -39,24 +39,24 @@ void Card::play(vector<Order*> &ol, Deck &deck) {
 	Order* o;
 	if(this->val == CardType::BOMB) {
 		// TODO: supposely player that issues the command, temporarily use OrdersList.
-    	o = new Bomb("mexico");
+    	//o = new Bomb(1, "mexico");
 	}
 	if(this->val == CardType::REINFORCEMENT) {
 		// TODO: supposely player that issues the command, temporarily use OrdersList.
-		o = new Deploy(2, "canada");
-    	o = new Advance("canada", "usa", 2);
+		//o = new Deploy(1, 2, "canada");
+    	//o = new Advance(1, "canada", "usa", 2);
 	}
 	if(this->val == CardType::BLOCKADE) {
 		// TODO: supposely player that issues the command, temporarily use OrdersList.
-    	o = new Blockade("canada");
+    	//o = new Blockade(1, "canada");
 	}
 	if(this->val == CardType::AIRLIFT) {
 		// TODO: supposely player that issues the command, temporarily use OrdersList.
-	    o = new Airlift("canada", "usa", 2); 
+	    //o = new Airlift(1, "canada", "usa", 2); 
 	}
 	if(this->val == CardType::DIPLOMACY) {
 		// TODO: supposely player that issues the command, temporarily use OrdersList.
-	    o = new Negotiate(6); 
+	    //o = new Negotiate(1, 6); 
 	}
 	ol.push_back(o);
 

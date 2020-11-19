@@ -12,6 +12,7 @@
 using namespace std;
 
 class Order;
+class Hand;
 class OrdersList;
 
 class Player {
@@ -24,6 +25,7 @@ class Player {
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
 		int reinforcementPool;
+		
 	public:
 		vector<Territory*> toDefend();	// returns list of territories to be defended
 		vector<Territory*> toAttack();	// returns list of territories to be attacked		
@@ -36,11 +38,11 @@ class Player {
 		void addTerritory(Territory* territory);
 		vector<Territory*> getTerritories();
 		int getPlayerID();
+		vector<Order*> getPlayerOrders();
 		int getReinforcementPool();
 		void setReinforcementPool(int i);
 		void setOrdersRef(vector<Order*> orders);
 		vector<Territory*> get_neighbour_territories(Player* p);
 		vector<Territory*> get_friendly_neighbour(Player* p);
-
 };
 #endif 

@@ -1,5 +1,6 @@
 #include "../include/Player.h"
 #include <vector>
+#include <string>
 #include <iostream>
 #include <algorithm> 
 #include <stdlib.h> 
@@ -396,6 +397,10 @@ vector<Territory*> Player::get_friendly_neighbour(Player* p) {
 
 int Player::getPlayerID(){
 	return playerID;
+}
+
+vector<Order*> Player :: getPlayerOrders(){
+	return orders;
 }
 
 int Player::getReinforcementPool(){

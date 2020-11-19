@@ -3,10 +3,9 @@
 
 #include <vector>
 #include <iostream>
-
-#include "../include/Orders.h"
 #include "../include/Player.h"
 #include "../include/Orders.h"
+#include "../include/Cards.h"
 #include "../include/Map.h"
 #include "../include/MapLoader.h"
 #include "../include/Subject.h"
@@ -36,8 +35,6 @@ public:
     friend ostream& operator<<(ostream& out, const GameEngine &gameEngine); // string insertion
     GameEngine(int numberOfPlayers, vector<Player*> players, MapLoader* maploader, Map* map);
     Map* chooseMap(); // let user choose map from path
-
-
     void setMap(Map* map); // set the map after loading it
     void setPlayerNum(); // set the number of player (2 to 5 only)
     int getPlayerNum(); // retrieve number of player

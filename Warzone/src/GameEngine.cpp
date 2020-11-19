@@ -208,12 +208,38 @@ void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
         }
 }
 
-void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {}
-
+void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {
+    vector<Player*>::iterator it;
+    vector<Order*>::iterator iter;
+    vector<Order*> playerOrders;
+    for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
+        playerOrders = (*it)->getPlayerOrders();  //accessing each player's orders
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            if (typeid(*iter) != typeid(Deploy)){   //skips iteration if not deploy
+                continue;
+            }
+            (*iter)->execute();
+        }
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            if (typeid(*iter) != typeid(Airlift)){   //skips iteration if not airlift
+                continue;
+            }
+            (*iter)->execute();
+        } 
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            if (typeid(*iter) != typeid(Blockade)){   //skips iteration if not blockade
+                continue;
+            }
+            (*iter)->execute();
+        }
+        for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            (*iter)->execute();     //executes the rest of the order types
+        }
+    }
+    reinforcementPhase(PhaseObserver* phaseObserver);   //goes back to the reinforcement phase
+  
 // constructor with no parameter
-Startup::Startup(){
-    // nothing
-}
+Startup::Startup() {}
 
 // constructor takes in a vector pointer of player pointers and a pointer to map
 Startup::Startup(vector<Player*> *players, Map *map){
