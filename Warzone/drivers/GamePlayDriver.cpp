@@ -32,7 +32,7 @@ int main(){
 	} while (phaseToggle != "Y" && phaseToggle != "N");
     if (phaseToggle == "Y") {
         delete phaseObserver;
-        phaseObserver = NULL;
+        phaseObserver = nullptr;
     }
 
     string statsToggle;
@@ -42,7 +42,7 @@ int main(){
 	} while (statsToggle != "Y" && statsToggle != "N");
     if (statsToggle == "Y") {
         delete statsObserver;
-        statsObserver = NULL;
+        statsObserver = nullptr;
     }
 
     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
@@ -94,9 +94,12 @@ int main(){
     
     gameEngine->Notify(statsObserver);
 
-    if (phaseObserver != NULL) {
+    if (phaseObserver != nullptr) {
         phaseObserver->setPhase("Reinforcement Phase");
         gameEngine->reinforcementPhase(phaseObserver);
+    }
+    else {
+        gameEngine->reinforcementPhase(nullptr);
     }
 
     // free memory and dangling ptr
@@ -105,18 +108,18 @@ int main(){
     delete defaultHand;
     delete defaultDeck;
 
-    startUp = NULL;
-    gameEngine = NULL;
-    defaultHand = NULL;
-    defaultDeck = NULL;
+    startUp = nullptr;
+    gameEngine = nullptr;
+    defaultHand = nullptr;
+    defaultDeck = nullptr;
 
-    if (phaseObserver != NULL) {
+    if (phaseObserver != nullptr) {
         delete phaseObserver;
-        phaseObserver = NULL;
+        phaseObserver = nullptr;
     }
-    if (statsObserver != NULL) {
+    if (statsObserver != nullptr) {
         delete statsObserver;
-        statsObserver = NULL;
+        statsObserver = nullptr;
     }
 
     return 0;

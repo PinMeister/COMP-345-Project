@@ -116,8 +116,6 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
 
     for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
-        cout << (*it)->getTerritories().size() << endl; 
-
         numOfArmies = (*it)->getTerritories().size();
         numOfArmies = floor(numOfArmies/3);
 
@@ -171,17 +169,20 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
             numOfArmies = 3;
         }
 
-        phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.");
-        //cout << "Player " << (*it)->getPlayerID() + 1 << " will receive " << numOfArmies << " armies" << endl;
-        Notify(phaseObserver);
+        if (phaseObserver != nullptr) {
+            phaseObserver->setPlayer(*it);
+            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.");
+            Notify(phaseObserver);
+        }
 
         // add new army number to the user's pool
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
-        phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
-        //cout << "Player " << (*it)->getPlayerID() + 1 << " has " << (*it)->getReinforcementPool() << " armies" << endl;
-        Notify(phaseObserver);
+            if (phaseObserver != nullptr) {
+                phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
+                Notify(phaseObserver);
+            }
         }
     }
 }

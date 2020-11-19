@@ -42,16 +42,8 @@ PhaseObserver::~PhaseObserver() {
     subject->Detach(this);
 }
 
-void PhaseObserver::Update() {}
-
-// Update observer every time some new info comes up
-void PhaseObserver::Update(Player* player, string phase, string info) { 
-    if (this->player != player && this->phase != phase) { // Prevent repetition of player and phase if there is new info in same phase
-        this->player = player;
-        this->phase = phase;
-        cout << endl << "Player " + to_string(player->getPlayerID()) + " " + phase << endl; // Display player and their current phase
-    }
-    this->info = info;
+void PhaseObserver::Update() {
+    cout << endl << "Player " + to_string(player->getPlayerID() + 1) + " " + phase << endl; // Display player and their current phase
     cout << info << endl; // Display relevant information
 }
 
@@ -70,6 +62,10 @@ string PhaseObserver::getPhase() {
 string PhaseObserver::getInfo() {
     return info;
 };
+
+void PhaseObserver::setPlayer(Player* player) {
+    this->player = player;
+}
 
 void PhaseObserver::setPhase(string phase) {
     this->phase = phase;
