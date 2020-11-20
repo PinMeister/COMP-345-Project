@@ -13,29 +13,44 @@ using namespace std;
 int main(){
 
     vector <Territory*> territories;
-    Territory* territory1 = new Territory("United States", "North America");
-    Territory* territory2 = new Territory("Canada", "North America");
-    territories.push_back(territory1);
-    territories.push_back(territory2);
+    Territory* us = new Territory("United States", "North America");
+    Territory* belize = new Territory("Belize", "Central America");
+    us->setArmyNum(3);
+    belize->setArmyNum(0);
+    territories.push_back(us);
+    territories.push_back(belize);
     vector<Order*> orders;
-    Territory* territory = territory1;
-    //Territory* start = territory2;
-    territory1->setArmyNum(10);
-    //territory2->setArmyNum(10);
     Player* player = new Player(territories, NULL, orders, 1);
-    Blockade* blockade = new Blockade(player, territory);
+
+    Deploy* deploy = new Deploy(player, 5, us);
+    deploy->execute();
+    int i = us->getArmyNum();
+    cout << "After deploying, armies in the territory are " << i << endl << endl;
+
+    Territory* canada = new Territory("Canada", "North America");
+    Bomb* bomb = new Bomb(player, canada);
+    canada->setArmyNum(10);
+    bomb->execute();
+    int j = canada->getArmyNum();
+    cout << "The armies in bombed territory are " << j << endl << endl;
+
+    Blockade* blockade = new Blockade(player, us);
     blockade->execute();
-    int j = territory1->getArmyNum();
-    cout << j << endl;
-    
+    cout << "The armies in the territory are now " << us->getArmyNum() << endl << endl;
 
-    // Airlift* airlift = new Airlift(player, start, target, 5);
-    // airlift->execute();
-    // int i = territory2->getArmyNum();
-    // int j = territory1->getArmyNum();
-    // cout << i << endl;
-    // cout << j << endl;
-
+    vector <Territory*> territories2;
+    vector<Order*> orders2;
+    Territory* mexico = new Territory("Mexico", "North America");
+    Territory* guatemala = new Territory("Guatemala", "Central America");
+    Territory* nicaragua = new Territory("Nicaragua", "Central America");
+    mexico->setArmyNum(5);
+    guatemala->setArmyNum(0);
+    territories2.push_back(mexico);
+    territories2.push_back(guatemala);
+    Player* player2 = new Player(territories2, NULL, orders2, 2);
+    Airlift* airlift = new Airlift(player2, mexico, guatemala, 5);
+    airlift->execute();
+    cout << "The armies in the start territory after airlift are " << mexico->getArmyNum() << " and in the target territory after airlift are "<< guatemala->getArmyNum() <<endl << endl;
 
 return 0;
 };

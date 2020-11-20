@@ -116,7 +116,7 @@ using namespace std;
 		     this->territory->addArmyNum(armies);
                pool -= armies; 
 		     player->setReinforcementPool(pool);
-		     cout << "Troops have been deployed" << endl;  
+		     cout << "Deploy order executed" << endl;  
                }
        }      
 
@@ -161,6 +161,7 @@ using namespace std;
      }
 
      void Advance  :: execute() {
+
           validate();
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories();   //getting territories of player that issued the order
@@ -299,7 +300,7 @@ using namespace std;
                this->territory->removeOwner();    //making the territory neutral
                cout << "Blockade order executed" << endl;
                playerTerritories = this->player->getTerritories();
-               std::cout << "The vector elements are : " << endl;
+               std::cout << "The player's territories are now : " << endl;
                for(int i=0; i < playerTerritories.size(); i++){
                     std::cout << *playerTerritories.at(i) << ' '<< endl;
                }
@@ -339,7 +340,7 @@ using namespace std;
           bool isValid;
           isValid = true;
           vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
+          playerTerritories = this->player->getTerritories(); //getting the territories of player issuing the order
           if((std::find(playerTerritories.begin(), playerTerritories.end(), this->start) != playerTerritories.end()) && (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end())){
                cout << "The airlift order is valid." << endl;
                isValid = true;
@@ -386,7 +387,7 @@ using namespace std;
           bool isValid;
           isValid = true;
           if(this->player == this->targetPlayer){
-               cout << "The airlift order is invalid." << endl;
+               cout << "The negotiate order is invalid." << endl;
                isValid = false;
           }
           else{
