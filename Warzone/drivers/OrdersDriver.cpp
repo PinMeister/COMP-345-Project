@@ -14,12 +14,16 @@ int main(){
 
     vector <Territory*> territories;
     Territory* territory = new Territory("Luxemborg", "Europe");
-    territories.push_back(territory);
+    // territories.push_back(territory);
     vector<Order*> orders;
     Territory* target = territory;
     Player* player = new Player(territories, NULL, orders, 1);
+    target->setArmyNum(10);
     Bomb* bomb = new Bomb(player, target);
     bomb->validate();
+    bomb->execute();
+    int i = target->getArmyNum();
+    cout << i << " armies in territory" <<endl;
 
 return 0;
 };

@@ -251,29 +251,12 @@ using namespace std;
      }  
 
      void Bomb  :: execute() {
-          validate();
-          bool neighbour = false;
-          vector<Territory*> playerTerritories;
-          vector<Territory*>::iterator iter;
-          playerTerritories = player->getTerritories();   //getting the territories of player issuing the order
-          vector<Territory*> adjacent; 
-          adjacent = target->neighbours;     //adjacent is the list of target's neighboring territories
-          int targetArmies = target->getArmyNum(); //number of armies of target territory
-
-          //executes if target is not part of player's territories
-         if (!(std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end())){
-            for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){ //looping through player's territories
-            //if the any of the player's territory is a neighbour of target territory
-               if(std::find(adjacent.begin(), adjacent.end(), (*iter)) != adjacent.end()){  
-                    neighbour = true;
-               }
-               break; 
-            }
-            if(neighbour){    //if it is a neighbour, it executes bomb order and sets a new army number for target territory
-               int newArmyNum = targetArmies/2;
-               target->setArmyNum(newArmyNum);
-            }
-         }
+          bool orderValid = this->validate();
+          int targetArmyNum = this->target->getArmyNum();
+          if (orderValid) {       
+                this->target->setArmyNum(targetArmyNum/2);
+                cout << "Bomb order executed" << endl;
+          }
      }   
 
      // for Blockade
