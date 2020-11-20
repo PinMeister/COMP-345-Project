@@ -10,7 +10,7 @@
 
 using namespace std;
 
-/*
+
 // main driver
 int main(){
     int numberOfPlayers = 0;
@@ -22,7 +22,7 @@ int main(){
     StatsObserver* statsObserver = new StatsObserver(gameEngine);
     PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
 
-    /*string phaseToggle; // Set phase observer on/off
+    string phaseToggle; // Set phase observer on/off
     do {
         cout << "Turn off phase observer? (Y/N)" << endl;
 		cin >> phaseToggle;
@@ -82,9 +82,7 @@ int main(){
 
     // create GameEngine
     cout << "\nCreating game" << "\n";
-    cout << "hello0" << endl;
     Startup *startUp = new Startup(&players, map);
-    cout << "hello0.5" << endl;
     cout << "startup phase completed" << "\n\n";
 
     for(int i = 0; i < playerNum; i++){
@@ -94,9 +92,7 @@ int main(){
     gameEngine->Notify(statsObserver);
 
     if (phaseObserver != nullptr) {
-        phaseObserver->setPhase("Reinforcement Phase");
-        gameEngine->mainGameLoop(nullptr);
-        phaseObserver->setPhase("Orders Issuing Phase");
+        gameEngine->mainGameLoop(phaseObserver);
     }
     else {
         gameEngine->mainGameLoop(nullptr);
@@ -123,7 +119,7 @@ int main(){
     }
 
     return 0;
-}*/
+}
 
 // default constructor auto generated
 GameEngine::GameEngine() {}
@@ -181,7 +177,7 @@ Map* GameEngine::chooseMap() {
     while(validMap != 1) {
         cout << "Which file do you want to use as the map?\n\n";
         string filePath;
-        filePath = "../maps/artic.map";
+        filePath = "../maps/artic.map"; // TO DELETE
         //cin >> filePath;
         MapLoader* mapL = new MapLoader(filePath); // load the file
         validMap = mapL->parse(); // check if it is a valid map
@@ -215,8 +211,6 @@ void GameEngine::setPlayerNum() {
     this->numberOfPlayers = tempnumberOfPlayers;
 }
 
-// TO DO
-
 void GameEngine::mainGameLoop(PhaseObserver* phaseObserver) {
 // This loop shall continue until only one of the players owns all the territories in the map, at which point a winner is
 // announced and the game ends. The main game loop also checks for any player that does not control at least one
@@ -230,8 +224,11 @@ string gameEnd;
         cout << "End game? (Y/N)";
 		cin >> gameEnd;
         round++;
+        phaseObserver->setPhase("Reinforcement Phase");
         this->reinforcementPhase(phaseObserver);
+        phaseObserver->setPhase("Orders Issuing Phase");
         this->issueOrdersPhase(phaseObserver);
+        phaseObserver->setPhase("Order Execution Phase");
         this->executeOrdersPhase(phaseObserver);
 	} while (gameEnd != "Y");
 }
@@ -295,18 +292,14 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
             numOfArmies = 3;
         }
 
-        if (phaseObserver != nullptr) {
-            phaseObserver->setPlayer(*it);
-            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.");
-            Notify(phaseObserver);
-        }
-
         // add new army number to the user's pool
         int totalArmySize = (*it)->getReinforcementPool() + numOfArmies;
         (*it)->setReinforcementPool(totalArmySize);
 
         if (phaseObserver != nullptr) {
-            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
+            phaseObserver->setPlayer(*it);
+            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.\n"
+            + "Player " + to_string((*it)->getPlayerID() + 1)+ " has " + to_string((*it)->getReinforcementPool()) + " armies.");
             Notify(phaseObserver);
         }
     }
@@ -327,7 +320,7 @@ void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
 
         for (size_t i=0; i<active.size(); i++)
         {
-            active[i]-> issueOrder();       
+            active[i]-> issueOrder(this, phaseObserver);       
         }
 }
 
@@ -428,9 +421,6 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
         cout << to_string(randTerritoryId[i]) << endl;
     }*/
 
-    cout << "total territories: " + to_string(size) << endl;
-    cout << "total players: " + to_string(playerNum) << endl;
-
     // assign all territories to each player randomly
     while(randTerritoryId.size() < size){
         for(int i = 0; i < playerNum; i ++){
@@ -445,14 +435,10 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
             cout << "Player " + to_string(i + 1) + " gets territory " + to_string(temp) << "\n";
             // break the loop if these's no more territory
             if (randTerritoryId.size() >= size){
-                cout << "hello1" << endl;
                 break;
             }
         }
-        cout << "The loop ran a lap!" << endl;
     }
-    
-    cout << "hello2" << endl;
 
     // give player all the orders and armies
     for(int i = 0; i < playerNum; i++){
@@ -473,9 +459,6 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
         players->at(i)->setOrdersRef(orders);
         players->at(i)->setReinforcementPool(initialArmyNum); // set player total army
     }
-
-    cout << "hello3" << endl;
-
     started = true; // the game starts
 }
 
