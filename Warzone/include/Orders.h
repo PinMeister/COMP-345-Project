@@ -107,7 +107,7 @@ class Airlift : public Order{
         ~Airlift(); //destructor
         Airlift& operator=(const Airlift &airlift); //assignment operator
         friend ostream& operator << (ostream &os, const Airlift &airlift); //stream insertion operator for Airlift
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 
@@ -119,7 +119,7 @@ class Negotiate : public Order{
        ~Negotiate(); //destructor
        Negotiate& operator=(const Negotiate &negotiate); //assignment operator
        friend ostream& operator << (ostream &os, const Negotiate &negotiate); //stream insertion operator for Negotiate
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 

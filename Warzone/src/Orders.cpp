@@ -35,23 +35,6 @@ using namespace std;
 
      } 
 
-//     void OrdersList::move(vector<Order*> orderslist, int start, int end){                  
-
-//         //first iterator for the order that has to be moved
-
-//         std::vector<Order *>::iterator itr1 = orderslist.begin();
-//         std::advance(itr1, start-1);
-
-//         //second iterator for the order that is to be swapped with
-//         std::vector<Order *>::iterator itr2 = orderslist.begin();
-//         std::advance(itr2, end-1);
-
-//         //swapping the two orders the iterators point to
-
-//         std::iter_swap(*itr1, *itr2);
-
-//         } 
-
      ostream& operator << (ostream &os, const OrdersList &ordersList){ //stream insertion operator for OrdersList
 
                os << "["; 
@@ -268,7 +251,6 @@ using namespace std;
      }   
 
      // for Blockade
-
      Blockade::Blockade(Player* player, Territory* territory){ //constructor
                this->player = player;
                this->territory = territory;
@@ -324,7 +306,6 @@ using namespace std;
      }   
 
      // for Airlift
-
      Airlift::Airlift(Player* player, Territory* start, Territory* target, int armies){ //constructor
                this->player = player;
                this->start = start;
@@ -353,23 +334,32 @@ using namespace std;
           }
 
 
-     void Airlift  :: validate() {
+     bool Airlift  :: validate() {
+          bool isValid;
+          isValid = true;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-         if ((!(std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()))||(!(std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()))){
-              cout << "The airlift order is invalid." << endl;
-         }
+          if((std::find(playerTerritories.begin(), playerTerritories.end(), this->start) != playerTerritories.end()) && (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end())){
+               cout << "The airlift order is valid." << endl;
+               isValid = true;
+          }
          else{
-             cout << "The airlift order is valid." << endl; 
+             cout << "The airlift order is invalid." << endl; 
+             isValid = false;
          }
+        return isValid;
      }  
 
      void Airlift  :: execute() {
-          
+          bool orderValid = this->validate();
+          if (orderValid) {       
+               this->start->subtractArmyNum(armies);
+               this->target->addArmyNum(armies);
+               cout << "airlift order executed" << endl;
+          }
      }   
 
      // for Negotiate
-
      Negotiate::Negotiate(Player* player, Player* targetPlayer){ //constructor
                this->player = player;
                this->targetPlayer = targetPlayer;
@@ -391,10 +381,24 @@ using namespace std;
                return os << "Negotiate "<< " with " << negotiate.targetPlayer <<endl;
           }
 
-     void Negotiate  :: validate() {
-          
+     bool Negotiate  :: validate() {
+          bool isValid;
+          isValid = true;
+          if(this->player == this->targetPlayer){
+               cout << "The airlift order is invalid." << endl;
+               isValid = false;
+          }
+          else{
+               isValid = true;
+          }
+          return isValid;
      }  
 
      void Negotiate  :: execute() {
-          
+          bool orderValid = this->validate();
+          if (orderValid) {       
+
+
+
+          }
      }   
