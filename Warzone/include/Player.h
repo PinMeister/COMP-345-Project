@@ -8,14 +8,18 @@
 #include "../include/Orders.h"
 #include "../include/Cards.h"
 #include "../include/Map.h"
+#include "../include/GameEngine.h"
+#include "../include/GameObservers.h"
 
 using namespace std;
 
 class Order;
 class Hand;
 class OrdersList;
+class PhaseObserver;
+class GameEngine;
 
-class Player {
+class Player{
 	private:
 		vector<Territory*> territories;
 		Hand* hand; // player's cards
@@ -27,9 +31,9 @@ class Player {
 		int reinforcementPool;
 		
 	public:
-		vector<Territory*> toDefend();	// returns list of territories to be defended
-		vector<Territory*> toAttack();	// returns list of territories to be attacked		
-		void issueOrder();	// generates an order to add to order list
+		vector<Territory*> toDefend(PhaseObserver* phaseObserver);	// returns list of territories to be defended
+		vector<Territory*> toAttack(PhaseObserver* phaseObserver);	// returns list of territories to be attacked		
+		void issueOrder(GameEngine* gameEngine, PhaseObserver* phaseObserver);	// generates an order to add to order list
 		Player(int playerID);
 		Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID);
 		Player(const Player &player); // copy constructor
@@ -37,6 +41,7 @@ class Player {
 		friend ostream& operator << (ostream &os, const Player &player); //stream insertion operator for Player
 		void addTerritory(Territory* territory);
 		vector<Territory*> getTerritories();
+		void removeTerritory(Territory* territory);
 		int getPlayerID();
 		vector<Order*> getPlayerOrders();
 		int getReinforcementPool();

@@ -11,28 +11,31 @@
 using namespace std;
     //will be changed in assignment 2
 int main(){
-    vector <Territory*> territories;
-    Territory* territory = new Territory("Luxemborg", "Europe");
-    territories.push_back(territory);
-    // Hand* hand = new Hand();
-    vector<Order*> orders;
-    Player* player = new Player(territories, NULL, orders, 1);
-    //Territory* target = new Territory("Luxemburg", "Europe");
-    Territory* target = territory;
-    Deploy* deploy = new Deploy(player, 5, target);
-    deploy->validate();
-    
-    delete territory;
-    //delete hand;
-    delete player;
-    delete deploy;
-    delete target;
 
-    territory = NULL;
-    //hand = NULL;
-    player = NULL; 
-    deploy = NULL;
-    target = NULL;
+    vector <Territory*> territories;
+    Territory* territory1 = new Territory("United States", "North America");
+    Territory* territory2 = new Territory("Canada", "North America");
+    territories.push_back(territory1);
+    territories.push_back(territory2);
+    vector<Order*> orders;
+    Territory* territory = territory1;
+    //Territory* start = territory2;
+    territory1->setArmyNum(10);
+    //territory2->setArmyNum(10);
+    Player* player = new Player(territories, NULL, orders, 1);
+    Blockade* blockade = new Blockade(player, territory);
+    blockade->execute();
+    int j = territory1->getArmyNum();
+    cout << j << endl;
+    
+
+    // Airlift* airlift = new Airlift(player, start, target, 5);
+    // airlift->execute();
+    // int i = territory2->getArmyNum();
+    // int j = territory1->getArmyNum();
+    // cout << i << endl;
+    // cout << j << endl;
+
 
 return 0;
 };

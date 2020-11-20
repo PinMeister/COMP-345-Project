@@ -58,7 +58,7 @@ class Deploy : public Order { //class Deploy inherits from Order
         // ~Deploy(); //destructor
         Deploy& operator=(const Deploy &deploy); //assignment operator
         friend ostream& operator << (ostream &os, const Deploy &deploy); //stream insertion operator for Deploy 
-        void validate(); 
+        bool validate(); 
         void execute();         
 };
 
@@ -83,7 +83,7 @@ class Bomb : public Order{
         ~Bomb(); //destructor
         Bomb& operator=(const Bomb &bomb); //assignment operator
         friend ostream& operator << (ostream &os, const Bomb &bomb); //stream insertion operator for Bomb
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 
@@ -95,7 +95,7 @@ class Blockade : public Order{
         ~Blockade(); //destructor
         Blockade& operator=(const Blockade &blockade); //assignment operator
         friend ostream& operator << (ostream &os, const Blockade &blockade); //stream insertion operator for Blockade
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 
@@ -107,7 +107,7 @@ class Airlift : public Order{
         ~Airlift(); //destructor
         Airlift& operator=(const Airlift &airlift); //assignment operator
         friend ostream& operator << (ostream &os, const Airlift &airlift); //stream insertion operator for Airlift
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 
@@ -119,7 +119,7 @@ class Negotiate : public Order{
        ~Negotiate(); //destructor
        Negotiate& operator=(const Negotiate &negotiate); //assignment operator
        friend ostream& operator << (ostream &os, const Negotiate &negotiate); //stream insertion operator for Negotiate
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 

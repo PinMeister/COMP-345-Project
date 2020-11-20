@@ -11,8 +11,10 @@
 #include "../include/Subject.h"
 #include "../include/GameObservers.h"
 
-class GameEngine;
 class PhaseObserver;
+class GameEngine;
+class Deck;
+class Order;
 
 class GameEngine : public Subject {
 //private attributes for GameEngine class

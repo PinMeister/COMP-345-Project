@@ -35,23 +35,6 @@ using namespace std;
 
      } 
 
-//     void OrdersList::move(vector<Order*> orderslist, int start, int end){                  
-
-//         //first iterator for the order that has to be moved
-
-//         std::vector<Order *>::iterator itr1 = orderslist.begin();
-//         std::advance(itr1, start-1);
-
-//         //second iterator for the order that is to be swapped with
-//         std::vector<Order *>::iterator itr2 = orderslist.begin();
-//         std::advance(itr2, end-1);
-
-//         //swapping the two orders the iterators point to
-
-//         std::iter_swap(*itr1, *itr2);
-
-//         } 
-
      ostream& operator << (ostream &os, const OrdersList &ordersList){ //stream insertion operator for OrdersList
 
                os << "["; 
@@ -111,49 +94,38 @@ using namespace std;
           return os << "Deploy " << deploy.armies << " to " << deploy.territory << endl;
      }
 
-     void Deploy  :: validate() {
+     bool Deploy  :: validate() {
+          bool isValid;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
             cout << "The deploy order is valid." << endl;
+            isValid = true;
          }
          else {
            cout << "The deploy order is invalid." << endl;
+           isValid = false;
          }
-          //vector<Territory*> playerTerritories = player->getTerritories();
-          /*
-          bool valid = 0;
-          for(int i = 0; i < playerTerritories.size(); i++){
-               if (playerTerritories[i]->getName() == territory->getName()){
-                    cout << "The deploy order is valid." << endl;
-                    valid = 1;
-                    break;
-               }
-          }
-          if (!valid){
-               cout << "The deploy order is invalid." << endl;
-          }*/
+          return isValid;
      }
 
      void Deploy  :: execute() {
-          validate();
-          vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
-          while(armies <= player->getReinforcementPool()){
-          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
-            territory->addArmyNum(armies);
-         }   
+          bool orderValid = this->validate();
+          if (orderValid) {       
+               int pool = player->getReinforcementPool();
+		     this->territory->addArmyNum(armies);
+               pool -= armies; 
+		     player->setReinforcementPool(pool);
+		     cout << "Troops have been deployed" << endl;  
+               }
        }      
-     }
-
 
      // for Advance
-
      Advance::Advance(Player* player, Territory* start, Territory* target, int armies){ //constructor
                this->player = player;
                this->start = start;
                this->target = target;
-               armies = armies;
+               this->armies = armies;
           }
 
      Advance::Advance(const Advance &advance){ //copy constructor
@@ -194,8 +166,8 @@ using namespace std;
           playerTerritories = player->getTerritories();   //getting territories of player that issued the order
           vector<Territory*> adjacent; 
           adjacent = start->neighbours;       //getting the neighbouring territories of the start territory 
-          armyNumAttack = start ->getArmyNum();    //getting number of armies of player that issued the order
-          armyNumDefend = target ->getArmyNum();
+          armyNumAttack = armies;    //getting number of armies of player that issued the order
+          armyNumDefend = target->getArmyNum();
           //executes if target territory is adjacent to start 
           if(std::find(adjacent.begin(), adjacent.end(), target) != adjacent.end()){ 
                //checks if the target is from the player's territories
@@ -204,20 +176,28 @@ using namespace std;
                     start->subtractArmyNum(armies);
                }
                else{
-                    if(armyNumAttack > armyNumDefend){
-                         for(int i = 0; i < armyNumAttack; i++){
-                         random_device rd;     
-                         mt19937 gen(rd());
-                         uniform_real_distribution<> dis(0, 1);
-                         float randomNumberAttack = dis(gen);
-                         if(randomNumberAttack > 0.4){
-                              target->setArmyNum(armyNumDefend-1);
+                    start->subtractArmyNum(armies);
+                    random_device rd;     
+                    mt19937 gen(rd());
+                    uniform_real_distribution<> dis(0, 1);
+                    float randomNumberAttack = dis(gen);
+                    while(armyNumDefend != 0 && armyNumAttack != 0){
+                         // 60% killing 1 defending amry
+                         if (randomNumberAttack > 0.4){
+                              armyNumDefend -= 1;
                          }
-                         float randomNumberDefend = dis(gen);
-                         if(randomNumberDefend > 0.3){
-                              start->subtractArmyNum(armyNumAttack-1);
-                            }
+                         // 70% killing 1 attacking amry
+                         if (randomNumberAttack > 0.3){
+                              armyNumAttack -= 1;
                          }
+                         randomNumberAttack = dis(gen);
+                    }
+                    target->setArmyNum(armyNumDefend); // update defending army num
+                    // capture the territory
+                    if (armyNumDefend == 0){
+                         // add the territory to the player and remove it from its previous owner
+                         player->addTerritory(target);
+                         target->setArmyNum(armyNumAttack); // move player army to target
                     }
                }    
           }         
@@ -225,18 +205,18 @@ using namespace std;
 
      // for Bomb
      Bomb::Bomb(Player* player, Territory* target){ //constructor
-               player=player;
-               target=target;
+               this->player=player;
+               this->target=target;
           }
 
      Bomb::Bomb(const Bomb &bomb){ //copy constructor
-          player=bomb.player;
-          target=bomb.target;
+          this->player=bomb.player;
+          this->target=bomb.target;
      }
 
      Bomb& Bomb::operator=(const Bomb &bomb){ //assignment operator
-          player=bomb.player;
-          target=bomb.target;
+          this->player=bomb.player;
+          this->target=bomb.target;
 
           return *this;
      }
@@ -245,58 +225,45 @@ using namespace std;
           return os << "Bomb "<< bomb.target <<endl;
      }
 
-     void Bomb  :: validate() {
+     bool Bomb  :: validate() {
+          bool isValid;
+          isValid = true;
           vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()){
+          playerTerritories = player->getTerritories(); //getting the territories of the player that issues this order
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end()){
             cout << "The bomb order is invalid." << endl;
+            isValid = false;
          }
          else{
               cout << "The bomb order is valid." << endl;
+              isValid = true;
          }
+          return isValid;
      }  
 
      void Bomb  :: execute() {
-          validate();
-          bool neighbour = false;
-          vector<Territory*> playerTerritories;
-          vector<Territory*>::iterator iter;
-          playerTerritories = player->getTerritories();   //getting the territories of player issuing the order
-          vector<Territory*> adjacent; 
-          adjacent = target->neighbours;     //adjacent is the list of target's neighboring territories
-          int targetArmies = target->getArmyNum(); //number of armies of target territory
-
-          //executes if target is not part of player's territories
-         if (!(std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end())){
-            for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){ //looping through player's territories
-            //if the any of the player's territory is a neighbour of target territory
-               if(std::find(adjacent.begin(), adjacent.end(), (*iter)) != adjacent.end()){  
-                    neighbour = true;
-               }
-               break; 
-            }
-            if(neighbour){    //if it is a neighbour, it executes bomb order and sets a new army number for target territory
-               int newArmyNum = targetArmies/2;
-               target->setArmyNum(newArmyNum);
-            }
-         }
+          bool orderValid = this->validate();
+          int targetArmyNum = this->target->getArmyNum();
+          if (orderValid) {       
+                this->target->setArmyNum(targetArmyNum/2);
+                cout << "Bomb order executed" << endl;
+          }
      }   
 
      // for Blockade
-
      Blockade::Blockade(Player* player, Territory* territory){ //constructor
-               player = player;
-               territory = territory;
+               this->player = player;
+               this->territory = territory;
           }
 
      Blockade::Blockade(const Blockade &blockade){ //copy constructor
-          player = blockade.player;
-          territory = blockade.territory;
+          this->player = blockade.player;
+          this->territory = blockade.territory;
      }
 
      Blockade& Blockade::operator=(const Blockade &blockade){ //assignment operator
-          player = blockade.player;
-          territory=blockade.territory;
+          this->player = blockade.player;
+          this->territory=blockade.territory;
 
           return *this;
      }
@@ -305,57 +272,60 @@ using namespace std;
                return os << "Blockade "<< blockade.territory <<endl;
           }
 
-     void Blockade  :: validate() {
+     bool Blockade  :: validate() {    
+          bool isValid;
+          isValid = true;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), this->territory) != playerTerritories.end()){
             cout << "The blockade order is valid." << endl;
+            isValid = true;
          }
          else{
               cout << "The blockade order is invalid." << endl;
-         }    
+              isValid = false;
+         } 
+         return isValid;
      }  
 
      void Blockade  :: execute() {
-          validate();
+          bool orderValid = this->validate();
           vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-          int territoryArmies = territory->getArmyNum(); //number of armies of target territory
+          int targetArmyNum = this->territory->getArmyNum();
           vector<Territory*>::iterator iter; //iterator to iterate through player territories
-          //only executes if territory is a player's territory
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
-               int newArmyNum = territoryArmies * 2;
-               territory->setArmyNum(newArmyNum);
-             for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){   //iterating through each player's list of orders
-                    if((*iter) == territory){
-                         playerTerritories.erase(iter);     //erase the territory from player's territories, making it neutral
-                    }
-                    break;    //ends loop after erasing the territory
-               }     
-         }
+          if (orderValid) {       
+                this->territory->setArmyNum(targetArmyNum*2);
+               this->territory->getOwner()->removeTerritory(territory);
+               this->territory->removeOwner();    //making the territory neutral
+               cout << "Blockade order executed" << endl;
+               playerTerritories = this->player->getTerritories();
+               std::cout << "The vector elements are : " << endl;
+               for(int i=0; i < playerTerritories.size(); i++){
+                    std::cout << *playerTerritories.at(i) << ' '<< endl;
+               }
+          }
      }   
 
      // for Airlift
-
      Airlift::Airlift(Player* player, Territory* start, Territory* target, int armies){ //constructor
-               player = player;
-               start = start;
-               target = target;
-               armies = armies;
+               this->player = player;
+               this->start = start;
+               this->target = target;
+               this->armies = armies;
           }
 
      Airlift::Airlift(const Airlift &airlift){ //copy constructor
-          player= airlift.player;
-          start = airlift.start;
-          target = airlift.target;
-          armies = airlift.armies;
+          this->player= airlift.player;
+          this->start = airlift.start;
+          this->target = airlift.target;
+          this->armies = airlift.armies;
      }
 
      Airlift& Airlift::operator=(const Airlift &airlift){ //assignment operator
-          player = airlift.player;
-          start = airlift.start;
-          target = airlift.target;
-          armies = airlift.armies;
+          this->player = airlift.player;
+          this->start = airlift.start;
+          this->target = airlift.target;
+          this->armies = airlift.armies;
 
           return *this;
      }
@@ -365,36 +335,45 @@ using namespace std;
           }
 
 
-     void Airlift  :: validate() {
+     bool Airlift  :: validate() {
+          bool isValid;
+          isValid = true;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-         if ((!(std::find(playerTerritories.begin(), playerTerritories.end(), start) != playerTerritories.end()))||(!(std::find(playerTerritories.begin(), playerTerritories.end(), target) != playerTerritories.end()))){
-              cout << "The airlift order is invalid." << endl;
-         }
+          if((std::find(playerTerritories.begin(), playerTerritories.end(), this->start) != playerTerritories.end()) && (std::find(playerTerritories.begin(), playerTerritories.end(), this->target) != playerTerritories.end())){
+               cout << "The airlift order is valid." << endl;
+               isValid = true;
+          }
          else{
-             cout << "The airlift order is valid." << endl; 
+             cout << "The airlift order is invalid." << endl; 
+             isValid = false;
          }
+        return isValid;
      }  
 
      void Airlift  :: execute() {
-          
+          bool orderValid = this->validate();
+          if (orderValid) {       
+               this->start->subtractArmyNum(armies);
+               this->target->addArmyNum(armies);
+               cout << "airlift order executed" << endl;
+          }
      }   
 
      // for Negotiate
-
      Negotiate::Negotiate(Player* player, Player* targetPlayer){ //constructor
-               player = player;
-               targetPlayer = targetPlayer;
+               this->player = player;
+               this->targetPlayer = targetPlayer;
           }
 
      Negotiate::Negotiate(const Negotiate &negotiate){ //copy constructor
-          player = negotiate.player;
-          targetPlayer = negotiate.targetPlayer;
+          this->player = negotiate.player;
+          this->targetPlayer = negotiate.targetPlayer;
      }
 
      Negotiate& Negotiate::operator=(const Negotiate &negotiate){ //assignment operator
-          player = negotiate.player;
-          targetPlayer = negotiate.targetPlayer;
+          this->player = negotiate.player;
+          this->targetPlayer = negotiate.targetPlayer;
 
           return *this;
      }
@@ -403,10 +382,24 @@ using namespace std;
                return os << "Negotiate "<< " with " << negotiate.targetPlayer <<endl;
           }
 
-     void Negotiate  :: validate() {
-          
+     bool Negotiate  :: validate() {
+          bool isValid;
+          isValid = true;
+          if(this->player == this->targetPlayer){
+               cout << "The airlift order is invalid." << endl;
+               isValid = false;
+          }
+          else{
+               isValid = true;
+          }
+          return isValid;
      }  
 
      void Negotiate  :: execute() {
-          
+          bool orderValid = this->validate();
+          if (orderValid) {       
+
+
+
+          }
      }   

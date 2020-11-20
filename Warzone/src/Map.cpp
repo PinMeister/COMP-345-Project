@@ -3,7 +3,10 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+
+
 #include "../include/Map.h"
+#include "../include/Player.h"
 
 using namespace std;
 
@@ -232,6 +235,7 @@ Territory::Territory(const Territory &territory) {
     this->neighbours = territory.neighbours;
     this->visited = territory.visited;
     this->armies = territory.armies;
+    this->owner = territory.owner;
 }
 
 // Assignment operator
@@ -241,6 +245,7 @@ Territory& Territory::operator=(const Territory &territory) {
     this->neighbours = territory.neighbours;
     this->visited = territory.visited;
     this->armies = territory.armies;
+    this->owner = territory.owner;
     return *this;
 }
 
@@ -335,4 +340,16 @@ vector<Territory*> Continent::getMembers() {
 
 int Continent::getControlBonus() {
     return controlBonus;
+}
+
+void Territory::addOwner(Player *player){
+    owner = player;
+}
+
+void Territory::removeOwner(){
+    owner = nullptr;
+}
+
+Player* Territory::getOwner(){
+    return owner;
 }
