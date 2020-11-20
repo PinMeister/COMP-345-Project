@@ -193,31 +193,26 @@ using namespace std;
                     start->subtractArmyNum(armies);
                }
                else{
-                    start -> subtractArmyNum(armies);
+                    start->subtractArmyNum(armies);
                     random_device rd;     
                     mt19937 gen(rd());
                     uniform_real_distribution<> dis(0, 1);
                     float randomNumberAttack = dis(gen);
-                    while(true){
+                    while(armyNumDefend != 0 && armyNumAttack != 0){
                          // 60% killing 1 defending amry
                          if (randomNumberAttack > 0.4){
                               armyNumDefend -= 1;
                          }
-                         if (armyNumDefend == 0){
-                              break;
-                         }
                          // 70% killing 1 attacking amry
                          if (randomNumberAttack > 0.3){
                               armyNumAttack -= 1;
-                         }
-                         if (armyNumAttack == 0){
-                              break;
                          }
                          randomNumberAttack = dis(gen);
                     }
                     target->setArmyNum(armyNumDefend); // update defending army num
                     // capture the territory
                     if (armyNumDefend == 0){
+                         // add the territory to the player and remove it from its previous owner
                          player->addTerritory(target);
                          target->setArmyNum(armyNumAttack); // move player army to target
                     }

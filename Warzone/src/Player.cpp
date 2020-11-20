@@ -17,6 +17,9 @@ Player::Player(int playerID){
 // construtor with parameters
 Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID) {
 	this->territories = territories;
+	for(int i = 0; i < territories.size(); i++){
+		territories[i]->addOwner(this);
+	}
 	this->hand = hand;
 	this->orders = orders;
 	this->playerID = playerID;
@@ -373,9 +376,26 @@ void Player::issueOrder() {
 	}
 }
 
-// add territory to player
+// add territory to player and remove the territory from the another player
 void Player::addTerritory(Territory* territory){
+	// if someone owns the territory, remove it from them
+	if (territory->getOwner() != NULL){
+		territory->getOwner()->removeTerritory(territory);
+		territory->removeOwner();
+	}
+	// add this to this player
+	territory->addOwner(this);
 	territories.push_back(territory);
+}
+
+// remove a territory from player
+void Player::removeTerritory(Territory* territory){
+	// find the territory and remove it
+	for(int i = 0; i < territories.size(); i++){
+		if (territories[i] == territory){
+			territories.erase(territories.begin()+i);
+		}
+	}
 }
 
 // return player's territories
