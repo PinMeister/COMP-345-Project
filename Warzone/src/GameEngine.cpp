@@ -11,116 +11,118 @@
 using namespace std;
 
 // main driver
-// int main(){
-//     int numberOfPlayers = 0;
-//     vector<Player*> tempPlayers;
-//     MapLoader* maploader;
-//     Map* map;
-//     GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
+int main(){
+    int numberOfPlayers = 0;
+    vector<Player*> tempPlayers;
+    MapLoader* maploader;
+    Map* map;
+    GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
 
-//     StatsObserver* statsObserver = new StatsObserver(gameEngine);
-//     PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
+    StatsObserver* statsObserver = new StatsObserver(gameEngine);
+    PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
 
-//     string phaseToggle; // Set phase 
-//     do {
-//         cout << "Turn off phase observer? (Y/N)" << endl;
-// 		cin >> phaseToggle;
-// 	} while (phaseToggle != "Y" && phaseToggle != "N");
-//     if (phaseToggle == "Y") {
-//         delete phaseObserver;
-//         phaseObserver = nullptr;
-//     }
+    /*string phaseToggle; // Set phase observer on/off
+    do {
+        cout << "Turn off phase observer? (Y/N)" << endl;
+		cin >> phaseToggle;
+	} while (phaseToggle != "Y" && phaseToggle != "N");
+    if (phaseToggle == "Y") {
+        delete phaseObserver;
+        phaseObserver = nullptr;
+    }
 
-//     string statsToggle;
-//     do {
-//         cout << "Turn off game stats observer? (Y/N)" << endl;
-// 		cin >> statsToggle;
-// 	} while (statsToggle != "Y" && statsToggle != "N");
-//     if (statsToggle == "Y") {
-//         delete statsObserver;
-//         statsObserver = nullptr;
-//     }
+    string statsToggle; // Set stats observer on/off
+    do {
+        cout << "Turn off game stats observer? (Y/N)" << endl;
+		cin >> statsToggle;
+	} while (statsToggle != "Y" && statsToggle != "N");
+    if (statsToggle == "Y") {
+        delete statsObserver;
+        statsObserver = nullptr;
+    }*/
 
-//     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
-//     map = gameEngine->chooseMap(); // choose map to start the game
-//     gameEngine->setMap(map); // set the new map from the maploader
-//     cout << "Map AFTER user chooses: " << gameEngine->map << endl;
+    cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
+    map = gameEngine->chooseMap(); // choose map to start the game
+    gameEngine->setMap(map); // set the new map from the maploader
+    cout << "Map AFTER user chooses: " << gameEngine->map << endl;
 
-//     cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
-//     gameEngine->setPlayerNum(); // let user choose number of players
-//     cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
+    cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
+    gameEngine->setPlayerNum(); // let user choose number of players
+    cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
 
-//     // above code is the driver for game start - Part 1
+    // above code is the driver for game start - Part 1
 
-//     // below code is for gameplay and maingameloop - Part 3
-//     int playerNum = gameEngine->numberOfPlayers;
+    // below code is for gameplay and maingameloop - Part 3
+    int playerNum = gameEngine->numberOfPlayers;
 
-//     cout << "Creating the players and required items for the game: " << endl;
+    cout << "Creating the players and required items for the game: " << endl;
 
-//     // objects for players
-//     vector<Territory*> defaultTerritories; // players have no territories at first
-//     Hand* defaultHand = new Hand(); // to make default empty hand
-//     vector<Order*> defaultOrders; // default set of battle orders
-//     vector<Card*> defaultCards; // some cards
-//     Deck* defaultDeck = new Deck(); // default deck of cards
+    // objects for players
+    vector<Territory*> defaultTerritories; // players have no territories at first
+    Hand* defaultHand = new Hand(); // to make default empty hand
+    vector<Order*> defaultOrders; // default set of battle orders
+    vector<Card*> defaultCards; // some cards
+    Deck* defaultDeck = new Deck(); // default deck of cards
 
-//     gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
+    gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
 
-//     // create players
-//     vector<Player*> players;
-//     for(int i = 0; i < playerNum; i++){
-//         Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
-//         players.push_back(player);
-//         cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
-//     }
+    // create players
+    vector<Player*> players;
+    for(int i = 0; i < playerNum; i++){
+        Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
+        players.push_back(player);
+        cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
+    }
     
-//     gameEngine->players = players;
+    gameEngine->players = players;
 
-//     cout << "Players have been created" << endl;
-//     cout << "GameEngine player size " << gameEngine->players.size() << endl;
+    cout << "Players have been created" << endl;
+    cout << "GameEngine player size " << gameEngine->players.size() << endl;
 
-//     // create GameEngine
-//     cout << "\nCreating game" << "\n";
-//     Startup *startUp = new Startup(&players, map);
-//     cout << "startup phase completed" << "\n\n";
+    // create GameEngine
+    cout << "\nCreating game" << "\n";
+    cout << "hello0" << endl;
+    Startup *startUp = new Startup(&players, map);
+    cout << "hello0.5" << endl;
+    cout << "startup phase completed" << "\n\n";
 
-//     for(int i = 0; i < playerNum; i++){
-//         cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
-//     }
-    
-//     gameEngine->Notify(statsObserver);
+    for(int i = 0; i < playerNum; i++){
+        cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
+    }
+   
+    gameEngine->Notify(statsObserver);
 
-//     if (phaseObserver != nullptr) {
-//         phaseObserver->setPhase("Reinforcement Phase");
-//         gameEngine->mainGameLoop(nullptr);
-//         phaseObserver->setPhase("Orders Issuing Phase");
-//     }
-//     else {
-//         gameEngine->mainGameLoop(nullptr);
-//     }
+    if (phaseObserver != nullptr) {
+        phaseObserver->setPhase("Reinforcement Phase");
+        gameEngine->mainGameLoop(nullptr);
+        phaseObserver->setPhase("Orders Issuing Phase");
+    }
+    else {
+        gameEngine->mainGameLoop(nullptr);
+    }
 
-//     // free memory and dangling ptr
-//     delete startUp;
-//     delete gameEngine;
-//     delete defaultHand;
-//     delete defaultDeck;
+    // free memory and dangling ptr
+    delete startUp;
+    delete gameEngine;
+    delete defaultHand;
+    delete defaultDeck;
 
-//     startUp = NULL;
-//     gameEngine = NULL;
-//     defaultHand = NULL;
-//     defaultDeck = NULL;
+    startUp = NULL;
+    gameEngine = NULL;
+    defaultHand = NULL;
+    defaultDeck = NULL;
 
-//     if (phaseObserver != nullptr) {
-//         delete phaseObserver;
-//         phaseObserver = nullptr;
-//     }
-//     if (statsObserver != nullptr) {
-//         delete statsObserver;
-//         statsObserver = nullptr;
-//     }
+    if (phaseObserver != nullptr) {
+        delete phaseObserver;
+        phaseObserver = nullptr;
+    }
+    if (statsObserver != nullptr) {
+        delete statsObserver;
+        statsObserver = nullptr;
+    }
 
-//     return 0;
-// }
+    return 0;
+}
 
 // default constructor auto generated
 GameEngine::GameEngine() {}
@@ -178,7 +180,8 @@ Map* GameEngine::chooseMap() {
     while(validMap != 1) {
         cout << "Which file do you want to use as the map?\n\n";
         string filePath;
-        cin >> filePath;
+        filePath = "../maps/artic.map";
+        //cin >> filePath;
         MapLoader* mapL = new MapLoader(filePath); // load the file
         validMap = mapL->parse(); // check if it is a valid map
         map = mapL->createMap(); // get the map
@@ -419,6 +422,13 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
     int size = map->getTerritories().size(); // get territory num
     vector<int> randTerritoryId;
 
+    for(int i = 0; i < randTerritoryId.size(); i++) {
+        cout << to_string(randTerritoryId[i]) << endl;
+    }
+
+    cout << "total territories: " + to_string(size) << endl;
+    cout << "total players: " + to_string(playerNum) << endl;
+
     // assign all territories to each player randomly
     while(randTerritoryId.size() < size){
         for(int i = 0; i < playerNum; i ++){
@@ -430,12 +440,18 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
             }
             randTerritoryId.push_back(temp); // push it to the vector
             players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
+            cout << "Player " + to_string(i + 1) + " gets territory " + to_string(temp) << endl;
             // break the loop if these's no more territory
             if (randTerritoryId.size() >= size){
+                cout << "hello1" << endl;
                 break;
             }
         }
+        cout << "The loop ran a lap!" << endl;
     }
+    
+    cout << "hello2" << endl;
+
     // give player all the orders and armies
     for(int i = 0; i < playerNum; i++){
         Deploy *depl;
@@ -455,6 +471,9 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
         players->at(i)->setOrdersRef(orders);
         players->at(i)->setReinforcementPool(initialArmyNum); // set player total army
     }
+
+    cout << "hello3" << endl;
+
     started = true; // the game starts
 }
 
