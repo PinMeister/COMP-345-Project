@@ -89,7 +89,9 @@ int main(){
         cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
     }
    
-    gameEngine->Notify(statsObserver);
+    if (statsObserver != nullptr) {
+        gameEngine->Notify(statsObserver);
+    }
 
     if (phaseObserver != nullptr) {
         gameEngine->mainGameLoop(phaseObserver);
@@ -177,8 +179,7 @@ Map* GameEngine::chooseMap() {
     while(validMap != 1) {
         cout << "Which file do you want to use as the map?\n\n";
         string filePath;
-        filePath = "../maps/artic.map"; // TO DELETE
-        //cin >> filePath;
+        cin >> filePath;
         MapLoader* mapL = new MapLoader(filePath); // load the file
         validMap = mapL->parse(); // check if it is a valid map
         map = mapL->createMap(); // get the map
@@ -224,12 +225,19 @@ string gameEnd;
         cout << "End game? (Y/N)";
 		cin >> gameEnd;
         round++;
-        phaseObserver->setPhase("Reinforcement Phase");
-        this->reinforcementPhase(phaseObserver);
-        phaseObserver->setPhase("Orders Issuing Phase");
-        this->issueOrdersPhase(phaseObserver);
-        phaseObserver->setPhase("Order Execution Phase");
-        this->executeOrdersPhase(phaseObserver);
+        if (phaseObserver != nullptr) {
+            phaseObserver->setPhase("Reinforcement Phase");
+            this->reinforcementPhase(phaseObserver);
+            phaseObserver->setPhase("Orders Issuing Phase");
+            this->issueOrdersPhase(phaseObserver);
+            phaseObserver->setPhase("Order Execution Phase");
+            this->executeOrdersPhase(phaseObserver);
+        }
+        else {
+            this->reinforcementPhase(nullptr);
+            this->issueOrdersPhase(nullptr);
+            this->executeOrdersPhase(nullptr);
+        }
 	} while (gameEnd != "Y");
 }
 

@@ -296,7 +296,7 @@ void Player::issueOrder(GameEngine* gameEngine, PhaseObserver *phaseObserver) {
 						this->orders.push_back(advanceAtk);
 						cout << "Attack order added" << endl;
 						if (phaseObserver != nullptr) {
-							phaseObserver->setInfo(phaseObserver->getInfo() + "Attacking " + toAttackTerritory[index]->getName() + ".\n"); }
+							phaseObserver->setInfo(phaseObserver->getInfo() + "Issuing attack from " + result[0]->getName() + " to " + toAttackTerritory[index]->getName() + ".\n"); }
 						break;
 						}
 						else  // if you don't have armies, redundant for now but will be implemented later
