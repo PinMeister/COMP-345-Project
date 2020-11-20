@@ -10,6 +10,7 @@
 
 using namespace std;
 
+/*
 // main driver
 int main(){
     int numberOfPlayers = 0;
@@ -39,7 +40,7 @@ int main(){
     if (statsToggle == "Y") {
         delete statsObserver;
         statsObserver = nullptr;
-    }*/
+    }
 
     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
     map = gameEngine->chooseMap(); // choose map to start the game
@@ -122,7 +123,7 @@ int main(){
     }
 
     return 0;
-}
+}*/
 
 // default constructor auto generated
 GameEngine::GameEngine() {}
@@ -422,9 +423,10 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
     int size = map->getTerritories().size(); // get territory num
     vector<int> randTerritoryId;
 
+    /*
     for(int i = 0; i < randTerritoryId.size(); i++) {
         cout << to_string(randTerritoryId[i]) << endl;
-    }
+    }*/
 
     cout << "total territories: " + to_string(size) << endl;
     cout << "total players: " + to_string(playerNum) << endl;
@@ -440,7 +442,7 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
             }
             randTerritoryId.push_back(temp); // push it to the vector
             players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
-            cout << "Player " + to_string(i + 1) + " gets territory " + to_string(temp) << endl;
+            cout << "Player " + to_string(i + 1) + " gets territory " + to_string(temp) << "\n";
             // break the loop if these's no more territory
             if (randTerritoryId.size() >= size){
                 cout << "hello1" << endl;

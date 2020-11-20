@@ -33,7 +33,7 @@ class Territory {
         string name;
         string continent;
         int armies = 0;
-        Player* owner;
+        Player* owner = nullptr;
 };
 
 class Continent {

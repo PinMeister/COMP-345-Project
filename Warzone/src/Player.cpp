@@ -379,7 +379,7 @@ void Player::issueOrder() {
 // add territory to player and remove the territory from the another player
 void Player::addTerritory(Territory* territory){
 	// if someone owns the territory, remove it from them
-	if (territory->getOwner() != NULL){
+	if (territory->getOwner() != nullptr){
 		territory->getOwner()->removeTerritory(territory);
 		territory->removeOwner();
 	}
