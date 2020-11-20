@@ -17,11 +17,14 @@ int main(){
     territories.push_back(territory);
     vector<Order*> orders;
     Territory* target = territory;
+    territory->setArmyNum(10);
     Player* player = new Player(territories, NULL, orders, 1);
     target->setArmyNum(10);
     Blockade* blockade = new Blockade(player, territory);
     blockade->validate();
-
+    blockade->execute();
+    int i = territory->getArmyNum();
+    cout << i << endl;
 
 return 0;
 };

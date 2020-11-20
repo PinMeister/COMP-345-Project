@@ -287,7 +287,7 @@ using namespace std;
           isValid = true;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
+         if (std::find(playerTerritories.begin(), playerTerritories.end(), this->territory) != playerTerritories.end()){
             cout << "The blockade order is valid." << endl;
             isValid = true;
          }
@@ -299,22 +299,20 @@ using namespace std;
      }  
 
      void Blockade  :: execute() {
-          validate();
+          bool orderValid = this->validate();
           vector<Territory*> playerTerritories;
-          playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
-          int territoryArmies = territory->getArmyNum(); //number of armies of target territory
+          int targetArmyNum = this->territory->getArmyNum();
           vector<Territory*>::iterator iter; //iterator to iterate through player territories
-          //only executes if territory is a player's territory
-         if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
-               int newArmyNum = territoryArmies * 2;
-               territory->setArmyNum(newArmyNum);
-             for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){   //iterating through each player's list of orders
-                    if((*iter) == territory){
+          if (orderValid) {       
+                this->territory->setArmyNum(targetArmyNum*2);
+                for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){   //iterating through each player's list of orders
+                    if((*iter) == this->territory){
                          playerTerritories.erase(iter);     //erase the territory from player's territories, making it neutral
                     }
                     break;    //ends loop after erasing the territory
                }     
-         }
+                cout << "Blockade order executed" << endl;
+          }
      }   
 
      // for Airlift
