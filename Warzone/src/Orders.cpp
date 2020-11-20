@@ -392,6 +392,7 @@ using namespace std;
           }
           else{
                isValid = true;
+               cout << "The negotiate order is valid." << endl;
           }
           return isValid;
      }  
