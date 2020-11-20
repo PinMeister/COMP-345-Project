@@ -17,6 +17,9 @@ Player::Player(int playerID){
 // construtor with parameters
 Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID) {
 	this->territories = territories;
+	for(int i = 0; i < territories.size(); i++){
+		territories[i]->addOwner(this);
+	}
 	this->hand = hand;
 	this->orders = orders;
 	this->playerID = playerID;

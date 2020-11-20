@@ -193,7 +193,7 @@ using namespace std;
                     start->subtractArmyNum(armies);
                }
                else{
-                    start -> subtractArmyNum(armies);
+                    start->subtractArmyNum(armies);
                     random_device rd;     
                     mt19937 gen(rd());
                     uniform_real_distribution<> dis(0, 1);
@@ -212,6 +212,7 @@ using namespace std;
                     target->setArmyNum(armyNumDefend); // update defending army num
                     // capture the territory
                     if (armyNumDefend == 0){
+                         // add the territory to the player and remove it from its previous owner
                          player->addTerritory(target);
                          target->setArmyNum(armyNumAttack); // move player army to target
                     }

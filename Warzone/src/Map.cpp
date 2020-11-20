@@ -235,6 +235,7 @@ Territory::Territory(const Territory &territory) {
     this->neighbours = territory.neighbours;
     this->visited = territory.visited;
     this->armies = territory.armies;
+    this->owner = territory.owner;
 }
 
 // Assignment operator
@@ -244,6 +245,7 @@ Territory& Territory::operator=(const Territory &territory) {
     this->neighbours = territory.neighbours;
     this->visited = territory.visited;
     this->armies = territory.armies;
+    this->owner = territory.owner;
     return *this;
 }
 
