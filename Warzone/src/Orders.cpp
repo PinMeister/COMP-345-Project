@@ -295,13 +295,14 @@ using namespace std;
           vector<Territory*>::iterator iter; //iterator to iterate through player territories
           if (orderValid) {       
                 this->territory->setArmyNum(targetArmyNum*2);
-                for(iter = playerTerritories.begin(); iter != playerTerritories.end(); iter++){   //iterating through each player's list of orders
-                    if((*iter) == this->territory){
-                         playerTerritories.erase(iter);     //erase the territory from player's territories, making it neutral
-                    }
-                    break;    //ends loop after erasing the territory
-               }     
-                cout << "Blockade order executed" << endl;
+               this->territory->getOwner()->removeTerritory(territory);
+               this->territory->removeOwner();    //making the territory neutral
+               cout << "Blockade order executed" << endl;
+               playerTerritories = this->player->getTerritories();
+               std::cout << "The vector elements are : " << endl;
+               for(int i=0; i < playerTerritories.size(); i++){
+                    std::cout << *playerTerritories.at(i) << ' '<< endl;
+               }
           }
      }   
 
