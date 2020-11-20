@@ -142,7 +142,7 @@ using namespace std;
                this->player = player;
                this->start = start;
                this->target = target;
-               armies = armies;
+               this->armies = armies;
           }
 
      Advance::Advance(const Advance &advance){ //copy constructor
@@ -183,8 +183,8 @@ using namespace std;
           playerTerritories = player->getTerritories();   //getting territories of player that issued the order
           vector<Territory*> adjacent; 
           adjacent = start->neighbours;       //getting the neighbouring territories of the start territory 
-          armyNumAttack = start ->getArmyNum();    //getting number of armies of player that issued the order
-          armyNumDefend = target ->getArmyNum();
+          armyNumAttack = armies;    //getting number of armies of player that issued the order
+          armyNumDefend = target->getArmyNum();
           //executes if target territory is adjacent to start 
           if(std::find(adjacent.begin(), adjacent.end(), target) != adjacent.end()){ 
                //checks if the target is from the player's territories
@@ -193,20 +193,33 @@ using namespace std;
                     start->subtractArmyNum(armies);
                }
                else{
-                    if(armyNumAttack > armyNumDefend){
-                         for(int i = 0; i < armyNumAttack; i++){
-                         random_device rd;     
-                         mt19937 gen(rd());
-                         uniform_real_distribution<> dis(0, 1);
-                         float randomNumberAttack = dis(gen);
-                         if(randomNumberAttack > 0.4){
-                              target->setArmyNum(armyNumDefend-1);
+                    start -> subtractArmyNum(armies);
+                    random_device rd;     
+                    mt19937 gen(rd());
+                    uniform_real_distribution<> dis(0, 1);
+                    float randomNumberAttack = dis(gen);
+                    while(true){
+                         // 60% killing 1 defending amry
+                         if (randomNumberAttack > 0.4){
+                              armyNumDefend -= 1;
                          }
-                         float randomNumberDefend = dis(gen);
-                         if(randomNumberDefend > 0.3){
-                              start->subtractArmyNum(armyNumAttack-1);
-                            }
+                         if (armyNumDefend == 0){
+                              break;
                          }
+                         // 70% killing 1 attacking amry
+                         if (randomNumberAttack > 0.3){
+                              armyNumAttack -= 1;
+                         }
+                         if (armyNumAttack == 0){
+                              break;
+                         }
+                         randomNumberAttack = dis(gen);
+                    }
+                    target->setArmyNum(armyNumDefend); // update defending army num
+                    // capture the territory
+                    if (armyNumDefend == 0){
+                         player->addTerritory(target);
+                         target->setArmyNum(armyNumAttack); // move player army to target
                     }
                }    
           }         

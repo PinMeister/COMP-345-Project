@@ -236,7 +236,6 @@ void GameEngine::reinforcementPhase(PhaseObserver* phaseObserver) {
     int numOfArmies = 0;
     vector<Player*>::iterator it;
         
-
     for(it = this->players.begin(); it != this->players.end(); it++){   //iterating through list of players
         // (# of territories owned divided by 3, rounded down
         numOfArmies = (*it)->getTerritories().size();
@@ -356,6 +355,7 @@ void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {
             (*iter)->execute();     //executes the rest of the order types
         }
     }
+    reinforcementPhase(phaseObserver);   //goes back to the reinforcement phase
 }
   
 // constructor with no parameter
@@ -457,3 +457,4 @@ void Startup::startupPhase(vector<Player*> *players, Map *map){
     }
     started = true; // the game starts
 }
+
