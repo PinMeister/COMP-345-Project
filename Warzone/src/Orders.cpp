@@ -282,15 +282,20 @@ using namespace std;
                return os << "Blockade "<< blockade.territory <<endl;
           }
 
-     void Blockade  :: validate() {
+     bool Blockade  :: validate() {    
+          bool isValid;
+          isValid = true;
           vector<Territory*> playerTerritories;
           playerTerritories = player->getTerritories(); //getting the territories of player issuing the order
          if (std::find(playerTerritories.begin(), playerTerritories.end(), territory) != playerTerritories.end()){
             cout << "The blockade order is valid." << endl;
+            isValid = true;
          }
          else{
               cout << "The blockade order is invalid." << endl;
-         }    
+              isValid = false;
+         } 
+         return isValid;
      }  
 
      void Blockade  :: execute() {

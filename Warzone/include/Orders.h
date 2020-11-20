@@ -95,7 +95,7 @@ class Blockade : public Order{
         ~Blockade(); //destructor
         Blockade& operator=(const Blockade &blockade); //assignment operator
         friend ostream& operator << (ostream &os, const Blockade &blockade); //stream insertion operator for Blockade
-        void validate(); 
+        bool validate(); 
         void execute();
 };
 
