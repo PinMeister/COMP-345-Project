@@ -193,22 +193,6 @@ using namespace std;
                     start->subtractArmyNum(armies);
                }
                else{
-                    /*
-                    if(armyNumAttack > armyNumDefend){
-                         for(int i = 0; i < armyNumAttack; i++){
-                         random_device rd;     
-                         mt19937 gen(rd());
-                         uniform_real_distribution<> dis(0, 1);
-                         float randomNumberAttack = dis(gen);
-                         if(randomNumberAttack > 0.4){
-                              target->setArmyNum(armyNumDefend-1);
-                         }
-                         float randomNumberDefend = dis(gen);
-                         if(randomNumberDefend > 0.3){
-                              start->subtractArmyNum(armyNumAttack-1);
-                            }
-                         }
-                    } */
                     start -> subtractArmyNum(armies);
                     random_device rd;     
                     mt19937 gen(rd());
@@ -222,7 +206,6 @@ using namespace std;
                          if (armyNumDefend == 0){
                               break;
                          }
-                         //p = rand() % 10 + 1;
                          // 70% killing 1 attacking amry
                          if (randomNumberAttack > 0.3){
                               armyNumAttack -= 1;
