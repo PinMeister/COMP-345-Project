@@ -7,6 +7,8 @@
 
 using namespace std;
 
+class Player;
+
 class Territory {
     public:
         Territory();
@@ -24,10 +26,14 @@ class Territory {
         vector<Territory*> neighbours;
         vector<Territory*> getNeighbours();
         bool visited;
+        void addOwner(Player *player);
+        void removeOwner();
+        Player* getOwner();
     private:
         string name;
         string continent;
         int armies = 0;
+        Player* owner;
 };
 
 class Continent {

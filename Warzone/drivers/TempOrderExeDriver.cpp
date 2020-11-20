@@ -32,11 +32,17 @@ int main(){
     player->addTerritory(canada);
     //player->addTerritory(us);
     player2->addTerritory(us);
-    cout << "Canada " << canada ->getArmyNum() << "\n";
-    cout << "US " << us ->getArmyNum() << "\n\n";
+    cout << "Player 1 owns " << player->getTerritories()[0]->getName() << " " << canada->getArmyNum() << "\n";
+    cout << "Player 2 owns " << player2->getTerritories()[0]->getName() << " " << us ->getArmyNum() << "\n\n";
     Advance* advance = new Advance(player, canada, us, 7);
     advance->execute();
-    cout << "Canada " << canada ->getArmyNum() << "\n";
-    cout << "US " << us ->getArmyNum();
+    cout << "Player 1 now owns ";
+    for(auto&& t : player->getTerritories()){
+        cout << t->getName() << " " << t->getArmyNum() << "\n";
+    }
+    cout << "Player 2 now owns ";
+    for(auto&& t : player2->getTerritories()){
+        cout << t->getName() << " " << t->getArmyNum() << "\n";
+    }
     return 0;
 }

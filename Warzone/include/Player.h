@@ -37,6 +37,7 @@ class Player {
 		friend ostream& operator << (ostream &os, const Player &player); //stream insertion operator for Player
 		void addTerritory(Territory* territory);
 		vector<Territory*> getTerritories();
+		void removeTerritory(Territory* territory);
 		int getPlayerID();
 		vector<Order*> getPlayerOrders();
 		int getReinforcementPool();

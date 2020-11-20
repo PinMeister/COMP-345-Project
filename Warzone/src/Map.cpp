@@ -3,7 +3,10 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+
+
 #include "../include/Map.h"
+#include "../include/Player.h"
 
 using namespace std;
 
@@ -335,4 +338,16 @@ vector<Territory*> Continent::getMembers() {
 
 int Continent::getControlBonus() {
     return controlBonus;
+}
+
+void Territory::addOwner(Player *player){
+    owner = player;
+}
+
+void Territory::removeOwner(){
+    owner = nullptr;
+}
+
+Player* Territory::getOwner(){
+    return owner;
 }
