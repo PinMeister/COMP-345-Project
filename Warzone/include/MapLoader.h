@@ -1,5 +1,4 @@
-#ifndef MAPLOADER_H
-#define MAPLOADER_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -47,4 +46,32 @@ class MapLoader{
         bool isDigit(const string &str); // check if a string is a number
         void clearData(); // clear arrays in data containers
 };
-#endif 
+
+class ConquestFileReader{
+    public:
+        ConquestFileReader();
+        ConquestFileReader(const ConquestFileReader &conquestLoader);
+        ~ConquestFileReader();
+
+        ConquestFileReader& operator=(const ConquestFileReader &conquestLoader);
+        friend ostream& operator<<(ostream& out, const ConquestFileReader &conquestLoader);
+
+        bool parse();
+    private:
+
+};
+
+class ConquestFileReaderAdapter : public MapLoader{
+    public:
+        ConquestFileReaderAdapter(ConquestFileReader conquestLoader); // construtor
+        ConquestFileReaderAdapter(const ConquestFileReaderAdapter &conquestLoaderAdapter); // copy constructor
+        ~ConquestFileReaderAdapter(); // destructor
+        // overloading assignment and string insertion
+        ConquestFileReaderAdapter& operator=(const ConquestFileReaderAdapter &conquestLoaderAdapter);
+        friend ostream& operator<<(ostream& out, const ConquestFileReaderAdapter &conquestLoaderAdapter);
+        bool parse();
+    private:
+        ConquestFileReader conquestLoader;
+
+};
+
