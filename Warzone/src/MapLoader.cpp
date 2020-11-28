@@ -10,6 +10,8 @@
 
 using namespace std;
 
+//**************** MapLoader ****************
+
 // constructor
 MapLoader::MapLoader(string path){
     mapPath = path;
@@ -203,8 +205,18 @@ bool MapLoader::parseBorder(string line){
     return 0;
 }
 
+// clear all the arrays from the structs
+void MapLoader::clearData(){
+    continentsData.names.clear();
+    continentsData.armyNums.clear();
+    countriesData.names.clear();
+    countriesData.continentId.clear();
+    countriesData.pos.clear();
+    bordersData.adjacent.clear();
+}
+
 // split a string with a specified delimiter and return an array of elements
-vector<string> MapLoader::split(const string &line, char delim){
+vector<string> split(const string &line, char delim){
     vector<string> result;
     stringstream sstream(line);
     string element;
@@ -216,17 +228,81 @@ vector<string> MapLoader::split(const string &line, char delim){
 }
 
 // check if a string is a number
-bool MapLoader::isDigit(const string &str){
+bool isDigit(const string &str){
     // return if a string contains a non-number character
     return (str.find_first_not_of("0123456789") == string::npos);
 }
 
-// clear all the arrays from the structs
-void MapLoader::clearData(){
-    continentsData.names.clear();
-    continentsData.armyNums.clear();
-    countriesData.names.clear();
-    countriesData.continentId.clear();
-    countriesData.pos.clear();
-    bordersData.adjacent.clear();
+
+//**************** ConquestFileReader ****************
+
+
+ConquestFileReader::ConquestFileReader(string path){
+    mapPath = path;
+    error = 0;
+}
+
+ConquestFileReader::ConquestFileReader(const ConquestFileReader &conquestLoader){
+    mapPath = conquestLoader.mapPath;
+    error = conquestLoader.error;
+}
+
+ConquestFileReader::~ConquestFileReader(){
+    mapPath = "";
+    error = 0;
+}
+
+ConquestFileReader& ConquestFileReader::operator=(const ConquestFileReader &conquestLoader){
+    if (this != &conquestLoader){
+        this->mapPath = conquestLoader.mapPath;
+        this->error = conquestLoader.error;
+    }
+    return *this;
+}
+
+ostream& operator<<(ostream& out, const ConquestFileReader &conquestLoader){
+    out << "Path: " << conquestLoader.mapPath << "\nError(s): " << conquestLoader.error;
+    return out;
+}
+
+bool ConquestFileReader::parse(){
+
+}
+
+string ConquestFileReader::getPath(){
+    return mapPath;
+}
+
+
+//**************** ConquestFileReaderAdapter ****************
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(ConquestFileReader *conquestLoader) : MapLoader(conquestLoader->getPath()){
+    this->conquestLoader = conquestLoader;
+}
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(const ConquestFileReaderAdapter &conquestLoaderAdapter) : MapLoader(conquestLoaderAdapter){
+    delete this->conquestLoader;
+    this->conquestLoader = conquestLoaderAdapter.conquestLoader;
+}
+
+ConquestFileReaderAdapter& ConquestFileReaderAdapter::operator=(const ConquestFileReaderAdapter &conquestReaderAdapter){
+    if (this != &conquestReaderAdapter){
+        delete this->conquestLoader;
+        this->conquestLoader = conquestReaderAdapter.conquestLoader;
+    }
+    return *this;
+}
+
+ConquestFileReaderAdapter::~ConquestFileReaderAdapter(){
+    delete this->conquestLoader;
+    this->conquestLoader = nullptr;
+}
+
+ostream& operator<<(ostream& out, const ConquestFileReaderAdapter &conquestLoaderAdapter){
+    out << conquestLoaderAdapter.conquestLoader;
+    return out;
+}
+
+bool ConquestFileReaderAdapter::parse(){
+    conquestLoader->parse();
 }
