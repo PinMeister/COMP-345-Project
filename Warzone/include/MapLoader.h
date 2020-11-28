@@ -56,9 +56,28 @@ class ConquestFileReader{
 
         bool parse();
         string getPath();
+        bool parseContinent(string line); // parse continents block in the .map file
+        bool parseTerritory(string line); // parse territories block in the .map file
+        void showResult();
+        void convertTerritoryToId();
+        int getTerritoryId(const string &name);
     private:
         string mapPath; // path to the .map file
         int error;
+        // data container for continents
+        struct continents {
+            vector<string> names;
+            vector<string> armyNums;
+        } continentsData;
+        // data container for territories
+        struct territories {
+            vector<string> names;
+            vector<string> continentId;
+        } territoriesData;
+        // data container for borders
+        struct borders {
+            vector<vector<string> > adjacent;
+        } bordersData;
 };
 
 class ConquestFileReaderAdapter : public MapLoader{
@@ -75,3 +94,5 @@ class ConquestFileReaderAdapter : public MapLoader{
 
 };
 
+vector<string> split(const string &line, char delim);
+bool isDigit(const string &str);
