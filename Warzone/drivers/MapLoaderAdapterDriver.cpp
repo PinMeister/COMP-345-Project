@@ -23,10 +23,9 @@ int main(){
     
     for(int i = 0; i < map->getTerritories().size(); i++){
         cout << map->getTerritories()[i]->getName() << ": \n";
-        /*
         for(int j = 0; i < map->getTerritories()[i]->neighbours.size(); j++){
             cout << map->getTerritories()[i]->neighbours[j]->getName() << " ";
-        }*/
+        }
         cout << "\n";
     }
     map->mapValidate();
