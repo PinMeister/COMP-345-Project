@@ -10,6 +10,7 @@
 #include "../include/Map.h"
 #include "../include/GameEngine.h"
 #include "../include/GameObservers.h"
+#include "../include/PlayerStrategies.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ class Hand;
 class OrdersList;
 class PhaseObserver;
 class GameEngine;
+class PlayerStrategy;
 
 class Player{
 	private:
@@ -29,13 +31,13 @@ class Player{
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
 		int reinforcementPool;
-		
+		PlayerStrategy *strategy;
 	public:
 		vector<Territory*> toDefend(PhaseObserver* phaseObserver);	// returns list of territories to be defended
 		vector<Territory*> toAttack(PhaseObserver* phaseObserver);	// returns list of territories to be attacked		
 		void issueOrder(GameEngine* gameEngine, PhaseObserver* phaseObserver);	// generates an order to add to order list
 		Player(int playerID);
-		Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID);
+		Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID, PlayerStrategy *strategy);
 		Player(const Player &player); // copy constructor
 		Player& operator=(const Player &player); //assignment operator
 		friend ostream& operator << (ostream &os, const Player &player); //stream insertion operator for Player
@@ -49,5 +51,6 @@ class Player{
 		void setOrdersRef(vector<Order*> orders);
 		vector<Territory*> get_neighbour_territories(Player* p);
 		vector<Territory*> get_friendly_neighbour(Player* p);
+		void setStrategy(PlayerStrategy *strategy)
 };
 #endif 

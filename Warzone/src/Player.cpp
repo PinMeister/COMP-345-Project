@@ -1,5 +1,4 @@
 #include "../include/Player.h"
-#include "../include/GameObservers.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -16,7 +15,7 @@ Player::Player(int playerID){
 }
 
 // construtor with parameters
-Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID) {
+Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID, PlayerStrategy *strategy) {
 	this->territories = territories;
 	for(int i = 0; i < territories.size(); i++){
 		territories[i]->addOwner(this);
@@ -25,6 +24,7 @@ Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders
 	this->orders = orders;
 	this->playerID = playerID;
 	this->reinforcementPool = 0;
+	this->strategy = strategy;
 }
 
 // copy constructor
@@ -34,6 +34,7 @@ Player::Player(const Player &player){
 	this->orders = player.orders;
 	this->playerID = player.playerID;
 	this->reinforcementPool = player.reinforcementPool;
+	this->strategy = player.strategy;
 }
 
 //assignment operator
@@ -484,4 +485,8 @@ void Player::setReinforcementPool(int i){
 
 void Player::setOrdersRef(vector<Order*> ordersRef){
 	orders = ordersRef;
+}
+
+void Player::setStrategy(PlayerStrategy *strategy) {
+	this->strategy = strategy;
 }
