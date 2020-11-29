@@ -180,6 +180,7 @@ Map* GameEngine::chooseMap() {
         cout << "Which file do you want to use as the map?\n\n";
         string filePath;
         cin >> filePath;
+        // if file name contains Conquest_
         if (filePath.find("Conquest_") != string::npos){
             // use the adapter to read conquest maps
             ConquestFileReader *conquestLoader = new ConquestFileReader(filePath);

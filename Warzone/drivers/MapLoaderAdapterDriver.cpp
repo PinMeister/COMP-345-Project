@@ -15,12 +15,14 @@ int main(){
         cout << "Map is created.\n";
     }
     //conquestLoader->showResult();
+
+    // print out all the continents
     cout << "\nContinents:\n";
     for(int i = 0; i < map->getContinents().size(); i++){
         cout << map->getContinents()[i]->getName() << "\n";
     }
+    // print out all the territories and its neighbours
     cout << "\nTerritories:\n";
-    
     for(int i = 0; i < map->getTerritories().size(); i++){
         cout << map->getTerritories()[i]->getName() << ": ";
         cout << map->getTerritories()[i]->neighbours.size() << "\n";

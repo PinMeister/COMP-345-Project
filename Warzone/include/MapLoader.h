@@ -45,12 +45,14 @@ class MapLoader{
         void clearData(); // clear arrays in data containers
 };
 
+// Load a conquest map file
 class ConquestFileReader{
     public:
+        // constructors
         ConquestFileReader(string path);
         ConquestFileReader(const ConquestFileReader &conquestLoader);
         ~ConquestFileReader();
-
+        // overloading assignment and string insertion
         ConquestFileReader& operator=(const ConquestFileReader &conquestLoader);
         friend ostream& operator<<(ostream& out, const ConquestFileReader &conquestLoader);
 
@@ -58,12 +60,12 @@ class ConquestFileReader{
         string getPath();
         bool parseContinent(string line); // parse continents block in the .map file
         bool parseTerritory(string line); // parse territories block in the .map file
-        void showResult();
-        void convertTerritoryToInt();
-        int getTerritoryId(const string &name);
-        vector<string> getContinentsData(int id);
-        vector<string> getTerritoriesData(int id);
-        vector<vector<string>> getBordersData();
+        void showResult(); // for debug
+        void convertTerritoryToInt(); // change territory name to its index in vector
+        int getTerritoryId(const string &name); // get territory index in the vector
+        vector<string> getContinentsData(int id); // return struct continentsData
+        vector<string> getTerritoriesData(int id); // return struct territoriesData
+        vector<vector<string>> getBordersData(); // return struct bordersData
     private:
         string mapPath; // path to the .map file
         int error;
@@ -83,6 +85,7 @@ class ConquestFileReader{
         } bordersData;
 };
 
+// Adapter for loading a conqest map file and create a Map obj
 class ConquestFileReaderAdapter : public MapLoader{
     public:
         ConquestFileReaderAdapter(ConquestFileReader *conquestLoader); // construtor
@@ -98,5 +101,6 @@ class ConquestFileReaderAdapter : public MapLoader{
 
 };
 
+// free functions
 vector<string> split(const string &line, char delim);
 bool isDigit(const string &str);
