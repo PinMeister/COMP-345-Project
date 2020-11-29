@@ -75,7 +75,6 @@ void Map::addBorder(Territory *t1, Territory *t2) {
 // Connect t2 to t1 using index
 void Map::addBorderIndex(int t1, int t2) {
     territories[t1]->neighbours.push_back(territories[t2]);
-    territories[t2]->neighbours.push_back(territories[t1]);
 }
 
 // Get list of continents that map has
