@@ -5,7 +5,7 @@ using namespace std;
 
 int main(){
     // create adapter and map objs
-    ConquestFileReader *conquestLoader = new ConquestFileReader("Warzone/maps/Conquest_3D.map");
+    ConquestFileReader *conquestLoader = new ConquestFileReader("Warzone/maps/Conquest_Houston.map");
     ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(conquestLoader);
     Map *map;
     // use overrided functions to create a map
@@ -22,8 +22,9 @@ int main(){
     cout << "\nTerritories:\n";
     
     for(int i = 0; i < map->getTerritories().size(); i++){
-        cout << map->getTerritories()[i]->getName() << ": \n";
-        for(int j = 0; i < map->getTerritories()[i]->neighbours.size(); j++){
+        cout << map->getTerritories()[i]->getName() << ": ";
+        cout << map->getTerritories()[i]->neighbours.size() << "\n";
+        for(int j = 0; j < map->getTerritories()[i]->neighbours.size(); j++){
             cout << map->getTerritories()[i]->neighbours[j]->getName() << " ";
         }
         cout << "\n";
