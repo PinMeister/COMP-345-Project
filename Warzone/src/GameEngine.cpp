@@ -180,13 +180,23 @@ Map* GameEngine::chooseMap() {
         cout << "Which file do you want to use as the map?\n\n";
         string filePath;
         cin >> filePath;
-        MapLoader* mapL = new MapLoader(filePath); // load the file
-        validMap = mapL->parse(); // check if it is a valid map
-        map = mapL->createMap(); // get the map
+        if (filePath.find("Conquest_") != string::npos){
+            // use the adapter to read conquest maps
+            ConquestFileReader *conquestLoader = new ConquestFileReader(filePath);
+            ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(conquestLoader);
+            validMap = adapter->parse();
+            map = adapter->createMap();
 
-        // delete pointer and dangling pointer
-        delete mapL;
-        mapL = NULL;
+            delete adapter;
+            adapter = nullptr;
+        }else{
+            MapLoader* mapL = new MapLoader(filePath); // load the file
+            validMap = mapL->parse(); // check if it is a valid map
+            map = mapL->createMap(); // get the map
+            // delete pointer and dangling pointer
+            delete mapL;
+            mapL = NULL;
+        }
     }
     return map;
 }

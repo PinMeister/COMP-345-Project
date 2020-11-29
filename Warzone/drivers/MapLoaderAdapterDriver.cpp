@@ -4,22 +4,22 @@
 using namespace std;
 
 int main(){
+    // create adapter and map objs
     ConquestFileReader *conquestLoader = new ConquestFileReader("Warzone/maps/Conquest_3D.map");
     ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(conquestLoader);
     Map *map;
+    // use overrided functions to create a map
     if (adapter->parse()){
         cout << "Map is loaded.\n";
         map = adapter->createMap();
         cout << "Map is created.\n";
     }
     //conquestLoader->showResult();
-
     cout << "\nContinents:\n";
     for(int i = 0; i < map->getContinents().size(); i++){
         cout << map->getContinents()[i]->getName() << "\n";
     }
     cout << "\nTerritories:\n";
-    
     
     for(int i = 0; i < map->getTerritories().size(); i++){
         cout << map->getTerritories()[i]->getName() << ": \n";
@@ -30,6 +30,11 @@ int main(){
         cout << "\n";
     }
     map->mapValidate();
+
+    delete adapter;
+    adapter = nullptr;
+    delete map;
+    map = nullptr;
 
     return 0;
 }
