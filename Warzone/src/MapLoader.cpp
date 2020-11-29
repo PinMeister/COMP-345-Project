@@ -295,7 +295,7 @@ bool ConquestFileReader::parse(){
             }
         }
         mapFile.close();
-        //convertTerritoryToId();
+        convertTerritoryToInt();
         cout << "Parse completed, " << error << " errors found." << endl;
         if (error > 0){
             return 0;
@@ -337,25 +337,20 @@ bool ConquestFileReader::parseTerritory(string line){
             error += 1;
             cout << result[0] << " territory already exists!" << endl;
         }
-        int thisContinentId = 0;
-        // find continent and get its index
-        auto it = find(continentsData.names.begin(), continentsData.names.end(), result[3]);
-        if (it != continentsData.names.end()) {
-            thisContinentId = it - continentsData.names.begin();
-        }else {
+        // find continent
+        if (find(continentsData.names.begin(), continentsData.names.end(), result[3]) == continentsData.names.end()) {
             error += 1;
             cout << result[3] << " continent does not exist!" << endl;
         }
         // store the data in the territories data container
         territoriesData.names.push_back(result[0]);
-        territoriesData.continentId.push_back(to_string(thisContinentId + 1));
+        territoriesData.continentId.push_back(result[3]);
 
         // borders
         vector<string> temp;
         temp.push_back(result[0]);
         for(int i = 4; i < result.size(); i++){
-            string id = to_string(getTerritoryId(result[i]));
-            temp.push_back(id);
+            temp.push_back(result[i]);
         }
         bordersData.adjacent.push_back(temp);
         return 1;
@@ -363,20 +358,18 @@ bool ConquestFileReader::parseTerritory(string line){
     return 0;
 }
 
-void ConquestFileReader::convertTerritoryToId(){
+void ConquestFileReader::convertTerritoryToInt(){
     for(int i = 0; i < bordersData.adjacent.size(); i++){
         for(int j = 1;j < bordersData.adjacent[i].size(); j++){
-            cout << getTerritoryId(bordersData.adjacent[i][j]);
+            string id = to_string(getTerritoryId(bordersData.adjacent[i][j]));
+            bordersData.adjacent[i][j] = id;
         }
-        cout << endl;
     }
 }
 
 int ConquestFileReader::getTerritoryId(const string &name){
     auto it = find(territoriesData.names.begin(), territoriesData.names.end(), name);
-    cout << "finding " << name << endl;
     if (it != territoriesData.names.end()) {
-        cout << "found!" << endl;
         return (it - territoriesData.names.begin()) + 1;
     }
     return 0;
@@ -386,7 +379,7 @@ void ConquestFileReader::showResult(){
     for(int i = 0; i < continentsData.names.size(); i++){
         cout << continentsData.names[i] << " ";
     }
-    cout << endl;
+    cout << "\n\n";
 
     for(int i = 0; i < territoriesData.names.size(); i++){
         cout << territoriesData.names[i] << " - " << territoriesData.continentId[i] << endl;
@@ -396,10 +389,30 @@ void ConquestFileReader::showResult(){
 
     for(int i = 0; i < bordersData.adjacent.size(); i++){
         for(int j = 0; j < bordersData.adjacent[i].size(); j++){
-            cout << bordersData.adjacent[i][j] << "-";
+            cout << bordersData.adjacent[i][j] << " - ";
         }
         cout << "\n";
     }
+}
+
+vector<string> ConquestFileReader::getContinentsData(int id){
+    if (id == 0){
+        return continentsData.names;
+    }else{
+        return continentsData.armyNums;
+    }
+}
+
+vector<string> ConquestFileReader::getTerritoriesData(int id){
+    if (id == 0){
+        return territoriesData.names;
+    }else{
+        return territoriesData.continentId;
+    }
+}
+
+vector<vector<string>> ConquestFileReader::getBordersData(){
+    return bordersData.adjacent;
 }
 
 
@@ -433,6 +446,36 @@ ostream& operator<<(ostream& out, const ConquestFileReaderAdapter &conquestLoade
 }
 
 bool ConquestFileReaderAdapter::parse(){
-    conquestLoader->parse();
-    return 0;
+    return conquestLoader->parse();
+}
+
+Map* ConquestFileReaderAdapter::createMap(){
+    Map *map = new Map(); // new Map
+    // add continents to the Map
+    for (int i = 0; i < conquestLoader->getContinentsData(0).size(); i++){
+        Continent *continent = new Continent(conquestLoader->getContinentsData(0)[i], stoi(conquestLoader->getContinentsData(1)[i]));
+        map->addContinent(continent);
+    }
+    
+    // add territories to the Map
+    for (int i = 0; i < conquestLoader->getTerritoriesData(0).size(); i++){
+        Territory *country = new Territory(conquestLoader->getTerritoriesData(0)[i], conquestLoader->getTerritoriesData(1)[i]);
+        map->addTerritory(country);
+        // add territories to the continent
+        int contId = 0;
+        auto it = find(conquestLoader->getContinentsData(0).begin(), conquestLoader->getContinentsData(0).end(), conquestLoader->getTerritoriesData(1)[i]);
+        if (it != conquestLoader->getContinentsData(0).end()){
+            contId = it - conquestLoader->getContinentsData(0).begin();
+        }
+        map->addTerritoryToContinent(country, contId);
+    } 
+    
+    // add borders
+    for(int i = 0; i < conquestLoader->getBordersData().size(); i++){
+        for(int j = 1; conquestLoader->getBordersData()[i].size() > 1 && j < conquestLoader->getBordersData()[i].size(); j++){
+             map->addBorderIndex(i, stoi(conquestLoader->getBordersData()[i][j]) - 1);
+            }
+        }
+
+    return map;
 }

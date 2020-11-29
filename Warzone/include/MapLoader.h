@@ -29,11 +29,11 @@ class MapLoader{
         struct countries {
             vector<string> names;
             vector<string> continentId;
-            vector<vector<string> > pos;
+            vector<vector<string>> pos;
         } countriesData;
         // data container for borders
         struct borders {
-            vector<vector<string> > adjacent;
+            vector<vector<string>> adjacent;
         } bordersData;
 
         string mapPath; // path to the .map file
@@ -59,8 +59,11 @@ class ConquestFileReader{
         bool parseContinent(string line); // parse continents block in the .map file
         bool parseTerritory(string line); // parse territories block in the .map file
         void showResult();
-        void convertTerritoryToId();
+        void convertTerritoryToInt();
         int getTerritoryId(const string &name);
+        vector<string> getContinentsData(int id);
+        vector<string> getTerritoriesData(int id);
+        vector<vector<string>> getBordersData();
     private:
         string mapPath; // path to the .map file
         int error;
@@ -89,6 +92,7 @@ class ConquestFileReaderAdapter : public MapLoader{
         ConquestFileReaderAdapter& operator=(const ConquestFileReaderAdapter &conquestLoaderAdapter);
         friend ostream& operator<<(ostream& out, const ConquestFileReaderAdapter &conquestLoaderAdapter);
         bool parse(); // override MapLoader parse
+        Map* createMap(); // override MapLoader createMap
     private:
         ConquestFileReader *conquestLoader;
 
