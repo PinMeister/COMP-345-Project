@@ -1,5 +1,4 @@
-#ifndef MAPLOADER_H
-#define MAPLOADER_H
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -30,21 +29,78 @@ class MapLoader{
         struct countries {
             vector<string> names;
             vector<string> continentId;
-            vector<vector<string> > pos;
+            vector<vector<string>> pos;
         } countriesData;
         // data container for borders
         struct borders {
-            vector<vector<string> > adjacent;
+            vector<vector<string>> adjacent;
         } bordersData;
 
         string mapPath; // path to the .map file
         int error; // number of errors found when parsing and creating the map
 
-        vector<string> split(const string &line, char delim); // split string
         bool parseContinent(string line); // parse continents block in the .map file
         bool parseCountry(string line); // parse countries block in the .map file
         bool parseBorder(string line); // parse borders block in the .map file
-        bool isDigit(const string &str); // check if a string is a number
         void clearData(); // clear arrays in data containers
 };
-#endif 
+
+// Load a conquest map file
+class ConquestFileReader{
+    public:
+        // constructors
+        ConquestFileReader(string path);
+        ConquestFileReader(const ConquestFileReader &conquestLoader);
+        ~ConquestFileReader();
+        // overloading assignment and string insertion
+        ConquestFileReader& operator=(const ConquestFileReader &conquestLoader);
+        friend ostream& operator<<(ostream& out, const ConquestFileReader &conquestLoader);
+
+        bool parse();
+        string getPath();
+        bool parseContinent(string line); // parse continents block in the .map file
+        bool parseTerritory(string line); // parse territories block in the .map file
+        void showResult(); // for debug
+        void convertTerritoryToInt(); // change territory name to its index in vector
+        int getTerritoryId(const string &name); // get territory index in the vector
+        vector<string> getContinentsData(int id); // return struct continentsData
+        vector<string> getTerritoriesData(int id); // return struct territoriesData
+        vector<vector<string>> getBordersData(); // return struct bordersData
+    private:
+        string mapPath; // path to the .map file
+        int error;
+        // data container for continents
+        struct continents {
+            vector<string> names;
+            vector<string> armyNums;
+        } continentsData;
+        // data container for territories
+        struct territories {
+            vector<string> names;
+            vector<string> continentId;
+        } territoriesData;
+        // data container for borders
+        struct borders {
+            vector<vector<string> > adjacent;
+        } bordersData;
+};
+
+// Adapter for loading a conqest map file and create a Map obj
+class ConquestFileReaderAdapter : public MapLoader{
+    public:
+        ConquestFileReaderAdapter(ConquestFileReader *conquestLoader); // construtor
+        ConquestFileReaderAdapter(const ConquestFileReaderAdapter &conquestLoaderAdapter); // copy constructor
+        ~ConquestFileReaderAdapter(); // destructor
+        // overloading assignment and string insertion
+        ConquestFileReaderAdapter& operator=(const ConquestFileReaderAdapter &conquestLoaderAdapter);
+        friend ostream& operator<<(ostream& out, const ConquestFileReaderAdapter &conquestLoaderAdapter);
+        bool parse(); // override MapLoader parse
+        Map* createMap(); // override MapLoader createMap
+    private:
+        ConquestFileReader *conquestLoader;
+
+};
+
+// free functions
+vector<string> split(const string &line, char delim);
+bool isDigit(const string &str);

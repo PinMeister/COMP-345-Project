@@ -44,6 +44,7 @@ int main(){
 
     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
     map = gameEngine->chooseMap(); // choose map to start the game
+    cout << "Setting map..." << endl;
     gameEngine->setMap(map); // set the new map from the maploader
     cout << "Map AFTER user chooses: " << gameEngine->map << endl;
 
@@ -177,17 +178,31 @@ Map* GameEngine::chooseMap() {
     bool validMap = 0;
     Map* map = NULL;
     while(validMap != 1) {
-        cout << "Which file do you want to use as the map?\n\n";
+        cout << "Which file do you want to use as the map?\n";
         string filePath;
         cin >> filePath;
-        MapLoader* mapL = new MapLoader(filePath); // load the file
-        validMap = mapL->parse(); // check if it is a valid map
-        map = mapL->createMap(); // get the map
-
-        // delete pointer and dangling pointer
-        delete mapL;
-        mapL = NULL;
+        // if file name contains Conquest_
+        if (filePath.find("Conquest_") != string::npos) {
+            // use the adapter to read conquest maps
+            ConquestFileReader *conquestLoader = new ConquestFileReader(filePath);
+            ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(conquestLoader);
+            validMap = adapter->parse();
+            cout << "Creating map..." << endl;
+            map = adapter->createMap();
+            cout << "Confirming Conquest map..." << endl;
+            delete adapter;
+            adapter = nullptr;
+        }
+        else {
+            MapLoader* mapL = new MapLoader(filePath); // load the file
+            validMap = mapL->parse(); // check if it is a valid map
+            map = mapL->createMap(); // get the map
+            // delete pointer and dangling pointer
+            delete mapL;
+            mapL = NULL;
+        }
     }
+    cout << map << endl;
     return map;
 }
 
@@ -205,7 +220,7 @@ int GameEngine::getPlayerNum() {
 void GameEngine::setPlayerNum() {
     int tempnumberOfPlayers = 0;
     do {
-        cout << "How many players do you want in the game (2-5 players)?\n\n";
+        cout << "How many players do you want in the game (2-5 players)?\n";
 		cin >> tempnumberOfPlayers;
 	} while (tempnumberOfPlayers < 2 || tempnumberOfPlayers > 5);
 
@@ -222,8 +237,11 @@ string gameEnd;
     
     do {
         cout << endl << "Round: " << to_string(round + 1) << endl;
-        cout << "End game? (Y/N)";
+        cout << "End game? (Y/N)" << endl;
 		cin >> gameEnd;
+        if (gameEnd == "Y") {
+            break;
+        }
         round++;
         if (phaseObserver != nullptr) {
             phaseObserver->setPhase("Reinforcement Phase");

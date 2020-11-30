@@ -10,6 +10,8 @@
 
 using namespace std;
 
+//**************** MapLoader ****************
+
 // constructor
 MapLoader::MapLoader(string path){
     mapPath = path;
@@ -64,14 +66,12 @@ bool MapLoader::parse(){
             if (line.find("[continents]") != string::npos){
                 currentBlock = 0; // update state
                 continue; // skip this line
-            }
             // if the line contains countries block
-            else if (line.find("[countries]") != string::npos){
+            }else if (line.find("[countries]") != string::npos){
                 currentBlock = 1;
                 continue;
-            }
             // if the line contains borders block
-            else if (line.find("[borders]") != string::npos){
+            }else if (line.find("[borders]") != string::npos){
                 currentBlock = 2;
                 continue;
             }
@@ -203,8 +203,18 @@ bool MapLoader::parseBorder(string line){
     return 0;
 }
 
+// clear all the arrays from the structs
+void MapLoader::clearData(){
+    continentsData.names.clear();
+    continentsData.armyNums.clear();
+    countriesData.names.clear();
+    countriesData.continentId.clear();
+    countriesData.pos.clear();
+    bordersData.adjacent.clear();
+}
+
 // split a string with a specified delimiter and return an array of elements
-vector<string> MapLoader::split(const string &line, char delim){
+vector<string> split(const string &line, char delim){
     vector<string> result;
     stringstream sstream(line);
     string element;
@@ -216,17 +226,284 @@ vector<string> MapLoader::split(const string &line, char delim){
 }
 
 // check if a string is a number
-bool MapLoader::isDigit(const string &str){
+bool isDigit(const string &str){
     // return if a string contains a non-number character
     return (str.find_first_not_of("0123456789") == string::npos);
 }
 
-// clear all the arrays from the structs
-void MapLoader::clearData(){
-    continentsData.names.clear();
-    continentsData.armyNums.clear();
-    countriesData.names.clear();
-    countriesData.continentId.clear();
-    countriesData.pos.clear();
-    bordersData.adjacent.clear();
+
+//**************** ConquestFileReader ****************
+
+// constructor
+ConquestFileReader::ConquestFileReader(string path){
+    mapPath = path;
+    error = 0;
+}
+
+// copy constructor
+ConquestFileReader::ConquestFileReader(const ConquestFileReader &conquestLoader){
+    mapPath = conquestLoader.mapPath;
+    error = conquestLoader.error;
+}
+
+// destructor
+ConquestFileReader::~ConquestFileReader(){
+    mapPath = "";
+    error = 0;
+}
+
+// assignment operator
+ConquestFileReader& ConquestFileReader::operator=(const ConquestFileReader &conquestLoader){
+    if (this != &conquestLoader){
+        this->mapPath = conquestLoader.mapPath;
+        this->error = conquestLoader.error;
+    }
+    return *this;
+}
+
+// stream insertion
+ostream& operator<<(ostream& out, const ConquestFileReader &conquestLoader){
+    out << "Path: " << conquestLoader.mapPath << "\nError(s): " << conquestLoader.error;
+    return out;
+}
+
+// parse conquest map
+bool ConquestFileReader::parse(){
+    ifstream mapFile(mapPath); // open .map file
+    // if successful
+    if (mapFile.is_open()){
+        string line;
+        int currentBlock = -1; // current state
+        // read the whole text file, 1 line at a time
+        while (getline(mapFile, line)) {
+            // if the line contains continents block,
+            if (line.find("[Continents]") != string::npos){
+                currentBlock = 0; // update state
+                continue; // skip this line
+            // if the line contains countries block
+            }else if (line.find("[Territories]") != string::npos){
+                currentBlock = 1;
+                continue;
+            }
+            if (!line.empty()){
+                // remove whitespaces
+                line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
+                // check for state
+                switch(currentBlock){
+                    case 0:
+                        parseContinent(line); // parse a single line in continents block
+                        break;
+                    case 1:
+                        parseTerritory(line); // parse a single line in territories block
+                        break;
+                }
+            }
+        }
+        mapFile.close();
+        convertTerritoryToInt(); // change territory name string to int
+        cout << "Parse completed, " << error << " errors found." << endl;
+        if (error > 0){
+            return 0;
+        }
+    // if not successful
+    }else{
+        cout << "Unable to open map file " << mapPath << endl;
+        return 0;
+    }
+    return 1;
+}
+
+// return map path as string
+string ConquestFileReader::getPath(){
+    return mapPath;
+}
+
+// parse a single line in continents block
+// return bool
+bool ConquestFileReader::parseContinent(string line){
+    vector<string> result = split(line, '=');
+    // if the size of result array is 2
+    if (result.size() >= 2){
+        // if the continent already exists
+        if (find(continentsData.names.begin(), continentsData.names.end(), result[0]) != continentsData.names.end()){
+            error += 1;
+            cout << result[0] << " continent already exists!" << endl;
+        }
+        // store the data in the continents data container
+        continentsData.names.push_back(result[0]);
+        continentsData.armyNums.push_back(result[1]);
+        return 1;
+    }
+    return 0;
+}
+
+// parse a single line in territories block
+// return bool
+bool ConquestFileReader::parseTerritory(string line){
+    vector<string> result = split(line, ',');
+    if (result.size() >= 5){
+        // if the territory already exists
+        if (find(territoriesData.names.begin(), territoriesData.names.end(), result[0]) != territoriesData.names.end()){
+            error += 1;
+            cout << result[0] << " territory already exists!" << endl;
+        }
+        // find continent
+        int contId = 0;
+        // get continent index
+        auto it = find(continentsData.names.begin(), continentsData.names.end(), result[3]);
+        if (it != continentsData.names.end()){
+            contId = it - continentsData.names.begin();
+        }else{
+            error += 1;
+            cout << result[3] << " continent does not exist!" << endl;
+        }
+        // store the data in the territories data container
+        territoriesData.names.push_back(result[0]);
+        territoriesData.continentId.push_back(to_string(contId));
+
+        // add borders
+        vector<string> temp;
+        temp.push_back(result[0]);
+        for(int i = 4; i < result.size(); i++){
+            temp.push_back(result[i]);
+        }
+        bordersData.adjacent.push_back(temp);
+        return 1;
+    }
+    return 0;
+}
+
+// change territory name from string to int in the borders data container
+void ConquestFileReader::convertTerritoryToInt(){
+    for(int i = 0; i < bordersData.adjacent.size(); i++){
+        for(int j = 1;j < bordersData.adjacent[i].size(); j++){
+            // get the index of the territory
+            string id = to_string(getTerritoryId(bordersData.adjacent[i][j]));
+            bordersData.adjacent[i][j] = id;
+        }
+    }
+}
+
+// return the index of the territory in its vector
+int ConquestFileReader::getTerritoryId(const string &name){
+    // find the territory
+    auto it = find(territoriesData.names.begin(), territoriesData.names.end(), name);
+    // return index + 1 if finds it
+    if (it != territoriesData.names.end()) {
+        return (it - territoriesData.names.begin()) + 1;
+    }
+    return 0;
+}
+
+// print out all the continents, territories, and borders
+void ConquestFileReader::showResult(){
+    // continents
+    for(int i = 0; i < continentsData.names.size(); i++){
+        cout << continentsData.names[i] << " ";
+    }
+    cout << "\n\n";
+    // territories
+    for(int i = 0; i < territoriesData.names.size(); i++){
+        cout << territoriesData.names[i] << " - " << territoriesData.continentId[i] << endl;
+    }
+    cout << "\n";
+    // borders
+    for(int i = 0; i < bordersData.adjacent.size(); i++){
+        for(int j = 0; j < bordersData.adjacent[i].size(); j++){
+            cout << bordersData.adjacent[i][j] << " - ";
+        }
+        cout << "\n";
+    }
+}
+
+// take an int 0 / 1
+// return the vector of continent names or continent army bonuses
+vector<string> ConquestFileReader::getContinentsData(int id){
+    if (id == 0){
+        return continentsData.names;
+    }else{
+        return continentsData.armyNums;
+    }
+}
+
+// take an int 0 / 1
+// return the vector of territory names or continent id
+vector<string> ConquestFileReader::getTerritoriesData(int id){
+    if (id == 0){
+        return territoriesData.names;
+    }else{
+        return territoriesData.continentId;
+    }
+}
+
+// return the vector of all neighbours
+vector<vector<string>> ConquestFileReader::getBordersData(){
+    return bordersData.adjacent;
+}
+
+
+//**************** ConquestFileReaderAdapter ****************
+
+// constructor
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(ConquestFileReader *conquestLoader) : MapLoader(conquestLoader->getPath()){
+    this->conquestLoader = conquestLoader;
+}
+
+// copy constructor
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(const ConquestFileReaderAdapter &conquestLoaderAdapter) : MapLoader(conquestLoaderAdapter){
+    delete this->conquestLoader;
+    this->conquestLoader = conquestLoaderAdapter.conquestLoader;
+}
+
+// assignment operator
+ConquestFileReaderAdapter& ConquestFileReaderAdapter::operator=(const ConquestFileReaderAdapter &conquestReaderAdapter){
+    if (this != &conquestReaderAdapter){
+        delete this->conquestLoader;
+        this->conquestLoader = conquestReaderAdapter.conquestLoader;
+    }
+    return *this;
+}
+
+// destructor
+ConquestFileReaderAdapter::~ConquestFileReaderAdapter(){
+    delete this->conquestLoader;
+    this->conquestLoader = nullptr;
+}
+
+// stream insertion
+ostream& operator<<(ostream& out, const ConquestFileReaderAdapter &conquestLoaderAdapter){
+    out << conquestLoaderAdapter.conquestLoader;
+    return out;
+}
+
+// override parse from MapLoader
+bool ConquestFileReaderAdapter::parse(){
+    // call conquest loader parse
+    return conquestLoader->parse();
+}
+
+// override createMap from MapLoader
+Map* ConquestFileReaderAdapter::createMap(){
+    Map *map = new Map(); // new Map
+    // add continents to the Map
+    for (int i = 0; i < conquestLoader->getContinentsData(0).size(); i++){
+        Continent *continent = new Continent(conquestLoader->getContinentsData(0)[i], stoi(conquestLoader->getContinentsData(1)[i]));
+        map->addContinent(continent);
+    }
+
+    // add territories to the Map
+    for (int i = 0; i < conquestLoader->getTerritoriesData(0).size(); i++){
+        Territory *country = new Territory(conquestLoader->getTerritoriesData(0)[i], conquestLoader->getTerritoriesData(1)[i]);
+        map->addTerritory(country);
+        // add territories to the continent
+        map->addTerritoryToContinent(country, stoi(conquestLoader->getTerritoriesData(1)[i]));
+    } 
+    // add borders
+    for(int i = 0; i < conquestLoader->getBordersData().size(); i++){
+        for(int j = 1; conquestLoader->getBordersData()[i].size() > 1 && j < conquestLoader->getBordersData()[i].size(); j++){
+             map->addBorderIndex(i, stoi(conquestLoader->getBordersData()[i][j]) - 1);
+            }
+        }
+        
+    return map;
 }
