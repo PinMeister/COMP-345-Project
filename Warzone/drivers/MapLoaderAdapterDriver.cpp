@@ -5,16 +5,19 @@ using namespace std;
 
 int main(){
     // create adapter and map objs
-    ConquestFileReader *conquestLoader = new ConquestFileReader("Warzone/maps/Conquest_Houston.map");
+    string path;
+    cin >> path;
+    ConquestFileReader *conquestLoader = new ConquestFileReader(path);
     ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(conquestLoader);
     Map *map;
     // use overrided functions to create a map
     if (adapter->parse()){
         cout << "Map is loaded.\n";
+        //conquestLoader->showResult();
         map = adapter->createMap();
         cout << "Map is created.\n";
     }
-    //conquestLoader->showResult();
+    
 
     // print out all the continents
     cout << "\nContinents:\n";

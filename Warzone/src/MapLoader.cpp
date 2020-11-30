@@ -348,13 +348,18 @@ bool ConquestFileReader::parseTerritory(string line){
             cout << result[0] << " territory already exists!" << endl;
         }
         // find continent
-        if (find(continentsData.names.begin(), continentsData.names.end(), result[3]) == continentsData.names.end()) {
+        int contId = 0;
+        // get continent index
+        auto it = find(continentsData.names.begin(), continentsData.names.end(), result[3]);
+        if (it != continentsData.names.end()){
+            contId = it - continentsData.names.begin();
+        }else{
             error += 1;
             cout << result[3] << " continent does not exist!" << endl;
         }
         // store the data in the territories data container
         territoriesData.names.push_back(result[0]);
-        territoriesData.continentId.push_back(result[3]);
+        territoriesData.continentId.push_back(to_string(contId));
 
         // add borders
         vector<string> temp;
@@ -485,18 +490,13 @@ Map* ConquestFileReaderAdapter::createMap(){
         Continent *continent = new Continent(conquestLoader->getContinentsData(0)[i], stoi(conquestLoader->getContinentsData(1)[i]));
         map->addContinent(continent);
     }
+
     // add territories to the Map
     for (int i = 0; i < conquestLoader->getTerritoriesData(0).size(); i++){
         Territory *country = new Territory(conquestLoader->getTerritoriesData(0)[i], conquestLoader->getTerritoriesData(1)[i]);
         map->addTerritory(country);
         // add territories to the continent
-        int contId = 0;
-        // get continent index
-        auto it = find(conquestLoader->getContinentsData(0).begin(), conquestLoader->getContinentsData(0).end(), conquestLoader->getTerritoriesData(1)[i]);
-        if (it != conquestLoader->getContinentsData(0).end()){
-            contId = it - conquestLoader->getContinentsData(0).begin();
-        }
-        map->addTerritoryToContinent(country, contId);
+        map->addTerritoryToContinent(country, stoi(conquestLoader->getTerritoriesData(1)[i]));
     } 
     // add borders
     for(int i = 0; i < conquestLoader->getBordersData().size(); i++){
@@ -504,6 +504,6 @@ Map* ConquestFileReaderAdapter::createMap(){
              map->addBorderIndex(i, stoi(conquestLoader->getBordersData()[i][j]) - 1);
             }
         }
-
+        
     return map;
 }
