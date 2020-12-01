@@ -2,20 +2,27 @@
 
 #include "../include/Orders.h"
 #include "../include/Cards.h"
+#include "../include/GameObservers.h"
+#include "../include/Player.h"
 
+class Order;
+class Hand;
+class OrdersList;
 class Territory;
 class Player;
+class GameEngine;
 
 class PlayerStrategy {
 
     friend class GameEngine;
 	friend class Player;
 	friend class Card;
+    friend class Order;
 
 	public:
         PlayerStrategy(Player* player); // base constructor, player owns strategy
         PlayerStrategy(const PlayerStrategy &strat); // copy constructor
-        PlayerStrategy& operator=(const PlayerStrategy& other); // assignment operator
+        PlayerStrategy& operator=(const PlayerStrategy &strat); // assignment operator
         // virtual orders
 
         virtual ~PlayerStrategy(); // desctructor
@@ -23,10 +30,20 @@ class PlayerStrategy {
         virtual vector<Territory*> toAttack(PhaseObserver *phaseObserver);
         virtual void issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) =0;
         //virtual void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver) = 0;  // actually I don't think we need this 
+
+        int getPlayerID();
+        Player* getPlayer();
+		vector<Order*> getPlayerOrders();
+		int getReinforcementPool();
+        Hand* getHand();
     private:
-    vector<Territory*> toDefendTerritory;
-	vector<Territory*> toAttackTerritory;
-    int reinforcementPool;
+
+    protected: // fields used in all child classes of this class
+        vector<Territory*> toDefendTerritory;
+        vector<Territory*> toAttackTerritory;
+        int reinforcementPool;
+        Player* player;
+        Hand* hand;
 
 };
 
@@ -45,6 +62,8 @@ class AggressivePlayerStrategy : public PlayerStrategy {
 	public:
         AggressivePlayerStrategy(Player* player); // base constructor
         AggressivePlayerStrategy(const AggressivePlayerStrategy &strat); // copy constructor
+        AggressivePlayerStrategy& operator=(const AggressivePlayerStrategy& strat);
+
         ~AggressivePlayerStrategy(); // destructor
 
 
@@ -60,6 +79,8 @@ class BenevolentPlayerStrategy : public PlayerStrategy {
 	public:
         BenevolentPlayerStrategy(Player* player); // base constructor
         BenevolentPlayerStrategy(const BenevolentPlayerStrategy &strat); // copy constructor
+        BenevolentPlayerStrategy& operator=(const BenevolentPlayerStrategy& strat);
+
         ~BenevolentPlayerStrategy(); // destructor
 
 		//void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver);

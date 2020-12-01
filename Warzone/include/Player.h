@@ -52,5 +52,6 @@ class Player{
 		vector<Territory*> get_neighbour_territories(Player* p);
 		vector<Territory*> get_friendly_neighbour(Player* p);
 		void setStrategy(PlayerStrategy *strategy);
+		Hand* getHand();
 };
 #endif 

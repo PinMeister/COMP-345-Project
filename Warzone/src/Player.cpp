@@ -47,13 +47,16 @@ Player& Player::operator=(const Player &player){
 	return *this;
 }
 
+
 //stream insertion operator for Player
 ostream& operator << (ostream &os, const Player &player){ 
 	return os << "Player:" << player.playerID << " Player territories: " << player.territories.size()  << " Player hand: " << player.hand  << "Player orders: " << player.orders.size();
 }
 
 vector<Territory*> Player::toDefend(PhaseObserver* phaseObserver) {
+	return strategy->toDefend(phaseObserver);
 
+	/*
 	time_t t;
 
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
@@ -126,6 +129,7 @@ vector<Territory*> Player::toDefend(PhaseObserver* phaseObserver) {
 				
 		}
 		return this->toDefendTerritory;
+	*/
 }
 
 // creates vector of countries to attack
@@ -133,6 +137,8 @@ vector<Territory*> Player::toDefend(PhaseObserver* phaseObserver) {
 // 2. neigbours not in controlled are non_allied_neighbours
 // 3. pick from non_allied_neighbours randomly and add to toAttackTerritory
 vector<Territory*> Player::toAttack(PhaseObserver* phaseObserver) {
+	return strategy->toAttack(phaseObserver);
+	/*
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
 	vector<Territory*> non_allied_neighbours = this->get_neighbour_territories(this); // neighbouring territories not controlled by player
 	time_t t;
@@ -208,9 +214,13 @@ vector<Territory*> Player::toAttack(PhaseObserver* phaseObserver) {
 	}
 	
 	return this->toAttackTerritory;
+	 */
 }
 
-void Player::issueOrder(GameEngine* gameEngine, PhaseObserver *phaseObserver) {
+void Player::issueOrder(GameEngine* gameEngine, PhaseObserver* phaseObserver) {
+	return strategy->issueOrder(gameEngine, phaseObserver);
+
+	/*
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
 
 	if (phaseObserver != nullptr) {
@@ -386,7 +396,7 @@ void Player::issueOrder(GameEngine* gameEngine, PhaseObserver *phaseObserver) {
 	}
 
 	gameEngine->Notify(phaseObserver);
-	
+	*/
 }
 
 // add territory to player and remove the territory from the another player
@@ -414,6 +424,12 @@ void Player::removeTerritory(Territory* territory){
 // return player's territories
 vector<Territory*> Player::getTerritories(){
 	return territories;
+}
+
+// return players hand
+Hand* Player::getHand()
+{
+	return hand;
 }
 
 // returns neighbours not controlled by player
