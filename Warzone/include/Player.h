@@ -51,6 +51,6 @@ class Player{
 		void setOrdersRef(vector<Order*> orders);
 		vector<Territory*> get_neighbour_territories(Player* p);
 		vector<Territory*> get_friendly_neighbour(Player* p);
-		void setStrategy(PlayerStrategy *strategy)
+		void setStrategy(PlayerStrategy *strategy);
 };
 #endif 
