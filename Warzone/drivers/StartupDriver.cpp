@@ -7,7 +7,7 @@ using namespace std;
 int main(){
     cout << "Loading Map" << "\n";
     // load and create a map
-    MapLoader *loader = new MapLoader("Warzone/maps/google.map");
+    MapLoader *loader = new MapLoader("Warzone/maps/bigeurope.map");
     Map* map;
     if (loader->parse()){
         map = loader->createMap();

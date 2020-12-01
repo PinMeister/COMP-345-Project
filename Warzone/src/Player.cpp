@@ -1,4 +1,5 @@
 #include "../include/Player.h"
+#include "../include/GameObservers.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -50,7 +51,7 @@ ostream& operator << (ostream &os, const Player &player){
 	return os << "Player:" << player.playerID << " Player territories: " << player.territories.size()  << " Player hand: " << player.hand  << "Player orders: " << player.orders.size();
 }
 
-vector<Territory*> Player::toDefend() {
+vector<Territory*> Player::toDefend(PhaseObserver* phaseObserver) {
 
 	time_t t;
 
@@ -59,7 +60,7 @@ vector<Territory*> Player::toDefend() {
 	// show territories controlled by player 
 	if (controlled.size() > 0)
 	{	
-		cout << "Currently controlled Territories and armies: "<< endl;
+		cout << "Player " << this->getPlayerID() + 1 << "'s currently controlled Territories and armies:"<< endl;
 		for (int i=0; i< controlled.size(); i++)
 		{
 			cout << " (" << i << ") "  + controlled[i]->getName()  + "   " << controlled[i]->getArmyNum() << endl;
@@ -71,7 +72,7 @@ vector<Territory*> Player::toDefend() {
 		return this->toDefendTerritory;	
 	}
 
-	cout << "Choose a territory to defend (number corresponding to territory):" << endl;
+	cout << "\nChoose a territory to defend (number corresponding to territory):" << endl;
 
 	//choose territory(ies) to defend
 	srand(time(NULL)); // different random outputs everytime it's run
@@ -105,15 +106,14 @@ vector<Territory*> Player::toDefend() {
 			else 
 			{
 				int decision = rand() % 100;  // take a random number from 0 to 100
-				cout << "Index is: " << decision << endl;
 				if (decision % 2 == 1 ) // if odd, finish picking
 				{
-					cout << "Finished Picking." << endl;
+					cout << "Finished picking.\n" << endl;
 					break;
 				}
 				else if (decision % 2 == 0 && controlled.size() > 0)
 				{
-					cout << "Pick another territory." << endl;
+					cout << "Pick another territory:" << endl;
 					index = rand() % controlled.size();
 				}				
 				else // if odd, continue picking
@@ -131,7 +131,7 @@ vector<Territory*> Player::toDefend() {
 // 1. get all territories controlled by player 
 // 2. neigbours not in controlled are non_allied_neighbours
 // 3. pick from non_allied_neighbours randomly and add to toAttackTerritory
-vector<Territory*> Player::toAttack() {
+vector<Territory*> Player::toAttack(PhaseObserver* phaseObserver) {
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
 	vector<Territory*> non_allied_neighbours = this->get_neighbour_territories(this); // neighbouring territories not controlled by player
 	time_t t;
@@ -181,10 +181,9 @@ vector<Territory*> Player::toAttack() {
 		if (this->toAttackTerritory.size() > 1 && deploy_limit>0)
 		{
 			int decision = rand() % 100;  // take a random number from 0 to 100
-			cout << "Decision is: " << decision << endl;
 			if (decision % 2 == 1) // if odd, finish picking
 			{
-				cout << "Finished Picking." << endl;
+				cout << "Finished picking.\n" << endl;
 				break;
 			}
 			else if (decision % 2 == 0 && non_allied_neighbours.size()>0) // if odd, continue picking
@@ -210,21 +209,22 @@ vector<Territory*> Player::toAttack() {
 	return this->toAttackTerritory;
 }
 
-// TODO issueOrder
-void Player::issueOrder() {
+void Player::issueOrder(GameEngine* gameEngine, PhaseObserver *phaseObserver) {
 	vector<Territory*> controlled = this->getTerritories(); // territories controlled by player
-	
 
-
-    // tell whose player's orders
-    cout << "\n\nPlayer: " << this->getPlayerID() << "'s  Orders" << endl;
+	if (phaseObserver != nullptr) {
+		phaseObserver->setPlayer(this);
+		phaseObserver->setInfo("");
+	}
 
     // gets territories to defend and attack of player
-    toDefendTerritory = this->toDefend();
-    toAttackTerritory = this->toAttack();
+    toDefendTerritory = this->toDefend(phaseObserver);
+    toAttackTerritory = this->toAttack(phaseObserver);
 
     int canDeploy = this->getReinforcementPool(); // get player's army pool
-    cout << "\n\nPlayer " << this->getPlayerID() << " currently has: " << canDeploy << " armies" << endl;
+
+	cout << "Player " + to_string(this->getPlayerID() + 1) + " currently has " + to_string(canDeploy) + " armies." << endl; 
+
     // 1. while have armies, deploy them until none or stop
     while (canDeploy > 0)
     {
@@ -237,7 +237,10 @@ void Player::issueOrder() {
                     srand(time(NULL));                       // different random outputs everytime it's run
                     int toDeploy = rand() % canDeploy + 1; // randomly choose a number from 0 to how many you can deploy max
                     canDeploy -= toDeploy;                   // subtract deploying armies from total pool
-                    cout << "Deploying " << toDeploy << " armies to " << toDefendTerritory[i]->getName() << endl;
+                    cout << "Deploying " << toDeploy << " armies to " << toDefendTerritory[i]->getName() + "."<< endl;	
+					if (phaseObserver != nullptr) {
+						phaseObserver->setInfo(phaseObserver->getInfo() + "Deploying " + to_string(toDeploy) + " armies to " + toDefendTerritory[i]->getName() + ".\n");
+					}
                     // TODO create deploy order issue
 					Deploy* deploy = new Deploy(this, toDeploy,toDefendTerritory[i]);
 					this->orders.push_back(deploy);
@@ -257,7 +260,6 @@ void Player::issueOrder() {
             break;
         }
     }
-	cout << "\n Advanced Orders " << endl;
 	// 2. advanced orders
 		vector<Territory*> allied_neighbours; // neighbouring territories controlled by player
 		vector<Territory*> enemy_neighbours; // neighbouring territories hostile to player
@@ -266,10 +268,12 @@ void Player::issueOrder() {
 		int decision = rand() % 100;  // take a random number from 0 to 100
 			if (decision % 2 == 0  || toDefendTerritory.size() < 2) // if even, attack
 			{
-				cout << "Player: "<< this->getPlayerID()<<  " chooses to attack" << endl;
+				cout << "Player " << this->getPlayerID() + 1 <<  " chooses to attack" << endl;
 				int index = rand() % toAttackTerritory.size();
 				auto all_neighbours = toAttackTerritory[index]->getNeighbours(); // get neighbours of enemy territory
 				cout << "Chosen enemy to attack: " << toAttackTerritory[index]->getName() << endl;
+				if (phaseObserver != nullptr) {
+						phaseObserver->setInfo(phaseObserver->getInfo() + "Attempting to attack " + toAttackTerritory[index]->getName() + ".\n"); }
 				cout << "\nEnemies's neighbours: ";
 				for (auto n : all_neighbours) {cout << n->getName() << "   ";}
 				cout << "\nYour Enemies: " ;
@@ -291,10 +295,14 @@ void Player::issueOrder() {
 						Advance* advanceAtk = new Advance(this, result[0], toAttackTerritory[index], attackNum);
 						this->orders.push_back(advanceAtk);
 						cout << "Attack order added" << endl;
+						if (phaseObserver != nullptr) {
+							phaseObserver->setInfo(phaseObserver->getInfo() + "Issuing attack from " + result[0]->getName() + " to " + toAttackTerritory[index]->getName() + ".\n"); }
 						break;
 						}
 						else  // if you don't have armies, redundant for now but will be implemented later
 						{ // test to see if it will break
+							if (phaseObserver != nullptr) {
+								phaseObserver->setInfo(phaseObserver->getInfo() + "No armies available to attack " + toAttackTerritory[index]->getName() + ".\n"); }
 							cout << "Don't have armies in " << result[0]->getName() << " to deploy to " << toAttackTerritory[index]->getName() << endl;
 							toDefendTerritory.erase(find(toDefendTerritory.begin(), toDefendTerritory.end(), result[0])); // pop from the defend list
 							continue;
@@ -303,10 +311,11 @@ void Player::issueOrder() {
             		else  // vector does not contain element
             		{
 						cout <<"You don't own: " << neighbour->getName()<< endl;
+						if (phaseObserver != nullptr) {
+							phaseObserver->setInfo(phaseObserver->getInfo() + "Unable to attack from " + neighbour->getName() + ".\n"); }
                			continue;
             		}
 				}
-				cout <<"\nAttacking Ended" << endl;
 			}
 			else // if odd, defend
 			
@@ -374,12 +383,15 @@ void Player::issueOrder() {
 	else {
 		cout << "You don't have cards to play!"<< endl;
 	}
+
+	gameEngine->Notify(phaseObserver);
+	
 }
 
 // add territory to player and remove the territory from the another player
 void Player::addTerritory(Territory* territory){
 	// if someone owns the territory, remove it from them
-	if (territory->getOwner() != NULL){
+	if (territory->getOwner() != nullptr){
 		territory->getOwner()->removeTerritory(territory);
 		territory->removeOwner();
 	}
