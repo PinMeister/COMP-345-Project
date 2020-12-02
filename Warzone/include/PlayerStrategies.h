@@ -4,6 +4,12 @@
 #include "../include/Cards.h"
 #include "../include/GameObservers.h"
 #include "../include/Player.h"
+#include "../include/GameEngine.h"
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
 
 class Order;
 class Hand;
@@ -11,6 +17,7 @@ class OrdersList;
 class Territory;
 class Player;
 class GameEngine;
+class PhaseObserver;
 
 class PlayerStrategy {
 
@@ -20,35 +27,31 @@ class PlayerStrategy {
     friend class Order;
 
 	public:
+        PlayerStrategy();
         PlayerStrategy(Player* player); // base constructor, player owns strategy
-        PlayerStrategy(const PlayerStrategy &strat); // copy constructor
+        PlayerStrategy(const PlayerStrategy &copy); // copy constructor
         PlayerStrategy& operator=(const PlayerStrategy &strat); // assignment operator
         // virtual orders
 
         virtual ~PlayerStrategy(); // desctructor
-		virtual vector<Territory*> toDefend(PhaseObserver *phaseObserver);
-        virtual vector<Territory*> toAttack(PhaseObserver *phaseObserver);
+		virtual vector<Territory*> toDefend(PhaseObserver *phaseObserver) =0;
+        virtual vector<Territory*> toAttack(PhaseObserver *phaseObserver) =0;
         virtual void issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) =0;
         //virtual void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver) = 0;  // actually I don't think we need this 
 
-        int getPlayerID();
-        Player* getPlayer();
-		vector<Order*> getPlayerOrders();
-		int getReinforcementPool();
-        Hand* getHand();
+        void setPlayer(Player* player);
     private:
 
     protected: // fields used in all child classes of this class
         vector<Territory*> toDefendTerritory;
         vector<Territory*> toAttackTerritory;
-        int reinforcementPool;
         Player* player;
-        Hand* hand;
-
 };
 
 class HumanPlayerStrategy : public PlayerStrategy {
 	public:
+        HumanPlayerStrategy();
+        HumanPlayerStrategy(Player* player);
 		//void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver);
         void virtual issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver);
         vector<Territory*> toDefend(PhaseObserver *phaseObserver);
@@ -60,9 +63,10 @@ class HumanPlayerStrategy : public PlayerStrategy {
 // always attack with it until it can't anymore, fortifies in order to maximize aggregation of forces in one country)
 class AggressivePlayerStrategy : public PlayerStrategy {
 	public:
+        AggressivePlayerStrategy();
         AggressivePlayerStrategy(Player* player); // base constructor
-        AggressivePlayerStrategy(const AggressivePlayerStrategy &strat); // copy constructor
-        AggressivePlayerStrategy& operator=(const AggressivePlayerStrategy& strat);
+        AggressivePlayerStrategy(const AggressivePlayerStrategy &copy); // copy constructor
+        AggressivePlayerStrategy& operator=(const AggressivePlayerStrategy& strat); // assignment operator
 
         ~AggressivePlayerStrategy(); // destructor
 
@@ -77,9 +81,10 @@ class AggressivePlayerStrategy : public PlayerStrategy {
 // BenevolentPlayerStrategy (reinforce weakest countries, never attacks, fortifies to move armies to weaker countries)
 class BenevolentPlayerStrategy : public PlayerStrategy {
 	public:
+        BenevolentPlayerStrategy();
         BenevolentPlayerStrategy(Player* player); // base constructor
         BenevolentPlayerStrategy(const BenevolentPlayerStrategy &strat); // copy constructor
-        BenevolentPlayerStrategy& operator=(const BenevolentPlayerStrategy& strat);
+        BenevolentPlayerStrategy& operator=(const BenevolentPlayerStrategy& strat); // assignment operator
 
         ~BenevolentPlayerStrategy(); // destructor
 
@@ -91,8 +96,12 @@ class BenevolentPlayerStrategy : public PlayerStrategy {
 
 class NeutralPlayerStrategy : public PlayerStrategy {
 	public:
+        NeutralPlayerStrategy();
+        NeutralPlayerStrategy(Player* player); // base constructor
+        NeutralPlayerStrategy(const NeutralPlayerStrategy &copy); // copy constructor
+
 		//void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver);
         void virtual issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver);
-        vector<Territory*> toDefend(PhaseObserver *phaseObserver);
-        vector<Territory*> toAttack(PhaseObserver *phaseObserver);
+        vector<Territory*> virtual toDefend(PhaseObserver *phaseObserver);
+        vector<Territory*> virtual toAttack(PhaseObserver *phaseObserver);
 };

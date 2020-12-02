@@ -65,15 +65,46 @@ int main(){
     vector<Order*> defaultOrders; // default set of battle orders
     vector<Card*> defaultCards; // some cards
     Deck* defaultDeck = new Deck(); // default deck of cards
+    PlayerStrategy* strategy; // default strategy
 
     gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
 
     // create players
     vector<Player*> players;
     for(int i = 0; i < playerNum; i++){
-        Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
+        Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i, strategy);
         players.push_back(player);
         cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
+
+        // set the player strategy (human, aggressive, benevolent or neutral)
+        int stratNum;
+        cout << "\nStrategy for Player " << 
+        i+1 << ":\n 1 --- Human\n 2 --- Aggressive\n 3 --- Benevolent\n 4 --- Neutral\nType number corresponding to your choice: "; 
+        do 
+        {
+            cin >> stratNum;
+            if (stratNum < 1 || stratNum > 4)
+            {
+                cout << "\nNumber should be between 1 and 4, please try again."<<endl;
+                cout << "1 --- Human\n 2 --- Aggressive\n 3 --- Benevolent\n 4 --- Neutral\nType number corresponding to your choice: "; 
+            }
+        }
+        while (stratNum < 1 || stratNum > 4);  // if choice made is not between 1 and 4, stay in the loop
+        switch (stratNum)   // once valid choice is made, goes into switch case to set player strategy
+        {
+            case 1: 
+                players.at(i)->setStrategy(new HumanPlayerStrategy(player)); 
+                break;
+            case 2: 
+                players.at(i)->setStrategy(new AggressivePlayerStrategy(player)); 
+                break;
+            case 3: 
+                players.at(i)->setStrategy(new BenevolentPlayerStrategy(player)); 
+                break;
+            case 4: 
+                players.at(i)->setStrategy(new NeutralPlayerStrategy(player)); 
+                break;
+        }
     }
     
     gameEngine->players = players;

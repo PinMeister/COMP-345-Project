@@ -2,9 +2,23 @@
 #include "../include/GameEngine.h"
 #include "../include/GameObservers.h"
 
+#include <iostream>
+#include <ctime>
+#include <algorithm>
+#include <random>
+#include <stdlib.h>
+#include <time.h>
+#include <chrono>
+#include <cmath>
+
 using namespace std;
 
-PlayerStrategy::PlayerStrategy(Player* player) {}
+PlayerStrategy::PlayerStrategy(Player* player) : player(player) {}
+
+PlayerStrategy::PlayerStrategy(const PlayerStrategy &copy) 
+{
+    this->player = copy.player;
+}
 
 PlayerStrategy::~PlayerStrategy() { }
 
@@ -12,30 +26,17 @@ vector<Territory*> PlayerStrategy::toDefend(PhaseObserver *phaseObserver) { retu
 	
 vector<Territory*> PlayerStrategy::toAttack(PhaseObserver *phaseObserver) { return toAttackTerritory; }
 
-int PlayerStrategy::getReinforcementPool()
-{
-	return reinforcementPool;
-}
 
-Player* PlayerStrategy::getPlayer()
-{
-    return player;
-}
 
-vector<Order*> Player :: getPlayerOrders(){
-	return orders;
-}
-
-Hand* Player::getHand()
+void PlayerStrategy::setPlayer(Player* player) 
 {
-    return hand;
+    this->player = player;
 }
 
 // assignment operator
 PlayerStrategy& PlayerStrategy::operator=(const PlayerStrategy& strat)
 {
     player = strat.player;
-    reinforcementPool = player->getReinforcementPool();
     toDefendTerritory.clear(); // clears the territory
 
     // gets all player owned territories pushes to todefend list
@@ -55,6 +56,10 @@ PlayerStrategy& PlayerStrategy::operator=(const PlayerStrategy& strat)
 }
 
 // TO DO: Repurpose issueOrder, toAttack and toDefend to conform to each strategy
+
+HumanPlayerStrategy::HumanPlayerStrategy(Player* player) : PlayerStrategy(player) { }
+
+
 void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
 
 }
@@ -81,7 +86,7 @@ vector<Territory*> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver) {
 AggressivePlayerStrategy::AggressivePlayerStrategy(Player* player) : PlayerStrategy(player) { }
 
 // copy constructor
-AggressivePlayerStrategy::AggressivePlayerStrategy(const AggressivePlayerStrategy &strat) : PlayerStrategy(strat) { }
+AggressivePlayerStrategy::AggressivePlayerStrategy(const AggressivePlayerStrategy &copy) : PlayerStrategy(copy) { }
 
 // destructor
 AggressivePlayerStrategy::~AggressivePlayerStrategy() {}
@@ -96,10 +101,10 @@ AggressivePlayerStrategy& AggressivePlayerStrategy::operator=(const AggressivePl
 
 void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) 
 {
-    vector<Territory*> controlled = getPlayer()->getTerritories(); // territories controlled by player
+    vector<Territory*> controlled = player->getTerritories(); // territories controlled by player
 
 	if (phaseObserver != nullptr) {
-		phaseObserver->setPlayer(this->getPlayer());
+		phaseObserver->setPlayer(this->player);
 		phaseObserver->setInfo("");
 	}
 
@@ -107,9 +112,9 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
     this->toDefendTerritory = this->toDefend(phaseObserver);
     toAttackTerritory = this->toAttack(phaseObserver);
 
-    int canDeploy = this->getReinforcementPool(); // get player's army pool
+    int canDeploy = player->getReinforcementPool(); // get player's army pool
 
-	cout << "Player " + to_string(this->getPlayerID() + 1) + " currently has " + to_string(canDeploy) + " armies." << endl; 
+	cout << "Player " + to_string(player->getPlayerID() + 1) + " currently has " + to_string(canDeploy) + " armies." << endl; 
 
     // 1. while have armies, deploy them until none or stop
     while (canDeploy > 0)
@@ -128,8 +133,8 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 						phaseObserver->setInfo(phaseObserver->getInfo() + "Deploying " + to_string(toDeploy) + " armies to " + toDefendTerritory[i]->getName() + ".\n");
 					}
                     // TODO create deploy order issue
-					Deploy* deploy = new Deploy(this->getPlayer(), toDeploy,toDefendTerritory[i]);
-					this->getPlayerOrders().push_back(deploy);
+					Deploy* deploy = new Deploy(player, toDeploy,toDefendTerritory[i]);
+					player->getPlayerOrders().push_back(deploy);
 					deploy->execute();
                     continue;
                 }
@@ -154,7 +159,7 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 		int decision = rand() % 100;  // take a random number from 0 to 100
 			if (decision % 2 == 0  || toDefendTerritory.size() < 2) // if even, attack
 			{
-				cout << "Player " << this->getPlayerID() + 1 <<  " chooses to attack" << endl;
+				cout << "Player " << player->getPlayerID() + 1 <<  " chooses to attack" << endl;
 				int index = rand() % toAttackTerritory.size();
 				auto all_neighbours = toAttackTerritory[index]->getNeighbours(); // get neighbours of enemy territory
 				cout << "Chosen enemy to attack: " << toAttackTerritory[index]->getName() << endl;
@@ -163,7 +168,7 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 				cout << "\nEnemies's neighbours: ";
 				for (auto n : all_neighbours) {cout << n->getName() << "   ";}
 				cout << "\nYour Enemies: " ;
-				auto all_hostile = this->getPlayer()->get_neighbour_territories(this->getPlayer()); // get unfriendly
+				auto all_hostile = this->player->get_neighbour_territories(this->player); // get unfriendly
 				for (auto n : all_hostile) {cout << n->getName() << "   ";}
 				cout << "\n" ;
 				cout << "\n" ;
@@ -171,15 +176,15 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 					auto result = find(toDefendTerritory.begin(), toDefendTerritory.end(), neighbour); 
             		if (result != toDefendTerritory.end()) // vector contains the element (get own territory close to hostile territory)
            			{
-						cout << "Player: "<< this->getPlayerID()<< " chooses to deploy armies from: " << result[0]->getName() <<" to attack " << toAttackTerritory[index]->getName()<<endl; 
+						cout << "Player: "<< player->getPlayerID()<< " chooses to deploy armies from: " << result[0]->getName() <<" to attack " << toAttackTerritory[index]->getName()<<endl; 
 						if (result[0]->getArmyNum() > 0) // if own territory has army  (TODO remove the equal later on for check)
 						{// move random amount of army up to max number in that territory to toAttack Territory
 						// pop toAttack territory
 						cout << "Allied territory has armies to attack: " << result[0]->getArmyNum() << endl;
 						int attackNum = rand() % result[0]->getArmyNum() +1; 
 						cout << "To deploy " << attackNum << " armies from: " << result[0]->getName() << " to attack: " <<toAttackTerritory[index]->getName() << endl;
-						Advance* advanceAtk = new Advance(this->getPlayer(), result[0], toAttackTerritory[index], attackNum);
-						this->getPlayerOrders().push_back(advanceAtk);
+						Advance* advanceAtk = new Advance(this->player, result[0], toAttackTerritory[index], attackNum);
+						player->getPlayerOrders().push_back(advanceAtk);
 						cout << "Attack order added" << endl;
 						if (phaseObserver != nullptr) {
 							phaseObserver->setInfo(phaseObserver->getInfo() + "Issuing attack from " + result[0]->getName() + " to " + toAttackTerritory[index]->getName() + ".\n"); }
@@ -206,12 +211,12 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 			else // if odd, defend
 			
 			{
-				cout << "Player: "<< this->getPlayerID()<<  " chooses to defend" << endl;
+				cout << "Player: "<< player->getPlayerID()<<  " chooses to defend" << endl;
 				int index = rand() % toDefendTerritory.size();
 				auto all_neighbours = toDefendTerritory[index]->getNeighbours(); // get neighbours of this territory
 				cout << "Chosen territory to defend: " << toDefendTerritory[index]->getName() << endl;
 
-				auto all_friendly = this->getPlayer()->get_friendly_neighbour(this->getPlayer()); // get all allied neighbours of player
+				auto all_friendly = this->player->get_friendly_neighbour(this->player); // get all allied neighbours of player
 				cout << "Your Allied territories:" << endl;
 				for (auto n : all_friendly) {cout << n->getName() << "   ";}
 				cout << "\n" ;
@@ -220,15 +225,15 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 					auto result = find(controlled.begin(), controlled.end(), neighbour);
             		if (result != controlled.end()) // vector contains the element
            			{
-						cout << "Player: "<< this->getPlayerID()<< " chooses to deploy armies from: " << result[0]->getName()<< " to defend " << toDefendTerritory[index]->getName() << endl; 
+						cout << "Player: "<< player->getPlayerID()<< " chooses to deploy armies from: " << result[0]->getName()<< " to defend " << toDefendTerritory[index]->getName() << endl; 
 						if (result[0]->getArmyNum() > 0) // TODO remove equal later when execution
 						{// move random amount of army up to max number in that territory to toDefend Territory
 						// pop toDefend territory
 						cout << "Allied territory has armies to move: " << result[0]->getArmyNum() << endl;
 						int moveNum = rand() % result[0]->getArmyNum() +1;
 						cout << "To deploy " << moveNum << " armies from: " << result[0]->getName() << " to defend: " <<toDefendTerritory[index]->getName() << endl;
-						Advance* advanceDef = new Advance(this->getPlayer(), result[0], toDefendTerritory[index], moveNum);
-						this->getPlayerOrders().push_back(advanceDef);
+						Advance* advanceDef = new Advance(this->player, result[0], toDefendTerritory[index], moveNum);
+						player->getPlayerOrders().push_back(advanceDef);
 						cout << "Defend order added" << endl;
 						break;
 						}
@@ -254,16 +259,16 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 	Deck* deck = new Deck(); 
 	
 	// if player has cards, they'll play one card at random 
-	if (this->getPlayer()->getHand()->getNumberHandCards() > 0) 
+	if (this->player->getHand()->getNumberHandCards() > 0) 
 	{
-	cout << "Player " << this->getPlayerID() << " has cards:"<< endl;
-	for (int i = 0; i < hand->getNumberHandCards(); i++)
+	cout << "Player " << player->getPlayerID() << " has cards:"<< endl;
+	for (int i = 0; i < player->getHand()->getNumberHandCards(); i++)
 	{    
-		cout << this->hand->getCards()[i]->getCardType() << "   ";
+		cout << player->getHand()->getCards()[i]->getCardType() << "   ";
 	}
 	cout << "\n";
-
-	this->getPlayer()->getHand()->getCards()[rand() % this->getPlayer()->getHand()->getNumberHandCards()]->play(this->getPlayerOrders(), *deck);
+    auto player_orders = player->getPlayerOrders();
+	this->player->getHand()->getCards()[rand() % player->getHand()->getNumberHandCards()]->play(player_orders, *deck);
 	cout << " ";
 	}
 	else {
@@ -277,12 +282,12 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 vector<Territory*> AggressivePlayerStrategy::toDefend(PhaseObserver *phaseObserver) {
     time_t t;
 
-	vector<Territory*> controlled = this->getPlayer()->getTerritories(); // territories controlled by player
+	vector<Territory*> controlled = this->player->getTerritories(); // territories controlled by player
 
 	// show territories controlled by player 
 	if (controlled.size() > 0)
 	{	
-		cout << "Player " << this->getPlayerID() + 1 << "'s currently controlled Territories and armies:"<< endl;
+		cout << "Player " << player->getPlayerID() + 1 << "'s currently controlled Territories and armies:"<< endl;
 		for (int i=0; i< controlled.size(); i++)
 		{
 			cout << " (" << i << ") "  + controlled[i]->getName()  + "   " << controlled[i]->getArmyNum() << endl;
@@ -358,7 +363,7 @@ vector<Territory*> AggressivePlayerStrategy::toAttack(PhaseObserver *phaseObserv
 	// 1. check if you have enough army to deploy to areas to add
 	// 2. if toAttackTerritory size is 0, pick index and check
 	// 3. if toAttackTerritory size is 1+, make decision (odd/even) to decide whether to continue picking or not
-	int deploy_limit = this->getReinforcementPool(); // get reinforcement pool to deploy
+	int deploy_limit = player->getReinforcementPool(); // get reinforcement pool to deploy
 
 	if (non_allied_neighbours.size() > 0) 
 	{
@@ -436,13 +441,21 @@ vector<Territory*> AggressivePlayerStrategy::toAttack(PhaseObserver *phaseObserv
 
 
 //  ---BenevolentPlayerStrategy (reinforce weakest countries, never attacks, fortifies to move armies to weaker countries) ---
+// base constructor
+BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player* player): PlayerStrategy(player) { }
 
+// copy constructor
+BenevolentPlayerStrategy::BenevolentPlayerStrategy(const BenevolentPlayerStrategy &copy) : PlayerStrategy(copy) { }
 
+// assignment operator
 BenevolentPlayerStrategy& BenevolentPlayerStrategy::operator=(const BenevolentPlayerStrategy& strat) 
 {
     PlayerStrategy::operator=(strat);
 		return *this;
 }
+
+// destructor
+BenevolentPlayerStrategy::~BenevolentPlayerStrategy() {}
 
 void BenevolentPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
 
@@ -459,6 +472,12 @@ vector<Territory*> BenevolentPlayerStrategy::toAttack(PhaseObserver *phaseObserv
 // void BenevolentPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
 //     issueOrder(gameEngine, phaseObserver);
 // }
+NeutralPlayerStrategy::NeutralPlayerStrategy(Player* player): PlayerStrategy(player) { }
+
+
+// copy constructor
+NeutralPlayerStrategy::NeutralPlayerStrategy(const NeutralPlayerStrategy &copy) : PlayerStrategy(copy) { }
+
 
 void NeutralPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
 
