@@ -12,117 +12,117 @@ using namespace std;
 
 
 // main driver
-// int main(){
-//     int numberOfPlayers = 0;
-//     vector<Player*> tempPlayers;
-//     MapLoader* maploader;
-//     Map* map;
-//     GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
+int main(){
+    int numberOfPlayers = 0;
+    vector<Player*> tempPlayers;
+    MapLoader* maploader;
+    Map* map;
+    GameEngine* gameEngine = new GameEngine(numberOfPlayers, tempPlayers, maploader, map);
 
-//     StatsObserver* statsObserver = new StatsObserver(gameEngine);
-//     PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
+    StatsObserver* statsObserver = new StatsObserver(gameEngine);
+    PhaseObserver* phaseObserver = new PhaseObserver(gameEngine);
 
-//     string phaseToggle; // Set phase observer on/off
-//     do {
-//         cout << "Turn off phase observer? (Y/N)" << endl;
-// 		cin >> phaseToggle;
-// 	} while (phaseToggle != "Y" && phaseToggle != "N");
-//     if (phaseToggle == "Y") {
-//         delete phaseObserver;
-//         phaseObserver = nullptr;
-//     }
+    string phaseToggle; // Set phase observer on/off
+    do {
+        cout << "Turn off phase observer? (Y/N)" << endl;
+		cin >> phaseToggle;
+	} while (phaseToggle != "Y" && phaseToggle != "N");
+    if (phaseToggle == "Y") {
+        delete phaseObserver;
+        phaseObserver = nullptr;
+    }
 
-//     string statsToggle; // Set stats observer on/off
-//     do {
-//         cout << "Turn off game stats observer? (Y/N)" << endl;
-// 		cin >> statsToggle;
-// 	} while (statsToggle != "Y" && statsToggle != "N");
-//     if (statsToggle == "Y") {
-//         delete statsObserver;
-//         statsObserver = nullptr;
-//     }
+    string statsToggle; // Set stats observer on/off
+    do {
+        cout << "Turn off game stats observer? (Y/N)" << endl;
+		cin >> statsToggle;
+	} while (statsToggle != "Y" && statsToggle != "N");
+    if (statsToggle == "Y") {
+        delete statsObserver;
+        statsObserver = nullptr;
+    }
 
-//     cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
-//     map = gameEngine->chooseMap(); // choose map to start the game
-//     cout << "Setting map..." << endl;
-//     gameEngine->setMap(map); // set the new map from the maploader
-//     cout << "Map AFTER user chooses: " << gameEngine->map << endl;
+    cout << "Map BEFORE user chooses: " << gameEngine->map << endl;
+    map = gameEngine->chooseMap(); // choose map to start the game
+    cout << "Setting map..." << endl;
+    gameEngine->setMap(map); // set the new map from the maploader
+    cout << "Map AFTER user chooses: " << gameEngine->map << endl;
 
-//     cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
-//     gameEngine->setPlayerNum(); // let user choose number of players
-//     cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
+    cout << "Number of player before user chooses: " << gameEngine->numberOfPlayers << endl;
+    gameEngine->setPlayerNum(); // let user choose number of players
+    cout << "Number of player after user chooses: " << gameEngine->numberOfPlayers << endl;
 
-//     // above code is the driver for game start - Part 1
+    // above code is the driver for game start - Part 1
 
-//     // below code is for gameplay and maingameloop - Part 3
-//     int playerNum = gameEngine->numberOfPlayers;
+    // below code is for gameplay and maingameloop - Part 3
+    int playerNum = gameEngine->numberOfPlayers;
 
-//     cout << "Creating the players and required items for the game: " << endl;
+    cout << "Creating the players and required items for the game: " << endl;
 
-//     // objects for players
-//     vector<Territory*> defaultTerritories; // players have no territories at first
-//     Hand* defaultHand = new Hand(); // to make default empty hand
-//     vector<Order*> defaultOrders; // default set of battle orders
-//     vector<Card*> defaultCards; // some cards
-//     Deck* defaultDeck = new Deck(); // default deck of cards
+    // objects for players
+    vector<Territory*> defaultTerritories; // players have no territories at first
+    Hand* defaultHand = new Hand(); // to make default empty hand
+    vector<Order*> defaultOrders; // default set of battle orders
+    vector<Card*> defaultCards; // some cards
+    Deck* defaultDeck = new Deck(); // default deck of cards
 
-//     gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
+    gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
 
-//     // create players
-//     vector<Player*> players;
-//     for(int i = 0; i < playerNum; i++){
-//         Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
-//         players.push_back(player);
-//         cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
-//     }
-    
-//     gameEngine->players = players;
+    // create players
+    vector<Player*> players;
+    for(int i = 0; i < playerNum; i++){
+        Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
+        players.push_back(player);
+        cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
+    }
 
-//     cout << "Players have been created" << endl;
-//     cout << "GameEngine player size " << gameEngine->players.size() << endl;
+    gameEngine->players = players;
 
-//     // create GameEngine
-//     cout << "\nCreating game" << "\n";
-//     Startup *startUp = new Startup(&players, map);
-//     cout << "startup phase completed" << "\n\n";
+    cout << "Players have been created" << endl;
+    cout << "GameEngine player size " << gameEngine->players.size() << endl;
 
-//     for(int i = 0; i < playerNum; i++){
-//         cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
-//     }
-   
-//     if (statsObserver != nullptr) {
-//         gameEngine->Notify(statsObserver);
-//     }
+    // create GameEngine
+    cout << "\nCreating game" << "\n";
+    Startup *startUp = new Startup(&players, map);
+    cout << "startup phase completed" << "\n\n";
 
-//     if (phaseObserver != nullptr) {
-//         gameEngine->mainGameLoop(phaseObserver);
-//     }
-//     else {
-//         gameEngine->mainGameLoop(nullptr);
-//     }
+    for(int i = 0; i < playerNum; i++){
+        cout << "Player " << i + 1 << " has " << players[i]->getReinforcementPool() <<  " armies" << endl;
+    }
 
-//     // free memory and dangling ptr
-//     delete startUp;
-//     delete gameEngine;
-//     delete defaultHand;
-//     delete defaultDeck;
+    if (statsObserver != nullptr) {
+        gameEngine->Notify(statsObserver);
+    }
 
-//     startUp = NULL;
-//     gameEngine = NULL;
-//     defaultHand = NULL;
-//     defaultDeck = NULL;
+    if (phaseObserver != nullptr) {
+        gameEngine->mainGameLoop(phaseObserver);
+    }
+    else {
+        gameEngine->mainGameLoop(nullptr);
+    }
 
-//     if (phaseObserver != nullptr) {
-//         delete phaseObserver;
-//         phaseObserver = nullptr;
-//     }
-//     if (statsObserver != nullptr) {
-//         delete statsObserver;
-//         statsObserver = nullptr;
-//     }
+    // free memory and dangling ptr
+    delete startUp;
+    delete gameEngine;
+    delete defaultHand;
+    delete defaultDeck;
 
-//     return 0;
-// }
+    startUp = NULL;
+    gameEngine = NULL;
+    defaultHand = NULL;
+    defaultDeck = NULL;
+
+    if (phaseObserver != nullptr) {
+        delete phaseObserver;
+        phaseObserver = nullptr;
+    }
+    if (statsObserver != nullptr) {
+        delete statsObserver;
+        statsObserver = nullptr;
+    }
+
+    return 0;
+}
 
 // default constructor auto generated
 GameEngine::GameEngine() {}
@@ -343,11 +343,11 @@ void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
     }
     vector<Player*> active = players;
 
-
-        for (size_t i=0; i<active.size(); i++)
-        {
-            active[i]-> issueOrder(this, phaseObserver);       
-        }
+    for (size_t i=0; i<active.size(); i++)
+    {
+        active[i]-> issueOrder(this, phaseObserver);
+    }
+    cout << "Donion rings" << endl;       
 }
 
 void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {
@@ -356,29 +356,37 @@ void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {
     vector<Order*> playerOrders;
     for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
         playerOrders = (*it)->getPlayerOrders();  //accessing each player's orders
+        cout << "Executing Player " << (*it)->getPlayerID() + 1 << "'s orders..." << endl;
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            cout << "Found " << typeid(*iter).name() << " order." << endl;
             if (typeid(*iter) != typeid(Deploy)){   //skips iteration if not deploy
                 continue;
             }
+            cout << "Executing " << typeid(*iter).name() << " order..." << endl;
             (*iter)->execute();
         }
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            cout << "Found " << typeid(*iter).name() << " order." << endl;
             if (typeid(*iter) != typeid(Airlift)){   //skips iteration if not airlift
                 continue;
             }
+            cout << "Executing " << typeid(*iter).name() << " order..." << endl;
             (*iter)->execute();
         } 
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            cout << "Found " << typeid(*iter).name() << " order." << endl;
             if (typeid(*iter) != typeid(Blockade)){   //skips iteration if not blockade
                 continue;
             }
+            cout << "Executing " << typeid(*iter).name() << " order..." << endl;
             (*iter)->execute();
         }
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
+            cout << "Found " << typeid(*iter).name() << " order." << endl;
+            cout << "Executing " << typeid(*iter).name() << " order..." << endl;
             (*iter)->execute();     //executes the rest of the order types
         }
     }
-    reinforcementPhase(phaseObserver);   //goes back to the reinforcement phase
 }
   
 // constructor with no parameter
