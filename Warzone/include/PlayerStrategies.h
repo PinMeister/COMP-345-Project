@@ -31,8 +31,9 @@ class PlayerStrategy {
         PlayerStrategy(Player* player); // base constructor, player owns strategy
         PlayerStrategy(const PlayerStrategy &copy); // copy constructor
         PlayerStrategy& operator=(const PlayerStrategy &strat); // assignment operator
-        // virtual orders
 
+        friend ostream& operator<<(ostream& out, const PlayerStrategy& output); // output stream
+        // virtual orders
         virtual ~PlayerStrategy(); // desctructor
 		virtual vector<Territory*> toDefend(PhaseObserver *phaseObserver) =0;
         virtual vector<Territory*> toAttack(PhaseObserver *phaseObserver) =0;
@@ -68,6 +69,7 @@ class AggressivePlayerStrategy : public PlayerStrategy {
         AggressivePlayerStrategy(const AggressivePlayerStrategy &copy); // copy constructor
         AggressivePlayerStrategy& operator=(const AggressivePlayerStrategy& strat); // assignment operator
 
+        friend ostream& operator<<(ostream& out, const AggressivePlayerStrategy& output); // output stream
         ~AggressivePlayerStrategy(); // destructor
 
 
@@ -86,6 +88,7 @@ class BenevolentPlayerStrategy : public PlayerStrategy {
         BenevolentPlayerStrategy(const BenevolentPlayerStrategy &strat); // copy constructor
         BenevolentPlayerStrategy& operator=(const BenevolentPlayerStrategy& strat); // assignment operator
 
+        friend ostream& operator<<(ostream& out, const BenevolentPlayerStrategy& output); // output stream
         ~BenevolentPlayerStrategy(); // destructor
 
 		//void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver);

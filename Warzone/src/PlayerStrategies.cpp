@@ -13,6 +13,8 @@
 
 using namespace std;
 
+PlayerStrategy::PlayerStrategy() : player(nullptr) {}
+
 PlayerStrategy::PlayerStrategy(Player* player) : player(player) {}
 
 PlayerStrategy::PlayerStrategy(const PlayerStrategy &copy) 
@@ -22,11 +24,12 @@ PlayerStrategy::PlayerStrategy(const PlayerStrategy &copy)
 
 PlayerStrategy::~PlayerStrategy() { }
 
-vector<Territory*> PlayerStrategy::toDefend(PhaseObserver *phaseObserver) { return toDefendTerritory; }
-	
-vector<Territory*> PlayerStrategy::toAttack(PhaseObserver *phaseObserver) { return toAttackTerritory; }
-
-
+// output stream
+ostream& operator<<(ostream& out, const PlayerStrategy& output) 
+{
+    out << "player strategy"<<endl;
+    return out;
+}
 
 void PlayerStrategy::setPlayer(Player* player) 
 {
@@ -87,6 +90,13 @@ AggressivePlayerStrategy::AggressivePlayerStrategy(Player* player) : PlayerStrat
 
 // copy constructor
 AggressivePlayerStrategy::AggressivePlayerStrategy(const AggressivePlayerStrategy &copy) : PlayerStrategy(copy) { }
+
+// stream output
+ostream& operator<<(ostream& out, const AggressivePlayerStrategy& output) 
+{
+    out << "Aggressive player strategy"<<endl;
+    return out;
+}
 
 // destructor
 AggressivePlayerStrategy::~AggressivePlayerStrategy() {}
@@ -281,78 +291,26 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 
 vector<Territory*> AggressivePlayerStrategy::toDefend(PhaseObserver *phaseObserver) {
     time_t t;
-
-	vector<Territory*> controlled = this->player->getTerritories(); // territories controlled by player
+	vector<Territory*> controlled = player->getTerritories(); // territories controlled by player
 
 	// show territories controlled by player 
 	if (controlled.size() > 0)
-	{	
+	{	    
+        // sort all controlled territories starting with the territories with the most armies in front
+        stable_sort(controlled.begin(), controlled.end(), Territory::moreArmiesDeployed); 
 		cout << "Player " << player->getPlayerID() + 1 << "'s currently controlled Territories and armies:"<< endl;
 		for (int i=0; i< controlled.size(); i++)
 		{
 			cout << " (" << i << ") "  + controlled[i]->getName()  + "   " << controlled[i]->getArmyNum() << endl;
 		}
+        return toDefendTerritory; 
+
 	}
 	else 
 	{
 		cout << " You currently don't control any territories. " << endl;
-		return this->toDefendTerritory;	
+		return toDefendTerritory;	
 	}
-
-	cout << "\nChoose a territory to defend (number corresponding to territory):" << endl;
-
-	//choose territory(ies) to defend
-	srand(time(NULL)); // different random outputs everytime it's run
-	int index = rand() % controlled.size();
-		while (true)
-		{
-			// 1. check if picked already 
-			// 2. if not picked, push to toDefendTerritory vector
-			vector<Territory*>::iterator it;
-			it = find(this->toDefendTerritory.begin(), this->toDefendTerritory.end(), controlled[index]);
-
-			if (it != this->toDefendTerritory.end())
-			{
-				cout << controlled[index]->getName() << " already picked." << endl;
-			}
-			else 
-			{
-				cout << controlled[index]->getName() + " picked."<< endl;
-				this->toDefendTerritory.push_back(controlled[index]);
-				controlled.erase(find(controlled.begin(), controlled.end(), controlled[index])); // pop from the controlled list
-
-			}
-
-			// 1. if toDefendTerritory size is 0, pick another index and check
-			// 2. if toDefendTerritory size is 1*, make a decision (odd/even) to decide whether to continue picking or not
-			if (this->toDefendTerritory.size() < 1) {
-				srand((unsigned) time(&t));// different random outputs everytime it's run
-				index = rand() % controlled.size();
-				continue;
-			}
-			else 
-			{
-				int decision = rand() % 100;  // take a random number from 0 to 100
-				if (decision % 2 == 1 ) // if odd, finish picking
-				{
-					cout << "Finished picking.\n" << endl;
-					break;
-				}
-				else if (decision % 2 == 0 && controlled.size() > 0)
-				{
-					cout << "Pick another territory:" << endl;
-					index = rand() % controlled.size();
-				}				
-				else // if odd, continue picking
-				{
-					cout << "No more Territories to pick" << endl;
-					break;
-				}
-			}
-				
-		}
-		return this->toDefendTerritory;
-    
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack(PhaseObserver *phaseObserver) 
@@ -364,74 +322,25 @@ vector<Territory*> AggressivePlayerStrategy::toAttack(PhaseObserver *phaseObserv
 	// 2. if toAttackTerritory size is 0, pick index and check
 	// 3. if toAttackTerritory size is 1+, make decision (odd/even) to decide whether to continue picking or not
 	int deploy_limit = player->getReinforcementPool(); // get reinforcement pool to deploy
-
+    
 	if (non_allied_neighbours.size() > 0) 
 	{
 		//	Show possible territories to attack
 		cout << " Territories to attack:"<< endl;
+        // sort all enemy territories starting with the territories with the most armies in front
+        stable_sort(non_allied_neighbours.begin(), non_allied_neighbours.end(), Territory::moreArmiesDeployed); 
 		for (int i = 0; i < non_allied_neighbours.size(); i++)
-			cout << "  (" << i << ") " + non_allied_neighbours[i]->getName() + "   " << non_allied_neighbours[i]->getArmyNum() << endl;
+			{
+                cout << "  (" << i << ") " + non_allied_neighbours[i]->getName() + "   " << non_allied_neighbours[i]->getArmyNum() << endl;
+            }
 		cout << endl;
-
-		cout << "Choose the territory to attack: " <<endl;
+        return toAttackTerritory;
 	}
 	else 
 	{
 		cout << "You don't have any neighbours."<< endl;
-		return this->toAttackTerritory;	
-	}
-
-	srand(time(NULL)); // different random outputs everytime it's run
-	int index = rand() % non_allied_neighbours.size(); // generate random number
-	while (true)
-	{
-	
-			vector<Territory*>::iterator it;
-			it = find(this->toAttackTerritory.begin(), this->toAttackTerritory.end(), non_allied_neighbours[index]);
-
-			if (it != this->toAttackTerritory.end()) // if the territory pick is already in toAttackTerritory
-			{
-				cout << non_allied_neighbours[index]->getName() << " already picked." << endl;
-				index = rand() % controlled.size();
-				continue;
-			}
-			else 
-			{
-				this->toAttackTerritory.push_back(non_allied_neighbours[index]);
-				cout << non_allied_neighbours[index]->getName() << " added to attacking territories." <<  endl;
-				non_allied_neighbours.erase(find(non_allied_neighbours.begin(), non_allied_neighbours.end(), non_allied_neighbours[index])); // pop from the non allied list
-				deploy_limit--;
-			}	
-		
-		if (this->toAttackTerritory.size() > 1 && deploy_limit>0)
-		{
-			int decision = rand() % 100;  // take a random number from 0 to 100
-			if (decision % 2 == 1) // if odd, finish picking
-			{
-				cout << "Finished picking.\n" << endl;
-				break;
-			}
-			else if (decision % 2 == 0 && non_allied_neighbours.size()>0) // if odd, continue picking
-			{
-				cout << "Pick another territory." << endl;
-				index = rand() % non_allied_neighbours.size();
-			}
-			else  // if odd, continue picking
-			{
-				cout << "No more Territories to pick" << endl;
-				break;
-			}
-		}
-
-		else if (deploy_limit==0)  // if none to deploy, break the loop
-		{
-			cout << "No more reinforcements to deploy, finished picking." << endl;
-			break;
-		}
-	
-	}
-	
-	return this->toAttackTerritory;   
+		return toAttackTerritory;	
+	}	
 }
 
 // void AggressivePlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
@@ -452,6 +361,13 @@ BenevolentPlayerStrategy& BenevolentPlayerStrategy::operator=(const BenevolentPl
 {
     PlayerStrategy::operator=(strat);
 		return *this;
+}
+
+// stream output
+ostream& operator<<(ostream& out, const BenevolentPlayerStrategy& output) 
+{
+    out << "Benevolent player strategy"<<endl;
+    return out;
 }
 
 // destructor

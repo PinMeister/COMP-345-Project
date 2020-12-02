@@ -285,6 +285,11 @@ vector<Territory*> Territory::getNeighbours() {
     return neighbours; 
 }
 
+bool Territory::moreArmiesDeployed(const Territory* first, const Territory* second)
+{
+    return first->armies > second->armies;
+}
+
 // Empty constructor
 Continent::Continent() {};
 

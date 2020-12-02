@@ -65,9 +65,9 @@ int main(){
     vector<Order*> defaultOrders; // default set of battle orders
     vector<Card*> defaultCards; // some cards
     Deck* defaultDeck = new Deck(); // default deck of cards
+    gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
     PlayerStrategy* strategy; // default strategy
 
-    gameEngine->deck = defaultDeck; // set the default deck to the new initialized one
 
     // create players
     vector<Player*> players;
@@ -86,23 +86,31 @@ int main(){
             if (stratNum < 1 || stratNum > 4)
             {
                 cout << "\nNumber should be between 1 and 4, please try again."<<endl;
-                cout << "1 --- Human\n 2 --- Aggressive\n 3 --- Benevolent\n 4 --- Neutral\nType number corresponding to your choice: "; 
+                cout << " 1 --- Human\n 2 --- Aggressive\n 3 --- Benevolent\n 4 --- Neutral\nType number corresponding to your choice: "; 
             }
         }
         while (stratNum < 1 || stratNum > 4);  // if choice made is not between 1 and 4, stay in the loop
         switch (stratNum)   // once valid choice is made, goes into switch case to set player strategy
         {
             case 1: 
-                players.at(i)->setStrategy(new HumanPlayerStrategy(player)); 
+                //HumanPlayerStrategy* human = new HumanPlayerStrategy(player);
+                player->setStrategy(new HumanPlayerStrategy(player)); 
+                cout << "\nSetting player " << i+1 << " to human player."<< endl;
                 break;
             case 2: 
-                players.at(i)->setStrategy(new AggressivePlayerStrategy(player)); 
+                //AggressivePlayerStrategy* aggressive = new AggressivePlayerStrategy(player);
+                player->setStrategy(new AggressivePlayerStrategy(player)); 
+                cout << "\nSetting player " << i+1 << " to aggressive computer."<< endl;
                 break;
             case 3: 
-                players.at(i)->setStrategy(new BenevolentPlayerStrategy(player)); 
+                //BenevolentPlayerStrategy* benevolent = new BenevolentPlayerStrategy(player);
+                player->setStrategy(new BenevolentPlayerStrategy(player)); 
+                cout << "\nSetting player " << i+1 << " to friendly computer."<< endl;
                 break;
             case 4: 
-                players.at(i)->setStrategy(new NeutralPlayerStrategy(player)); 
+                //NeutralPlayerStrategy* neutral = new NeutralPlayerStrategy(player);
+                player->setStrategy(new NeutralPlayerStrategy(player)); 
+                cout << "\nSetting player " << i+1 << " to neutral computer."<< endl;
                 break;
         }
     }

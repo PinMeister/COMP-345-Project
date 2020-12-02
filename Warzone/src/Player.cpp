@@ -504,13 +504,8 @@ void Player::setOrdersRef(vector<Order*> ordersRef){
 }
 
 void Player::setStrategy(PlayerStrategy *strategy) {
-	
-	// if the strategy to be set is same as the player's strategy, do nothing
-	if (strategy == this->strategy)
-	{
-		return;
-	}
-	// otherwise delete the player's strategy and set it to new one
+	// delete the player's strategy and set it to new one
 	delete this->strategy;
 	this->strategy = strategy;
+	strategy->setPlayer(this);
 }
