@@ -481,7 +481,7 @@ vector<Territory*> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver) {
 void HumanPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
     if (phaseObserver != nullptr) {
       phaseObserver->setPlayer(player);
-      phaseObserver->setInfo("execute Order NeutralPlayerStrategy");
+      phaseObserver->setInfo("execute Order HumanPlayerStrategy");
     }
     player->issueOrder(gameEngine, phaseObserver);
   	gameEngine->Notify(phaseObserver);
