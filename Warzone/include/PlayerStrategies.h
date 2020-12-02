@@ -52,8 +52,12 @@ class PlayerStrategy {
 
 class HumanPlayerStrategy : public PlayerStrategy {
 	public:
-    HumanPlayerStrategy();
-    HumanPlayerStrategy(Player* player);
+    HumanPlayerStrategy(); // construtor
+    HumanPlayerStrategy(Player* player); // base constructor
+		HumanPlayerStrategy(const HumanPlayerStrategy &copy); // copy constructor
+		HumanPlayerStrategy& operator=(const HumanPlayerStrategy& strat); // assignment operator
+		friend ostream& operator<<(ostream& out, const HumanPlayerStrategy& output); // output stream
+		~HumanPlayerStrategy(); // destructor
 		void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver);
     void virtual issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver);
     vector<Territory*> toDefend(PhaseObserver *phaseObserver);
@@ -102,6 +106,9 @@ class NeutralPlayerStrategy : public PlayerStrategy {
     NeutralPlayerStrategy();
     NeutralPlayerStrategy(Player* player); // base constructor
     NeutralPlayerStrategy(const NeutralPlayerStrategy &copy); // copy constructor
+		NeutralPlayerStrategy& operator=(const NeutralPlayerStrategy& strat); // assignment operator
+		friend ostream& operator<<(ostream& out, const NeutralPlayerStrategy& output); // output stream
+		~NeutralPlayerStrategy(); // destructor
 
 		void execute(GameEngine *gameEngine, PhaseObserver *phaseObserver);
     void virtual issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver);

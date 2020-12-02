@@ -45,8 +45,28 @@ PlayerStrategy& PlayerStrategy::operator=(const PlayerStrategy& strat)
 
 // TO DO: Repurpose issueOrder, toAttack and toDefend to conform to each strategy
 
+// constructor
 HumanPlayerStrategy::HumanPlayerStrategy(Player* player) : PlayerStrategy(player) { }
 
+// copy constructor
+HumanPlayerStrategy::HumanPlayerStrategy(const HumanPlayerStrategy &copy) : PlayerStrategy(copy) { }
+
+// destructor
+HumanPlayerStrategy::~HumanPlayerStrategy() {}
+
+// assignment operator
+HumanPlayerStrategy& HumanPlayerStrategy::operator=(const HumanPlayerStrategy& strat)
+{
+    PlayerStrategy::operator=(strat);
+		return *this;
+}
+
+// stream output
+ostream& operator<<(ostream& out, const HumanPlayerStrategy& output)
+{
+    out << "Human player strategy"<<endl;
+    return out;
+}
 
 void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
 
@@ -62,9 +82,14 @@ vector<Territory*> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver) {
 
 // NOTE: Only issueOrder is listed here since toAttack and toDefend are called within this
 // function by default (with the way it is currently set up in Player.cpp)
-// void HumanPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
-//     issueOrder(gameEngine, phaseObserver);
-// }
+void HumanPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
+    if (phaseObserver != nullptr) {
+      phaseObserver->setPlayer(player);
+      phaseObserver->setInfo("execute Order NeutralPlayerStrategy");
+    }
+    player->issueOrder(gameEngine, phaseObserver);
+  	gameEngine->Notify(phaseObserver);
+}
 
 
 // AggressivePlayerStrategy (reinforce strongest country, always attack with it until it can't anymore,
@@ -567,6 +592,26 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player* player): PlayerStrategy(pla
 
 // copy constructor
 NeutralPlayerStrategy::NeutralPlayerStrategy(const NeutralPlayerStrategy &copy) : PlayerStrategy(copy) { }
+
+// destructor
+NeutralPlayerStrategy::~NeutralPlayerStrategy() {}
+
+// assignment operator
+NeutralPlayerStrategy& NeutralPlayerStrategy::operator=(const NeutralPlayerStrategy& strat)
+{
+    PlayerStrategy::operator=(strat);
+		return *this;
+}
+
+// stream output
+ostream& operator<<(ostream& out, const NeutralPlayerStrategy& output)
+{
+    out << "Neutral player strategy"<<endl;
+    return out;
+}
+
+
+
 
 // we don't issue anything for this strategy
 void NeutralPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver) {
