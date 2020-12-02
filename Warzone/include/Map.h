@@ -30,6 +30,8 @@ class Territory {
         void removeOwner();
         Player* getOwner();
         bool static moreArmiesDeployed(const Territory* first, const Territory* second);
+        bool static lessArmiesDeployed(const Territory* first, const Territory* second);
+
     private:
         string name;
         string continent;

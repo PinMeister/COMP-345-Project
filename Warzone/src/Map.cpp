@@ -285,9 +285,16 @@ vector<Territory*> Territory::getNeighbours() {
     return neighbours; 
 }
 
+// territory 1 has more armies deployed than territory 2
 bool Territory::moreArmiesDeployed(const Territory* first, const Territory* second)
 {
     return first->armies > second->armies;
+}
+
+// territory 1 has less armies deployed than territory 2
+bool Territory::lessArmiesDeployed(const Territory* first, const Territory* second)
+{
+    return first->armies < second->armies;
 }
 
 // Empty constructor
