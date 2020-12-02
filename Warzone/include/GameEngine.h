@@ -30,6 +30,7 @@ public:
     Deck* deck; // default deck for the game
     Player* currentPlayer; // current player
     Order* lastOrder; // the last order
+    std::vector<Player*> negotiatedPlayers; //players that have negotiated in the turn
     GameEngine(); // default constructor
     ~GameEngine(); // destructor
     GameEngine(const GameEngine &gameEngine); // copy constructor

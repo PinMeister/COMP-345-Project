@@ -9,7 +9,7 @@
 #include "../include/MapLoader.h"
 
 using namespace std;
-    //will be changed in assignment 2
+    
 int main(){
 
     vector <Territory*> territories;
@@ -59,7 +59,7 @@ int main(){
     Player* player3 = new Player(territories3, NULL, orders3, 3);
     Player* player4 = new Player(territories4, NULL, orders4, 4);
     Negotiate* negotiate = new Negotiate(player3, player4); //negotiating between two different players should be valid
-    negotiate->validate();
+    negotiate->execute();
 
 return 0;
 };

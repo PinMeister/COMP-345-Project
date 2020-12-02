@@ -169,6 +169,9 @@ using namespace std;
           adjacent = start->neighbours;       //getting the neighbouring territories of the start territory 
           armyNumAttack = armies;    //getting number of armies of player that issued the order
           armyNumDefend = target->getArmyNum();
+          GameEngine* gameEngine;
+          vector<Player*> haveNegotiated = gameEngine->negotiatedPlayers;
+          if(!(std::find(haveNegotiated.begin(), haveNegotiated.end(), this->player) != haveNegotiated.end()) && !(std::find(haveNegotiated.begin(), haveNegotiated.end(), target->getOwner()) != haveNegotiated.end())){
           //executes if target territory is adjacent to start 
           if(std::find(adjacent.begin(), adjacent.end(), target) != adjacent.end()){ 
                //checks if the target is from the player's territories
@@ -201,7 +204,8 @@ using namespace std;
                          target->setArmyNum(armyNumAttack); // move player army to target
                     }
                }    
-          }         
+          } 
+       }        
      }
 
      // for Bomb
@@ -399,9 +403,11 @@ using namespace std;
 
      void Negotiate  :: execute() {
           bool orderValid = this->validate();
-          if (orderValid) {       
-
-
-
+          GameEngine gameEngine;
+          vector <Player*> negotiatedList = gameEngine.negotiatedPlayers;
+          if (orderValid) {  
+               negotiatedList.push_back(this->player);
+               negotiatedList.push_back(this->targetPlayer);
+               cout << "Negotiated between players." << endl;
           }
      }   
