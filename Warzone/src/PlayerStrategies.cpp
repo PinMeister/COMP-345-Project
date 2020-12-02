@@ -298,10 +298,182 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 
 vector<Territory*> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver) {
 
+	vector<Territory*> controlled = player->getTerritories(); // territories controlled by player
+
+	// show territories controlled by player
+	if (controlled.size() > 0) {
+		cout << "Player " << player->getPlayerID() + 1 << "'s currently controlled Territories and armies:"<< endl;
+		for (int i=0; i< controlled.size(); i++){
+			cout << " (" << i << ") "  + controlled[i]->getName()  + "   " << controlled[i]->getArmyNum() << endl;
+		}
+	}
+	else {
+		cout << " You currently don't control any territories. " << endl;
+		return toDefendTerritory;
+	}
+
+	cout << "\nChoose a territory to defend (number corresponding to territory):" << endl;
+
+  // let user choose which territory to defed
+	int index = 0;
+  do {
+    cin >> index;
+    if(index < 0 || index >= controlled.size()) {
+      cout << "Input number between 0 and " << controlled.size() - 1;
+    }
+  } while(index < 0 || index >= controlled.size());
+
+		while (true) {
+			// 1. check if picked already
+			// 2. if not picked, push to toDefendTerritory vector
+			vector<Territory*>::iterator it;
+			it = find(toDefendTerritory.begin(), toDefendTerritory.end(), controlled[index]);
+
+			if (it != toDefendTerritory.end()) {
+				cout << controlled[index]->getName() << " already picked." << endl;
+			}
+			else {
+				cout << controlled[index]->getName() + " picked."<< endl;
+				toDefendTerritory.push_back(controlled[index]);
+				controlled.erase(find(controlled.begin(), controlled.end(), controlled[index])); // pop from the controlled list
+			}
+
+			// 1. if toDefendTerritory size is 0, pick another index and check
+			// 2. if toDefendTerritory size is 1*, make a decision (odd/even) to decide whether to continue picking or not
+			if (toDefendTerritory.size() < 1) {
+        index = 0;
+        do {
+          cin >> index;
+          if(index < 0 || index >= controlled.size()) {
+            cout << "Input number between 0 and " << controlled.size() - 1;
+          }
+        } while(index < 0 || index >= controlled.size());
+				continue;
+			}
+			else {
+
+        // let user pick a decision number 0 to 100
+        int decision = 0;
+        do {
+          cin >> decision;
+          if(decision < 0 || decision >= 100) {
+            cout << "Input number between 0 and 99 inclusively";
+          }
+        } while(decision < 0 || decision >= 100);
+
+				if (decision % 2 == 1 ) { // if odd, finish picking
+					cout << "Finished picking.\n" << endl;
+					break;
+				}
+				else if (decision % 2 == 0 && controlled.size() > 0) {
+					cout << "Pick another territory:" << endl;
+          index = 0;
+          do {
+            if(index < 0 || index >= controlled.size()) {
+              cout << "Input number between 0 and " << controlled.size() - 1;
+            }
+          } while(index < 0 || index >= controlled.size());
+        }
+				else { // if odd, continue picking
+					cout << "No more Territories to pick" << endl;
+					break;
+				}
+			}
+		}
+		return toDefendTerritory;
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver) {
+	vector<Territory*> controlled = player->getTerritories(); // territories controlled by player
+	vector<Territory*> non_allied_neighbours = player->get_neighbour_territories(player); // neighbouring territories not controlled by player
 
+	// 1. check if you have enough army to deploy to areas to add
+	// 2. if toAttackTerritory size is 0, pick index and check
+	// 3. if toAttackTerritory size is 1+, make decision (odd/even) to decide whether to continue picking or not
+	int deploy_limit = player->getReinforcementPool(); // get reinforcement pool to deploy
+
+	if (non_allied_neighbours.size() > 0) {
+		//	Show possible territories to attack
+		cout << " Territories to attack:"<< endl;
+		for (int i = 0; i < non_allied_neighbours.size(); i++)
+			cout << "  (" << i << ") " + non_allied_neighbours[i]->getName() + "   " << non_allied_neighbours[i]->getArmyNum() << endl;
+		cout << endl;
+		cout << "Choose the territory to attack: " <<endl;
+	}
+	else {
+		cout << "You don't have any neighbours."<< endl;
+		return toAttackTerritory;
+	}
+
+  // let user choose which territory to attack
+	int index = 0;
+  do {
+    cin >> index;
+    if(index < 0 || index >= non_allied_neighbours.size()) {
+      cout << "Input number between 0 and " << non_allied_neighbours.size() - 1;
+    }
+  } while(index < 0 || index >= non_allied_neighbours.size());
+
+	while (true) {
+			vector<Territory*>::iterator it;
+			it = find(toAttackTerritory.begin(), toAttackTerritory.end(), non_allied_neighbours[index]);
+
+			if (it != toAttackTerritory.end()) { // if the territory pick is already in toAttackTerritory
+				cout << non_allied_neighbours[index]->getName() << " already picked." << endl;
+
+        // let user pick a decision number 0 to 100
+        index = 0;
+        do {
+          cin >> index;
+          if(index < 0 || index >= controlled.size()) {
+            cout << "Input number between 0 and " << controlled.size() - 1;
+          }
+        } while(index < 0 || index >= controlled.size());
+
+				continue;
+			}
+			else {
+				toAttackTerritory.push_back(non_allied_neighbours[index]);
+				cout << non_allied_neighbours[index]->getName() << " added to attacking territories." <<  endl;
+				non_allied_neighbours.erase(find(non_allied_neighbours.begin(), non_allied_neighbours.end(), non_allied_neighbours[index])); // pop from the non allied list
+				deploy_limit--;
+			}
+
+		if (toAttackTerritory.size() > 1 && deploy_limit>0) {
+      // let user pick a decision number 0 to 100
+      int decision = 0;
+      do {
+        cin >> decision;
+        if(decision < 0 || decision >= 100) {
+          cout << "Input number between 0 and 99 inclusively";
+        }
+      } while(decision < 0 || decision >= 100);
+			if (decision % 2 == 1) { // if odd, finish picking
+				cout << "Finished picking.\n" << endl;
+				break;
+			}
+			else if (decision % 2 == 0 && non_allied_neighbours.size()>0) { // if odd, continue picking
+        // let user choose which territory to attack
+				cout << "Pick another territory." << endl;
+        do {
+          cin >> index;
+          if(index < 0 || index >= non_allied_neighbours.size()) {
+            cout << "Input number between 0 and " << non_allied_neighbours.size() - 1;
+          }
+        } while(index < 0 || index >= non_allied_neighbours.size());
+			}
+			else  // if odd, continue picking
+			{
+				cout << "No more Territories to pick" << endl;
+				break;
+			}
+		}
+		else if (deploy_limit==0) { // if none to deploy, break the loop
+			cout << "No more reinforcements to deploy, finished picking." << endl;
+			break;
+		}
+	}
+	return toAttackTerritory;
 }
 
 // NOTE: Only issueOrder is listed here since toAttack and toDefend are called within this
