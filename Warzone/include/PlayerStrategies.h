@@ -3,6 +3,7 @@
 #include "../include/Orders.h"
 #include "../include/Cards.h"
 #include "../include/GameObservers.h"
+#include "../include/Map.h"
 #include "../include/Player.h"
 #include "../include/GameEngine.h"
 #include <iostream>

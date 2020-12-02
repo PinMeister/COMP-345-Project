@@ -29,7 +29,7 @@ class Territory {
         void addOwner(Player *player);
         void removeOwner();
         Player* getOwner();
-        bool moreArmiesDeployed(const Territory* first, const Territory* second);
+        bool static moreArmiesDeployed(const Territory* first, const Territory* second);
     private:
         string name;
         string continent;
