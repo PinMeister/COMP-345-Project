@@ -716,11 +716,20 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 		cout << "Fortication orders issue done." << endl;
 		break;
 	}
-	int index = rand() % 2 + 1; // choose number between 1 to 2
+	int index = rand() % 3 + 1; // choose number between 1 to 2
 	if (index % 2 == 0)			// if even set player strategy to benevolent
 	{
 		cout << "Setting " << player->getPlayerID() + 1 << " to benevolent strategy." << endl;
 		player->setStrategy(new BenevolentPlayerStrategy(player));
+	}
+	else if (index % 3 == 0)
+	{
+		cout << "Setting " << player->getPlayerID() + 1 << " to neutral strategy." << endl;
+		player->setStrategy(new NeutralPlayerStrategy(player));
+	}
+	else 
+	{
+		cout<< "Player " << player->getPlayerID()+1 << "'s strategy remains unchanged."<< endl;
 	}
 	gameEngine->Notify(phaseObserver);
 }
@@ -869,11 +878,20 @@ void BenevolentPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 	}
 	cout << "Fortication orders issue done." << endl;
 
-	int index = rand() % 2 + 1; // choose number between 1 to 2
+	int index = rand() % 3 + 1; // choose number between 1 to 2
 	if (index % 2 == 0)			// if even set player strategy to agressive strategy
 	{
 		cout << "Setting " << player->getPlayerID() + 1 << " to aggressive strategy." << endl;
 		player->setStrategy(new AggressivePlayerStrategy(player));
+	}
+	else if (index % 3 == 0)
+	{
+		cout << "Setting " << player->getPlayerID() + 1 << " to neutral strategy." << endl;
+		player->setStrategy(new NeutralPlayerStrategy(player));
+	}
+	else 
+	{
+		cout<< "Player " << player->getPlayerID()+1 << "'s strategy remains unchanged."<< endl;
 	}
 	gameEngine->Notify(phaseObserver);
 }
@@ -936,77 +954,64 @@ ostream &operator<<(ostream &out, const NeutralPlayerStrategy &output)
 // we don't issue anything for this strategy
 void NeutralPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver)
 {
-	cout << "NeutralPlayerStrategy not allowed to issueOrder" << endl;
-
-	vector<Territory *> controlled = player->getTerritories(); // territories controlled by player
-
-	if (phaseObserver != nullptr)
-	{
+    auto toDefendTerritory = toDefend(phaseObserver);
+    auto toAttackTerritory = toAttack(phaseObserver);
+    cout << "NeutralPlayerStrategy not allowed to issueOrder" << endl;
+    if (phaseObserver != nullptr)
+    {
 		phaseObserver->setPlayer(player);
-		phaseObserver->setInfo("Issue Order NeutralPlayerStrategy");
+        phaseObserver->setInfo("NeutralPlayerStrategy not allowed to issue Order.\n");
+    }
+
+	int index = rand() % 3 + 1; // choose number between 1 to 2
+	if (index % 2 == 0)			// if even set player strategy to agressive strategy
+	{
+		cout << "Setting " << player->getPlayerID() + 1 << " to aggressive strategy." << endl;
+		player->setStrategy(new AggressivePlayerStrategy(player));
 	}
-
-	int canDeploy = player->getReinforcementPool(); // get player's army pool
-
-	cout << "Player " + to_string(player->getPlayerID() + 1) + " currently has " + to_string(canDeploy) + " armies." << endl;
-
-	cout << "Not allowed to deploy!" << endl;
-
-	cout << "Not allowed to defend nor attack!" << endl;
-
-	cout << "Not allowed to play card!" << endl;
-
-	gameEngine->Notify(phaseObserver);
+	else if (index % 3 == 0)
+	{
+		cout << "Setting " << player->getPlayerID() + 1 << " to benevolent strategy." << endl;
+		player->setStrategy(new BenevolentPlayerStrategy(player));
+	}
+	else 
+	{
+		cout<< "Player " << player->getPlayerID()+1 << "'s strategy remains unchanged."<< endl;
+	}
+    gameEngine->Notify(phaseObserver);
 }
 
 // return their initial toDefendTerritory no modification
 vector<Territory *> NeutralPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 {
-	cout << "NeutralPlayerStrategy not allowed to toDefend" << endl;
 	vector<Territory *> toDefendTerritory;
 	vector<Territory *> controlled = player->getTerritories(); // territories controlled by player
 
 	// show territories controlled by player
 	if (controlled.size() > 0)
 	{
+		// sort all controlled territories starting with the territories with the most armies in front
+		stable_sort(controlled.begin(), controlled.end(), Territory::moreArmiesDeployed);
 		cout << "Player " << player->getPlayerID() + 1 << "'s currently controlled Territories and armies:" << endl;
 		for (int i = 0; i < controlled.size(); i++)
 		{
 			cout << " (" << i << ") " + controlled[i]->getName() + "   " << controlled[i]->getArmyNum() << endl;
+			toDefendTerritory.push_back(controlled[i]);
 		}
+		return toDefendTerritory;
 	}
 	else
 	{
 		cout << " You currently don't control any territories. " << endl;
 		return toDefendTerritory;
 	}
-
-	return toDefendTerritory;
 }
 
 // return their initial toAttackTerritory no modification
 vector<Territory *> NeutralPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 {
-	cout << "NeutralPlayerStrategy not allowed to toAttack" << endl;
-
 	vector<Territory *> toAttackTerritory;
-	vector<Territory *> controlled = player->getTerritories();							   // territories controlled by player
-	vector<Territory *> non_allied_neighbours = player->get_neighbour_territories(player); // neighbouring territories not controlled by player
-
-	if (non_allied_neighbours.size() > 0)
-	{
-		//	Show possible territories to attack
-		cout << " Territories to attack:" << endl;
-		for (int i = 0; i < non_allied_neighbours.size(); i++)
-			cout << "  (" << i << ") " + non_allied_neighbours[i]->getName() + "   " << non_allied_neighbours[i]->getArmyNum() << endl;
-		cout << endl;
-		cout << "Choose the territory to attack: " << endl;
-	}
-	else
-	{
-		cout << "You don't have any neighbours." << endl;
-		return toAttackTerritory;
-	}
-
+	cout << "Neutral Player Not allowed to attack."<< endl;
 	return toAttackTerritory;
 }
+
