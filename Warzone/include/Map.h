@@ -29,6 +29,13 @@ class Territory {
         void addOwner(Player *player);
         void removeOwner();
         Player* getOwner();
+        bool static moreArmiesDeployed(const Territory* first, const Territory* second);
+        bool static lessArmiesDeployed(const Territory* first, const Territory* second);
+        vector<Territory*> getAllies();
+        vector<Territory*> getEnemies();
+        bool static isEnemy(const Territory* first, const Territory* second);
+        bool static isAlly(const Territory* first, const Territory* second);
+
     private:
         string name;
         string continent;

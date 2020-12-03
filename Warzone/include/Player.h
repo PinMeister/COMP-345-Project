@@ -10,6 +10,7 @@
 #include "../include/Map.h"
 #include "../include/GameEngine.h"
 #include "../include/GameObservers.h"
+#include "../include/PlayerStrategies.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ class Hand;
 class OrdersList;
 class PhaseObserver;
 class GameEngine;
+class PlayerStrategy;
 
 class Player{
 	private:
@@ -29,7 +31,7 @@ class Player{
 		vector<Territory*> toDefendTerritory;
 		vector<Territory*> toAttackTerritory;
 		int reinforcementPool;
-		
+		PlayerStrategy *strategy;
 	public:
 		vector<Territory*> toDefend(PhaseObserver* phaseObserver);	// returns list of territories to be defended
 		vector<Territory*> toAttack(PhaseObserver* phaseObserver);	// returns list of territories to be attacked		
@@ -49,5 +51,7 @@ class Player{
 		void setOrdersRef(vector<Order*> orders);
 		vector<Territory*> get_neighbour_territories(Player* p);
 		vector<Territory*> get_friendly_neighbour(Player* p);
+		void setStrategy(PlayerStrategy* newStrat);
+		Hand* getHand();
 };
 #endif 

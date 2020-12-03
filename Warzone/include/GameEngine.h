@@ -10,6 +10,7 @@
 #include "../include/MapLoader.h"
 #include "../include/Subject.h"
 #include "../include/GameObservers.h"
+#include "../include/PlayerStrategies.h"
 
 class PhaseObserver;
 class GameEngine;
