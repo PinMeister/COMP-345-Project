@@ -321,14 +321,14 @@ void GameEngine::mainGameLoop(PhaseObserver *phaseObserver)
             this->reinforcementPhase(phaseObserver);
             phaseObserver->setPhase("Orders Issuing Phase");
             this->issueOrdersPhase(phaseObserver);
-            phaseObserver->setPhase("Order Execution Phase");
-            this->executeOrdersPhase(phaseObserver);
+            //phaseObserver->setPhase("Order Execution Phase");
+            //this->executeOrdersPhase(phaseObserver);
         }
         else
         {
             this->reinforcementPhase(nullptr);
             this->issueOrdersPhase(nullptr);
-            this->executeOrdersPhase(nullptr);
+            //this->executeOrdersPhase(nullptr);
         }
     } while (gameEnd != "Y");
 }

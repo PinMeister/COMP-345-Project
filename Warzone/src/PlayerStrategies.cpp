@@ -730,7 +730,7 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 		break;
 	}
 	int index = rand() % 2 + 1; // choose number between 1 to 2
-	if (index == 0)				// if even set player strategy to benevolent
+	if (index % 2 == 0)			// if even set player strategy to benevolent
 	{
 		cout << "Setting " << player->getPlayerID() + 1 << " to benevolent strategy." << endl;
 		player->setStrategy(new BenevolentPlayerStrategy(player));
@@ -883,7 +883,7 @@ void BenevolentPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 	cout << "Fortication orders issue done." << endl;
 
 	int index = rand() % 2 + 1; // choose number between 1 to 2
-	if (index == 0)				// if even set player strategy to agressive strategy
+	if (index % 2 == 0)			// if even set player strategy to agressive strategy
 	{
 		cout << "Setting " << player->getPlayerID() + 1 << " to aggressive strategy." << endl;
 		player->setStrategy(new AggressivePlayerStrategy(player));
