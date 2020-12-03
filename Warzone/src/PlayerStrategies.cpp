@@ -13,15 +13,19 @@
 
 using namespace std;
 
+// empty constructor
 PlayerStrategy::PlayerStrategy() : player(nullptr) {}
 
+// default constrcutor
 PlayerStrategy::PlayerStrategy(Player *player) : player(player) {}
 
+// copy constructor
 PlayerStrategy::PlayerStrategy(const PlayerStrategy &copy)
 {
 	this->player = copy.player;
 }
 
+// destructor
 PlayerStrategy::~PlayerStrategy() {}
 
 // output stream
@@ -31,6 +35,7 @@ ostream &operator<<(ostream &out, const PlayerStrategy &output)
 	return out;
 }
 
+// set player
 void PlayerStrategy::setPlayer(Player *player)
 {
 	this->player = player;
@@ -91,6 +96,7 @@ AggressivePlayerStrategy &AggressivePlayerStrategy::operator=(const AggressivePl
 	return *this;
 }
 
+// issue orders: fortify strongest country and keep attacking
 void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver)
 {
 	if (phaseObserver != nullptr)
@@ -106,42 +112,42 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 
 	cout << "Player " + to_string(player->getPlayerID() + 1) + " currently has " + to_string(canDeploy) + " armies." << endl;
 
-	// 1. while have armies, deploy them all to the strongest country	
-		if (toDefendTerritory.size() > 0)
+	// 1. while have armies, deploy them all to the strongest country
+	if (toDefendTerritory.size() > 0)
+	{
+		if (canDeploy > 0) // if you have reinforcements
 		{
-			if (canDeploy > 0) // if you have reinforcements
+			cout << "Deploying " << canDeploy << " armies to " << toDefendTerritory[0]->getName() + "." << endl;
+			if (phaseObserver != nullptr)
 			{
-				cout << "Deploying " << canDeploy << " armies to " << toDefendTerritory[0]->getName() + "." << endl;
-				if (phaseObserver != nullptr)
-				{
-					phaseObserver->setInfo(phaseObserver->getInfo() + "Deploying " + to_string(canDeploy) + " armies to " + toDefendTerritory[0]->getName() + ".\n");
-				}
-				// create deploy order issue and execute to deploy
-				Deploy *deploy = new Deploy(player, canDeploy, toDefendTerritory[0]);
-				player->getPlayerOrders().push_back(deploy);
-				deploy->execute(); // placing to the country so the army numbers are updated
-				player->setReinforcementPool(0); // set pool to zero since all are deployed
+				phaseObserver->setInfo(phaseObserver->getInfo() + "Deploying " + to_string(canDeploy) + " armies to " + toDefendTerritory[0]->getName() + ".\n");
 			}
-			else
-			{
-				cout << "No more armies to deploy" << endl;
-			}
+			// create deploy order issue and execute to deploy
+			Deploy *deploy = new Deploy(player, canDeploy, toDefendTerritory[0]);
+			player->getPlayerOrders().push_back(deploy);
+			deploy->execute();				 // placing to the country so the army numbers are updated
+			player->setReinforcementPool(0); // set pool to zero since all are deployed
 		}
 		else
 		{
-			cout << "You don't have territories to defend." << endl;
+			cout << "No more armies to deploy" << endl;
 		}
-	
+	}
+	else
+	{
+		cout << "You don't have territories to defend." << endl;
+	}
+
 	// 2. advanced orders --> fortify strongest country and keep attacking
 	cout << "Player " << player->getPlayerID() + 1 << " to issue attacks." << endl;
 	auto all_neighbours_enemy = toAttackTerritory[0]->getNeighbours();		   // get neighbours of top territory
 	vector<Territory *> allied_neighbours = toDefendTerritory[0]->getAllies(); // neighbouring territories controlled by player
 
-	while (true)
+	while (true) // attack enemy neighbours from strongest countries first if any
 	{
 		for (Territory *self : toDefendTerritory)
-		{	
-			int moveNum = self->getArmyNum(); // get army number in top country
+		{
+			int moveNum = self->getArmyNum();						   // get army number in top country
 			vector<Territory *> enemy_neighbours = self->getEnemies(); // get enemy neighbours of your top territory
 			if (enemy_neighbours.size() > 0)
 			{
@@ -172,33 +178,43 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 						cout << "No more armies to deploy." << endl;
 						break;
 					}
-				}		
+				}
+				cout << " No enemies to attack. Attacking orders issue done."<<endl;
+				break;
+
 			}
 		}
-		cout << " No enemies to attack. Attacking orders issue done."<<endl;
+		cout << " No enemies to attack. Attacking orders issue done." << endl;
 	}
-	while (true){
-	cout << "Player " << player->getPlayerID() + 1 << " issues fortify orders" << endl;
-			for (Territory *neighbour : allied_neighbours) // get all neighbours
+	while (true) // fortifying to aggregate to strongest country
+	{
+		cout << "Player " << player->getPlayerID() + 1 << " issues fortify orders" << endl;
+		for (Territory *neighbour : allied_neighbours) // get all neighbours
+		{
+			int moveNum = neighbour->getArmyNum();
+			if ((neighbour->getOwner() == player) && (moveNum > 0))
 			{
-				int moveNum = neighbour->getArmyNum();
-				if ((neighbour->getOwner() == player) && (moveNum > 0))
+				int defendNum = rand() % moveNum + 1;
+				cout << "To deploy " << defendNum << " armies from: " << neighbour->getName() << " to fortify: " << toDefendTerritory[0]->getName() << endl;
+				Advance *advancedfd = new Advance(player, neighbour, toDefendTerritory[0], defendNum);
+				player->getPlayerOrders().push_back(advancedfd);
+				moveNum -= defendNum;
+				if (phaseObserver != nullptr)
 				{
-					int defendNum = rand() % moveNum + 1;
-					cout << "To deploy " << defendNum << " armies from: " << neighbour->getName() << " to fortify: " << toDefendTerritory[0]->getName() << endl;
-					Advance *advancedfd = new Advance(player, neighbour, toDefendTerritory[0], defendNum);
-					player->getPlayerOrders().push_back(advancedfd);
-					moveNum -= defendNum;
-					if (phaseObserver != nullptr)
-						{
-							phaseObserver->setInfo(phaseObserver->getInfo() + "Issuing defend from " + neighbour->getName() + " to " + toDefendTerritory[0]->getName() + ".\n");
-						}
+					phaseObserver->setInfo(phaseObserver->getInfo() + "Issuing defend from " + neighbour->getName() + " to " + toDefendTerritory[0]->getName() + ".\n");
 				}
 			}
-			cout << "Fortication orders issue done."<<endl;
+			else if (moveNum == 0) // no more to advance
+			{
+				cout << "No more armies to deploy." << endl;
+				break;
+			}
+		}
+		cout << "Fortication orders issue done." << endl;
+		break;
 	}
 	int index = rand() % 2 + 1; // choose number between 1 to 2
-	if (index == 0) // if even set player strategy to benevolent
+	if (index == 0)				// if even set player strategy to benevolent
 	{
 		player->setStrategy(new BenevolentPlayerStrategy(player));
 	}
@@ -300,56 +316,57 @@ void BenevolentPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 
 	cout << "Player " + to_string(player->getPlayerID() + 1) + " currently has " + to_string(canDeploy) + " armies." << endl;
 
-	// 1. while have armies, deploy them all to the weakest country	
-		if (toDefendTerritory.size() > 0)
+	// 1. while have armies, deploy them all to the weakest country
+	if (toDefendTerritory.size() > 0)
+	{
+		if (canDeploy > 0) // if you have reinforcements
 		{
-			if (canDeploy > 0) // if you have reinforcements
+			cout << "Deploying " << canDeploy << " armies to " << toDefendTerritory[0]->getName() + "." << endl;
+			if (phaseObserver != nullptr)
 			{
-				cout << "Deploying " << canDeploy << " armies to " << toDefendTerritory[0]->getName() + "." << endl;
-				if (phaseObserver != nullptr)
-				{
-					phaseObserver->setInfo(phaseObserver->getInfo() + "Deploying " + to_string(canDeploy) + " armies to " + toDefendTerritory[0]->getName() + ".\n");
-				}
-				// create deploy order issue and execute to deploy
-				Deploy *deploy = new Deploy(player, canDeploy, toDefendTerritory[0]);
-				player->getPlayerOrders().push_back(deploy);
-				deploy->execute(); // placing to the country so the army numbers are updated
-				player->setReinforcementPool(0); // set pool to zero since all are deployed
+				phaseObserver->setInfo(phaseObserver->getInfo() + "Deploying " + to_string(canDeploy) + " armies to " + toDefendTerritory[0]->getName() + ".\n");
 			}
-			else
-			{
-				cout << "No more armies to deploy" << endl;
-			}
+			// create deploy order issue and execute to deploy
+			Deploy *deploy = new Deploy(player, canDeploy, toDefendTerritory[0]);
+			player->getPlayerOrders().push_back(deploy);
+			deploy->execute();				 // placing to the country so the army numbers are updated
+			player->setReinforcementPool(0); // set pool to zero since all are deployed
 		}
 		else
 		{
-			cout << "You don't have territories to defend." << endl;
+			cout << "No more armies to deploy" << endl;
 		}
-	
+	}
+	else
+	{
+		cout << "You don't have territories to defend." << endl;
+	}
+
 	// 2. advanced orders --> fortify weakest countries
 	vector<Territory *> allied_neighbours = toDefendTerritory[0]->getAllies(); // neighbouring territories controlled by player
-	while (true){
-	cout << "Player " << player->getPlayerID() + 1 << " issues fortify orders" << endl;
-			for (Territory *neighbour : allied_neighbours) // get all neighbours
+	while (true)
+	{
+		cout << "Player " << player->getPlayerID() + 1 << " issues fortify orders" << endl;
+		for (Territory *neighbour : allied_neighbours) // get all neighbours
+		{
+			int moveNum = neighbour->getArmyNum();
+			if ((neighbour->getOwner() == player) && (moveNum > 0))
 			{
-				int moveNum = neighbour->getArmyNum();
-				if ((neighbour->getOwner() == player) && (moveNum > 0))
+				int defendNum = rand() % moveNum + 1;
+				cout << "To deploy " << defendNum << " armies from: " << neighbour->getName() << " to fortify: " << toDefendTerritory[0]->getName() << endl;
+				Advance *advancedfd = new Advance(player, neighbour, toDefendTerritory[0], defendNum);
+				player->getPlayerOrders().push_back(advancedfd);
+				moveNum -= defendNum;
+				if (phaseObserver != nullptr)
 				{
-					int defendNum = rand() % moveNum + 1;
-					cout << "To deploy " << defendNum << " armies from: " << neighbour->getName() << " to fortify: " << toDefendTerritory[0]->getName() << endl;
-					Advance *advancedfd = new Advance(player, neighbour, toDefendTerritory[0], defendNum);
-					player->getPlayerOrders().push_back(advancedfd);
-					moveNum -= defendNum;
-					if (phaseObserver != nullptr)
-						{
-							phaseObserver->setInfo(phaseObserver->getInfo() + "Issuing defend from " + neighbour->getName() + " to " + toDefendTerritory[0]->getName() + ".\n");
-						}
+					phaseObserver->setInfo(phaseObserver->getInfo() + "Issuing defend from " + neighbour->getName() + " to " + toDefendTerritory[0]->getName() + ".\n");
 				}
 			}
-			cout << "Fortication orders issue done."<<endl;
+		}
+		cout << "Fortication orders issue done." << endl;
 	}
 	int index = rand() % 2 + 1; // choose number between 1 to 2
-	if (index == 0) // if even set player strategy to agressive strategy
+	if (index == 0)				// if even set player strategy to agressive strategy
 	{
 		player->setStrategy(new AggressivePlayerStrategy(player));
 	}
