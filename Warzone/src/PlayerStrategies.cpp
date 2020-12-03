@@ -950,7 +950,7 @@ ostream &operator<<(ostream &out, const NeutralPlayerStrategy &output)
 void NeutralPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver)
 {
 	cout << "NeutralPlayerStrategy not allowed to issueOrder" << endl;
-	gameEngine->Notify(phaseObserver);
+	// gameEngine->Notify(phaseObserver);
 }
 
 // return their initial toDefendTerritory no modification
@@ -958,6 +958,23 @@ vector<Territory *> NeutralPlayerStrategy::toDefend(PhaseObserver *phaseObserver
 {
 	cout << "NeutralPlayerStrategy not allowed to toDefend" << endl;
 	vector<Territory *> toDefendTerritory;
+	vector<Territory *> controlled = player->getTerritories(); // territories controlled by player
+
+	// show territories controlled by player
+	if (controlled.size() > 0)
+	{
+		cout << "Player " << player->getPlayerID() + 1 << "'s currently controlled Territories and armies:" << endl;
+		for (int i = 0; i < controlled.size(); i++)
+		{
+			cout << " (" << i << ") " + controlled[i]->getName() + "   " << controlled[i]->getArmyNum() << endl;
+		}
+	}
+	else
+	{
+		cout << " You currently don't control any territories. " << endl;
+		return toDefendTerritory;
+	}
+
 	return toDefendTerritory;
 }
 
@@ -965,7 +982,26 @@ vector<Territory *> NeutralPlayerStrategy::toDefend(PhaseObserver *phaseObserver
 vector<Territory *> NeutralPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 {
 	cout << "NeutralPlayerStrategy not allowed to toAttack" << endl;
+
 	vector<Territory *> toAttackTerritory;
+	vector<Territory *> controlled = player->getTerritories();							   // territories controlled by player
+	vector<Territory *> non_allied_neighbours = player->get_neighbour_territories(player); // neighbouring territories not controlled by player
+
+	if (non_allied_neighbours.size() > 0)
+	{
+		//	Show possible territories to attack
+		cout << " Territories to attack:" << endl;
+		for (int i = 0; i < non_allied_neighbours.size(); i++)
+			cout << "  (" << i << ") " + non_allied_neighbours[i]->getName() + "   " << non_allied_neighbours[i]->getArmyNum() << endl;
+		cout << endl;
+		cout << "Choose the territory to attack: " << endl;
+	}
+	else
+	{
+		cout << "You don't have any neighbours." << endl;
+		return toAttackTerritory;
+	}
+
 	return toAttackTerritory;
 }
 
