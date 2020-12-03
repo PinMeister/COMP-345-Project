@@ -46,8 +46,6 @@ class PlayerStrategy {
   private:
 
   protected: // fields used in all child classes of this class
-    vector<Territory*> toDefendTerritory;
-    vector<Territory*> toAttackTerritory;
     Player* player;
 };
 
