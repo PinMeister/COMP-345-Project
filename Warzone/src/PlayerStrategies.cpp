@@ -103,11 +103,11 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 					int toDeploy = 0;
 					do
 					{
-						cout << "Input number toDeploy" << endl;
+						cout << "Input number toDeploy between 0 and " << canDeploy << endl;
 						cin >> toDeploy;
 						if (toDeploy < 0 || toDeploy > canDeploy)
 						{
-							cout << "Input number between 0 and " << canDeploy;
+							cout << "Input number between 0 and " << canDeploy << endl;
 						}
 					} while (toDeploy < 0 || toDeploy > canDeploy);
 					canDeploy -= toDeploy; // subtract deploying armies from total pool
@@ -142,11 +142,11 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 	int decision = 0;
 	do
 	{
-		cout << "Input number decision" << endl;
+		cout << "Input number decision between 0 and 99 inclusively" << endl;
 		cin >> decision;
 		if (decision < 0 || decision >= 100)
 		{
-			cout << "Input number between 0 and 99 inclusively";
+			cout << "Input number between 0 and 99 inclusively"  << endl;
 		}
 	} while (decision < 0 || decision >= 100);
 	if (decision % 2 == 0 || toDefendTerritory.size() < 2) // if even, attack
@@ -156,11 +156,11 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 		int index = 0;
 		do
 		{
-			cout << "Input number index" << endl;
+			cout << "Input number index between 0 and " << toAttackTerritory.size() - 1 << endl;
 			cin >> index;
 			if (index < 0 || index >= toAttackTerritory.size())
 			{
-				cout << "Input number between 0 and " << toAttackTerritory.size() - 1;
+				cout << "Input number between 0 and " << toAttackTerritory.size() - 1 << endl;
 			}
 		} while (index < 0 || index >= toAttackTerritory.size());
 
@@ -197,11 +197,11 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 					int attackNum = 0;
 					do
 					{
-						cout << "Input number attackNum" << endl;
+						cout << "Input number attackNum between 0 and " << result[0]->getArmyNum() << endl;
 						cin >> attackNum;
 						if (attackNum < 0 || attackNum > result[0]->getArmyNum())
 						{
-							cout << "Input number between 0 and " << result[0]->getArmyNum();
+							cout << "Input number between 0 and " << result[0]->getArmyNum() << endl;
 						}
 					} while (attackNum < 0 || attackNum > result[0]->getArmyNum());
 
@@ -245,11 +245,11 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 		int index = 0;
 		do
 		{
-			cout << "Input number index" << endl;
+			cout << "Input number index between 0 and " << toDefendTerritory.size() - 1 << endl;
 			cin >> index;
 			if (index < 0 || index >= toDefendTerritory.size())
 			{
-				cout << "Input number between 0 and " << toDefendTerritory.size() - 1;
+				cout << "Input number between 0 and " << toDefendTerritory.size() - 1 << endl;
 			}
 		} while (index < 0 || index >= toDefendTerritory.size());
 
@@ -278,11 +278,11 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 					int moveNum = 0;
 					do
 					{
-						cout << "Input number moveNum" << endl;
+						cout << "Input number moveNum between 0 and " << result[0]->getArmyNum() << endl;
 						cin >> moveNum;
 						if (index < 0 || moveNum > result[0]->getArmyNum())
 						{
-							cout << "Input number between 0 and " << result[0]->getArmyNum();
+							cout << "Input number between 0 and " << result[0]->getArmyNum() << endl;
 						}
 					} while (moveNum < 0 || moveNum > result[0]->getArmyNum());
 
@@ -325,11 +325,11 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 		int cardNumPicked = 0;
 		do
 		{
-			cout << "Input number cardNumPicked" << endl;
+			cout << "Input number cardNumPicked between 0 and " << player->getHand()->getNumberHandCards() - 1 << endl;
 			cin >> cardNumPicked;
 			if (cardNumPicked < 0 || cardNumPicked >= player->getHand()->getNumberHandCards())
 			{
-				cout << "Input number between 0 and " << player->getHand()->getNumberHandCards() - 1;
+				cout << "Input number between 0 and " << player->getHand()->getNumberHandCards() - 1 << endl;
 			}
 		} while (cardNumPicked < 0 || cardNumPicked >= player->getHand()->getNumberHandCards());
 
@@ -370,11 +370,11 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 	int index = 0;
 	do
 	{
-		cout << "Input number index" << endl;
+		cout << "Input number index between 0 and " << controlled.size() - 1 << endl;
 		cin >> index;
 		if (index < 0 || index >= controlled.size())
 		{
-			cout << "Input number between 0 and " << controlled.size() - 1;
+			cout << "Input number between 0 and " << controlled.size() - 1 << endl;
 		}
 	} while (index < 0 || index >= controlled.size());
 
@@ -403,11 +403,11 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 			index = 0;
 			do
 			{
-				cout << "Input number index" << endl;
+				cout << "Input number index between 0 and " << controlled.size() - 1 << endl;
 				cin >> index;
 				if (index < 0 || index >= controlled.size())
 				{
-					cout << "Input number between 0 and " << controlled.size() - 1;
+					cout << "Input number between 0 and " << controlled.size() - 1 << endl;
 				}
 			} while (index < 0 || index >= controlled.size());
 			continue;
@@ -419,11 +419,11 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 			int decision = 0;
 			do
 			{
-				cout << "Input number decision" << endl;
+				cout << "Input number decision between 0 and 99 inclusively" << endl;
 				cin >> decision;
 				if (decision < 0 || decision >= 100)
 				{
-					cout << "Input number between 0 and 99 inclusively";
+					cout << "Input number between 0 and 99 inclusively" << endl;
 				}
 			} while (decision < 0 || decision >= 100);
 
@@ -439,10 +439,10 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 				index = 0;
 				do
 				{
-					cout << "Input number index" << endl;
+					cout << "Input number index between 0 and " << controlled.size() - 1 << endl;
 					if (index < 0 || index >= controlled.size())
 					{
-						cout << "Input number between 0 and " << controlled.size() - 1;
+						cout << "Input number between 0 and " << controlled.size() - 1 << endl;
 					}
 				} while (index < 0 || index >= controlled.size());
 			}
@@ -485,11 +485,11 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 	int index = 0;
 	do
 	{
-		cout << "Input number index" << endl;
+		cout << "Input number index between 0 and " << non_allied_neighbours.size() - 1 << endl;
 		cin >> index;
 		if (index < 0 || index >= non_allied_neighbours.size())
 		{
-			cout << "Input number between 0 and " << non_allied_neighbours.size() - 1;
+			cout << "Input number between 0 and " << non_allied_neighbours.size() - 1 << endl;
 		}
 	} while (index < 0 || index >= non_allied_neighbours.size());
 
@@ -506,11 +506,11 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 			index = 0;
 			do
 			{
-				cout << "Input number index" << endl;
+				cout << "Input number index between 0 and " << controlled.size() - 1 << endl;
 				cin >> index;
 				if (index < 0 || index >= controlled.size())
 				{
-					cout << "Input number between 0 and " << controlled.size() - 1;
+					cout << "Input number between 0 and " << controlled.size() - 1 << endl;
 				}
 			} while (index < 0 || index >= controlled.size());
 
@@ -530,11 +530,11 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 			int decision = 0;
 			do
 			{
-				cout << "Input number decision" << endl;
+				cout << "Input number decision between 0 and 99 inclusively" << endl;
 				cin >> decision;
 				if (decision < 0 || decision >= 100)
 				{
-					cout << "Input number between 0 and 99 inclusively";
+					cout << "Input number between 0 and 99 inclusively" << endl;
 				}
 			} while (decision < 0 || decision >= 100);
 			if (decision % 2 == 1)
@@ -549,11 +549,11 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 				cout << "Pick another territory." << endl;
 				do
 				{
-					cout << "Input number index" << endl;
+					cout << "Input number index between 0 and " << non_allied_neighbours.size() - 1 << endl;
 					cin >> index;
 					if (index < 0 || index >= non_allied_neighbours.size())
 					{
-						cout << "Input number between 0 and " << non_allied_neighbours.size() - 1;
+						cout << "Input number between 0 and " << non_allied_neighbours.size() - 1 << endl;
 					}
 				} while (index < 0 || index >= non_allied_neighbours.size());
 			}
@@ -945,6 +945,7 @@ ostream &operator<<(ostream &out, const NeutralPlayerStrategy &output)
 void NeutralPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver)
 {
 	cout << "NeutralPlayerStrategy not allowed to issueOrder" << endl;
+	gameEngine->Notify(phaseObserver);
 }
 
 // return their initial toDefendTerritory no modification
@@ -970,6 +971,6 @@ void NeutralPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phase
 		phaseObserver->setPlayer(player);
 		phaseObserver->setInfo("execute Order NeutralPlayerStrategy");
 	}
-	// We don't call issueOrder here since the user cannot use any order
+	player->issueOrder(gameEngine, phaseObserver);
 	gameEngine->Notify(phaseObserver);
 }
