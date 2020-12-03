@@ -789,6 +789,7 @@ void BenevolentPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 			}
 		}
 		cout << "Fortication orders issue done." << endl;
+		break;
 	}
 	int index = rand() % 2 + 1; // choose number between 1 to 2
 	if (index == 0)				// if even set player strategy to agressive strategy
