@@ -285,6 +285,47 @@ vector<Territory*> Territory::getNeighbours() {
     return neighbours; 
 }
 
+// get all allied neighbours of territory
+vector<Territory*> Territory::getAllies()
+{
+    vector<Territory*> allies;
+    for (Territory* neighbour : this->getNeighbours())
+    {
+        if (neighbour->owner == this->owner)
+        {
+            allies.push_back(neighbour);
+        }
+    }
+    return allies;
+}
+
+// get all enemy neighbours
+vector<Territory*> Territory::getEnemies()
+{
+    vector<Territory*> enemies;
+    for (Territory* neighbour : this->getNeighbours())
+    {
+        if (neighbour->owner != this->owner)
+        {
+            enemies.push_back(neighbour);
+        }
+    }
+    return enemies;
+}
+
+// return true if owner of both territories are not the same
+bool Territory::isEnemy(const Territory* first, const Territory* second)
+{
+    return first->owner != second->owner;
+
+}
+
+// return true if owner of both territories are the same
+bool Territory::isAlly(const Territory* first, const Territory* second)
+{
+    return first->owner == second->owner;
+}
+
 // territory 1 has more armies deployed than territory 2
 bool Territory::moreArmiesDeployed(const Territory* first, const Territory* second)
 {

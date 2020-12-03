@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYERSTRATEGY_H
+#define PLAYERSTRATEGY_H
 
 #include "../include/Orders.h"
 #include "../include/Cards.h"
@@ -115,3 +116,4 @@ class NeutralPlayerStrategy : public PlayerStrategy {
     vector<Territory*> virtual toDefend(PhaseObserver *phaseObserver);
     vector<Territory*> virtual toAttack(PhaseObserver *phaseObserver);
 };
+#endif

@@ -503,9 +503,9 @@ void Player::setOrdersRef(vector<Order*> ordersRef){
 	orders = ordersRef;
 }
 
-void Player::setStrategy(PlayerStrategy *strategy) {
+void Player::setStrategy(PlayerStrategy *newStrat) {
 	// delete the player's strategy and set it to new one
 	delete this->strategy;
-	this->strategy = strategy;
-	strategy->setPlayer(this);
+	newStrat->setPlayer(this);
+	this->strategy = newStrat;
 }
