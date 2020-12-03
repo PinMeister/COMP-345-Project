@@ -608,6 +608,7 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 			}
 		}
 		cout << " No enemies to attack. Attacking orders issue done." << endl;
+		break;
 	}
 	while (true) // fortifying to aggregate to strongest country
 	{
