@@ -448,10 +448,10 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 			else if (decision % 2 == 0 && controlled.size() > 0)
 			{
 				cout << "Pick another territory:" << endl;
-				index = 0;
 				do
 				{
 					cout << "Input number index between 0 and " << controlled.size() - 1 << endl;
+					cin >> index;
 					if (index < 0 || index >= controlled.size())
 					{
 						cout << "Input number between 0 and " << controlled.size() - 1 << endl;
@@ -514,16 +514,13 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 		if (it != toAttackTerritory.end())
 		{ // if the territory pick is already in toAttackTerritory
 			cout << non_allied_neighbours[index]->getName() << " already picked." << endl;
-
-			// let user pick a decision number 0 to 100
-			index = 0;
 			do
 			{
-				cout << "Input number index between 0 and " << controlled.size() - 1 << endl;
+				cout << "Input number index between 0 and " << non_allied_neighbours.size() - 1 << endl;
 				cin >> index;
 				if (index < 0 || index >= controlled.size())
 				{
-					cout << "Input number between 0 and " << controlled.size() - 1 << endl;
+					cout << "Input number between 0 and " << non_allied_neighbours.size() - 1 << endl;
 				}
 			} while (index < 0 || index >= controlled.size());
 
