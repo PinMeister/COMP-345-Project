@@ -7,6 +7,7 @@
 #include <time.h>
 #include <chrono>
 #include <cmath>
+#include <typeinfo> 
 
 using namespace std;
 
@@ -343,50 +344,58 @@ void GameEngine::issueOrdersPhase(PhaseObserver* phaseObserver) {
     }
     vector<Player*> active = players;
 
-    for (size_t i=0; i<active.size(); i++)
-    {
-        active[i]-> issueOrder(this, phaseObserver);
-    }
+
+        for (size_t i=0; i<active.size(); i++)
+        {
+            active[i]-> issueOrder(this, phaseObserver);       
+        }
 }
 
 void GameEngine::executeOrdersPhase(PhaseObserver* phaseObserver) {
     vector<Player*>::iterator it;
     vector<Order*>::iterator iter;
     vector<Order*> playerOrders;
+    Deploy* deploy;
     for(it = players.begin(); it != players.end(); it++){   //iterating through list of players
         playerOrders = (*it)->getPlayerOrders();  //accessing each player's orders
         cout << "Executing Player " << (*it)->getPlayerID() + 1 << "'s orders..." << endl;
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
-            cout << "Found " << typeid(*iter).name() << " Deploy order." << endl;            
+            cout << "Found " << (*iter)->getName() << " Deploy order." << endl;            
             cout << "Is it equal to " << typeid(Deploy).name() << " order?" << endl;
-            if (typeid(*iter) != typeid(Deploy)){   //skips iteration if not deploy
+            if ((*iter)->getName() != typeid(Deploy).name()){   //skips iteration if not deploy
                 continue;
             }
+            else {
             cout << "Executing " << typeid(*iter).name() << " Deploy order..." << endl;
             (*iter)->execute();
+            iter = playerOrders.erase(iter);
+            }
         }
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
             cout << "Found " << typeid(*iter).name() << " Airlift order." << endl;     
             cout << "Is it equal to " << typeid(Airlift).name() << " order?" << endl;
-            if (typeid(*iter) != typeid(Airlift)){   //skips iteration if not airlift
+            if ((*iter)->getName() != typeid(Airlift).name()){   //skips iteration if not airlift
                 continue;
             }
             cout << "Executing " << typeid(*iter).name() << " Airlift order..." << endl;
             (*iter)->execute();
+            iter = playerOrders.erase(iter);
         } 
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
             cout << "Found " << typeid(*iter).name() << " Blockade order." << endl;
             cout << "Is it equal to " << typeid(Blockade).name() << " order?" << endl;
-            if (typeid(*iter) != typeid(Blockade)){   //skips iteration if not blockade
+            if ((*iter)->getName() != typeid(Blockade).name()){   //skips iteration if not blockade
                 continue;
             }
             cout << "Executing " << typeid(*iter).name() << " Blockade order..." << endl;
             (*iter)->execute();
+            iter = playerOrders.erase(iter);
         }
         for(iter = playerOrders.begin(); iter != playerOrders.end(); iter++){   //iterating through each player's list of orders
             cout << "Found " << typeid(*iter).name() << " Other order." << endl;
             cout << "Executing " << typeid(*iter).name() << " Other order..." << endl;
             (*iter)->execute();     //executes the rest of the order types
+            iter = playerOrders.erase(iter);
         }
     }
 }

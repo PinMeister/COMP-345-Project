@@ -22,6 +22,7 @@ class Order{
         //validate and execute methods to be inherited by the Order subclasses
         void validate(); 
         virtual void execute() = 0;
+        string getName();
         Territory* territory;
         Territory* start;
         Territory* target;
@@ -31,6 +32,7 @@ class Order{
         int armies;
         int armyNumAttack;
         int armyNumDefend;
+        string name;      
 };
 
 class OrdersList{
@@ -46,24 +48,24 @@ class OrdersList{
         void add(Order* order);
         void Delete(vector<Order*> ord, int index);
         void move(vector<Order*> ord, int start, int end);
-    private:
+
         vector<Order*> orderslist; //list of orders
     
 };
 
 class Deploy : public Order { //class Deploy inherits from Order
     public:
-        Deploy(Player* player, int armies, Territory* territory);  //constructor
+        Deploy(Player* player, int armies, Territory* territory, string name);  //constructor
         Deploy(const Deploy &deploy); //copy constructor
         // ~Deploy(); //destructor
         Deploy& operator=(const Deploy &deploy); //assignment operator
         friend ostream& operator << (ostream &os, const Deploy &deploy); //stream insertion operator for Deploy 
         bool validate(); 
-        void execute();         
+        void execute();  
+        string getName();      
 };
 
 class Advance : public Order{
-
     public:
         Advance(Player* player, Territory* start, Territory* target, int armies); //constructor
         Advance(const Advance &advance); //copy constructor
@@ -72,11 +74,12 @@ class Advance : public Order{
         friend ostream& operator << (ostream &os, const Advance &advance); //stream insertion operator for Advance  
         void validate(); 
         void execute();
-
+        string getName();
 };
 
 class Bomb : public Order{
-
+    private:
+        string name = "Bomb";
     public:
         Bomb(Player* player, Territory* target); //constructor
         Bomb(const Bomb &bomb); //copy constructor
@@ -85,10 +88,10 @@ class Bomb : public Order{
         friend ostream& operator << (ostream &os, const Bomb &bomb); //stream insertion operator for Bomb
         bool validate(); 
         void execute();
+        string getName();
 };
 
 class Blockade : public Order{
-
     public:
         Blockade(Player* player, Territory* territory); //constructor
         Blockade(const Blockade &blockade); //copy constructor
@@ -97,10 +100,10 @@ class Blockade : public Order{
         friend ostream& operator << (ostream &os, const Blockade &blockade); //stream insertion operator for Blockade
         bool validate(); 
         void execute();
+        string getName();
 };
 
 class Airlift : public Order{
-
     public:
         Airlift(Player* player, Territory* start, Territory* target, int armies); //constructor
         Airlift(const Airlift &airlift); //copy constructor
@@ -109,10 +112,10 @@ class Airlift : public Order{
         friend ostream& operator << (ostream &os, const Airlift &airlift); //stream insertion operator for Airlift
         bool validate(); 
         void execute();
+        string getName();
 };
 
 class Negotiate : public Order{
-
     public:
        Negotiate(Player* player, Player* targetPlayer); //constructor
        Negotiate(const Negotiate &negotiate); //copy constructor
@@ -121,6 +124,7 @@ class Negotiate : public Order{
        friend ostream& operator << (ostream &os, const Negotiate &negotiate); //stream insertion operator for Negotiate
         bool validate(); 
         void execute();
+        string getName();
 };
 
 #endif

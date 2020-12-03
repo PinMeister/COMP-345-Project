@@ -242,7 +242,7 @@ void Player::issueOrder(GameEngine* gameEngine, PhaseObserver *phaseObserver) {
 						phaseObserver->setInfo(phaseObserver->getInfo() + "Deploying " + to_string(toDeploy) + " armies to " + toDefendTerritory[i]->getName() + ".\n");
 					}
                     // TODO create deploy order issue
-					Deploy* deploy = new Deploy(this, toDeploy,toDefendTerritory[i]);
+					Deploy* deploy = new Deploy(this, toDeploy,toDefendTerritory[i], "Deploy");
 					this->orders.push_back(deploy);
 					deploy->execute();
                     continue;

@@ -48,7 +48,7 @@ using namespace std;
          
      }
 
-     // for Order
+    // for Order
      Order::Order(){ //constructor
            
        }
@@ -70,22 +70,25 @@ using namespace std;
      }
 
      // for Deploy
-     Deploy::Deploy(Player* player, int armies, Territory* territory){ //constructor
+     Deploy::Deploy(Player* player, int armies, Territory* territory, string name){ //constructor
            this->player = player;
            this->armies = armies;
            this->territory = territory;
+           this->name = name;
        }
 
      Deploy::Deploy(const Deploy &deploy){ //copy constructor
           this->player = deploy.player;
           this->armies = deploy.armies;
           this->territory = deploy.territory;
+          this->name = name;
      }
 
      Deploy& Deploy::operator=(const Deploy &deploy){ //assignment operator
           this->player = deploy.player;
           this->armies= deploy.armies;
           this->territory=deploy.territory;
+          this->name = name;
 
            return *this;
      }
@@ -118,7 +121,11 @@ using namespace std;
 		     player->setReinforcementPool(pool);
 		     cout << "Deploy order executed" << endl;  
                }
-       }      
+       }  
+
+     string Deploy :: getName(){
+          return name;
+     }    
 
      // for Advance
      Advance::Advance(Player* player, Territory* start, Territory* target, int armies){ //constructor
@@ -208,6 +215,10 @@ using namespace std;
        }        
      }
 
+     string Advance :: getName(){
+          return name;
+     } 
+
      // for Bomb
      Bomb::Bomb(Player* player, Territory* target){ //constructor
                this->player=player;
@@ -254,6 +265,10 @@ using namespace std;
                 cout << "Bomb order executed" << endl;
           }
      }   
+
+     string Bomb :: getName(){
+          return name;
+     }  
 
      // for Blockade
      Blockade::Blockade(Player* player, Territory* territory){ //constructor
@@ -309,7 +324,11 @@ using namespace std;
                     std::cout << *playerTerritories.at(i) << ' '<< endl;
                }
           }
-     }   
+     }  
+
+     string Blockade :: getName(){
+          return name;
+     }
 
      // for Airlift
      Airlift::Airlift(Player* player, Territory* start, Territory* target, int armies){ //constructor
@@ -363,7 +382,11 @@ using namespace std;
                this->target->addArmyNum(armies);
                cout << "airlift order executed" << endl;
           }
-     }   
+     }  
+
+     string Airlift :: getName(){
+          return name;
+     } 
 
      // for Negotiate
      Negotiate::Negotiate(Player* player, Player* targetPlayer){ //constructor
@@ -411,3 +434,7 @@ using namespace std;
                cout << "Negotiated between players." << endl;
           }
      }   
+
+     string Negotiate :: getName(){
+          return name;
+     } 
