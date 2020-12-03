@@ -84,8 +84,8 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 	}
 
 	// gets territories to defend and attack of player
-	toDefendTerritory = player->toDefend(phaseObserver);
-	toAttackTerritory = player->toAttack(phaseObserver);
+	vector<Territory *> toDefendTerritory = player->toDefend(phaseObserver);
+	vector<Territory *> toAttackTerritory = player->toAttack(phaseObserver);
 
 	int canDeploy = player->getReinforcementPool(); // get player's army pool
 
@@ -346,7 +346,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 
 vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 {
-
+	vector<Territory *> toDefendTerritory;
 	vector<Territory *> controlled = player->getTerritories(); // territories controlled by player
 
 	// show territories controlled by player
@@ -458,6 +458,7 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 
 vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 {
+	vector<Territory *> toAttackTerritory;
 	vector<Territory *> controlled = player->getTerritories();							   // territories controlled by player
 	vector<Territory *> non_allied_neighbours = player->get_neighbour_territories(player); // neighbouring territories not controlled by player
 
@@ -740,6 +741,7 @@ void AggressivePlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 // to fortify the territories with the most army (to deploy to)
 vector<Territory *> AggressivePlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 {
+	vector<Territory *> toDefendTerritory;
 	vector<Territory *> controlled = player->getTerritories(); // territories controlled by player
 
 	// show territories controlled by player
@@ -765,6 +767,7 @@ vector<Territory *> AggressivePlayerStrategy::toDefend(PhaseObserver *phaseObser
 // attacks neighbours
 vector<Territory *> AggressivePlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 {
+	vector<Territory *> toAttackTerritory;
 	vector<Territory *> controlled = player->getTerritories();							   // territories controlled by player
 	vector<Territory *> non_allied_neighbours = player->get_neighbour_territories(player); // neighbouring territories not controlled by player
 
@@ -890,7 +893,8 @@ void BenevolentPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver 
 
 // defends least fortified controlled territories
 vector<Territory *> BenevolentPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
-{
+{	
+	vector<Territory *> toDefendTerritory;
 	vector<Territory *> controlled = player->getTerritories(); // territories controlled by player
 
 	// show territories controlled by player
@@ -916,6 +920,7 @@ vector<Territory *> BenevolentPlayerStrategy::toDefend(PhaseObserver *phaseObser
 // does not attack returns empty territory vector
 vector<Territory *> BenevolentPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 {
+	vector<Territory *> toAttackTerritory;
 	return toAttackTerritory;
 }
 
@@ -951,6 +956,7 @@ void NeutralPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *ph
 vector<Territory *> NeutralPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 {
 	cout << "NeutralPlayerStrategy not allowed to toDefend" << endl;
+	vector<Territory *> toDefendTerritory;
 	return toDefendTerritory;
 }
 
@@ -958,6 +964,7 @@ vector<Territory *> NeutralPlayerStrategy::toDefend(PhaseObserver *phaseObserver
 vector<Territory *> NeutralPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 {
 	cout << "NeutralPlayerStrategy not allowed to toAttack" << endl;
+	vector<Territory *> toAttackTerritory;
 	return toAttackTerritory;
 }
 
