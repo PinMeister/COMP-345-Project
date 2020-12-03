@@ -950,7 +950,26 @@ ostream &operator<<(ostream &out, const NeutralPlayerStrategy &output)
 void NeutralPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phaseObserver)
 {
 	cout << "NeutralPlayerStrategy not allowed to issueOrder" << endl;
-	// gameEngine->Notify(phaseObserver);
+
+	vector<Territory *> controlled = player->getTerritories(); // territories controlled by player
+
+	if (phaseObserver != nullptr)
+	{
+		phaseObserver->setPlayer(player);
+		phaseObserver->setInfo("Issue Order NeutralPlayerStrategy");
+	}
+
+	int canDeploy = player->getReinforcementPool(); // get player's army pool
+
+	cout << "Player " + to_string(player->getPlayerID() + 1) + " currently has " + to_string(canDeploy) + " armies." << endl;
+
+	cout << "Not allowed to deploy!" << endl;
+
+	cout << "Not allowed to defend nor attack!" << endl;
+
+	cout << "Not allowed to play card!" << endl;
+
+	gameEngine->Notify(phaseObserver);
 }
 
 // return their initial toDefendTerritory no modification
@@ -1005,15 +1024,15 @@ vector<Territory *> NeutralPlayerStrategy::toAttack(PhaseObserver *phaseObserver
 	return toAttackTerritory;
 }
 
-// don't execute anything, update phaseObserver
-void NeutralPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver)
-{
-	cout << "NeutralPlayerStrategy not allowed to execute" << endl;
-	if (phaseObserver != nullptr)
-	{
-		phaseObserver->setPlayer(player);
-		phaseObserver->setInfo("execute Order NeutralPlayerStrategy");
-	}
-	player->issueOrder(gameEngine, phaseObserver);
-	gameEngine->Notify(phaseObserver);
-}
+// // don't execute anything, update phaseObserver
+// void NeutralPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver)
+// {
+// 	cout << "NeutralPlayerStrategy not allowed to execute" << endl;
+// 	if (phaseObserver != nullptr)
+// 	{
+// 		phaseObserver->setPlayer(player);
+// 		phaseObserver->setInfo("execute Order NeutralPlayerStrategy");
+// 	}
+// 	player->issueOrder(gameEngine, phaseObserver);
+// 	gameEngine->Notify(phaseObserver);
+// }
