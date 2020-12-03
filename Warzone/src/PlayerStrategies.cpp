@@ -103,6 +103,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 					int toDeploy = 0;
 					do
 					{
+						cout << "Input number toDeploy" << endl;
 						cin >> toDeploy;
 						if (toDeploy < 0 || toDeploy > canDeploy)
 						{
@@ -141,6 +142,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 	int decision = 0;
 	do
 	{
+		cout << "Input number decision" << endl;
 		cin >> decision;
 		if (decision < 0 || decision >= 100)
 		{
@@ -154,6 +156,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 		int index = 0;
 		do
 		{
+			cout << "Input number index" << endl;
 			cin >> index;
 			if (index < 0 || index >= toAttackTerritory.size())
 			{
@@ -194,6 +197,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 					int attackNum = 0;
 					do
 					{
+						cout << "Input number attackNum" << endl;
 						cin >> attackNum;
 						if (attackNum < 0 || attackNum > result[0]->getArmyNum())
 						{
@@ -241,6 +245,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 		int index = 0;
 		do
 		{
+			cout << "Input number index" << endl;
 			cin >> index;
 			if (index < 0 || index >= toDefendTerritory.size())
 			{
@@ -273,6 +278,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 					int moveNum = 0;
 					do
 					{
+						cout << "Input number moveNum" << endl;
 						cin >> moveNum;
 						if (index < 0 || moveNum > result[0]->getArmyNum())
 						{
@@ -319,6 +325,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 		int cardNumPicked = 0;
 		do
 		{
+			cout << "Input number cardNumPicked" << endl;
 			cin >> cardNumPicked;
 			if (cardNumPicked < 0 || cardNumPicked >= player->getHand()->getNumberHandCards())
 			{
@@ -363,6 +370,7 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 	int index = 0;
 	do
 	{
+		cout << "Input number index" << endl;
 		cin >> index;
 		if (index < 0 || index >= controlled.size())
 		{
@@ -395,6 +403,7 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 			index = 0;
 			do
 			{
+				cout << "Input number index" << endl;
 				cin >> index;
 				if (index < 0 || index >= controlled.size())
 				{
@@ -410,6 +419,7 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 			int decision = 0;
 			do
 			{
+				cout << "Input number decision" << endl;
 				cin >> decision;
 				if (decision < 0 || decision >= 100)
 				{
@@ -429,6 +439,7 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 				index = 0;
 				do
 				{
+					cout << "Input number index" << endl;
 					if (index < 0 || index >= controlled.size())
 					{
 						cout << "Input number between 0 and " << controlled.size() - 1;
@@ -474,6 +485,7 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 	int index = 0;
 	do
 	{
+		cout << "Input number index" << endl;
 		cin >> index;
 		if (index < 0 || index >= non_allied_neighbours.size())
 		{
@@ -494,6 +506,7 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 			index = 0;
 			do
 			{
+				cout << "Input number index" << endl;
 				cin >> index;
 				if (index < 0 || index >= controlled.size())
 				{
@@ -517,6 +530,7 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 			int decision = 0;
 			do
 			{
+				cout << "Input number decision" << endl;
 				cin >> decision;
 				if (decision < 0 || decision >= 100)
 				{
@@ -535,6 +549,7 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 				cout << "Pick another territory." << endl;
 				do
 				{
+					cout << "Input number index" << endl;
 					cin >> index;
 					if (index < 0 || index >= non_allied_neighbours.size())
 					{
