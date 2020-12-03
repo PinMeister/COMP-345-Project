@@ -408,7 +408,7 @@ void GameEngine::reinforcementPhase(PhaseObserver *phaseObserver)
         if (phaseObserver != nullptr)
         {
             phaseObserver->setPlayer(*it);
-            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.\n" + "Player " + to_string((*it)->getPlayerID() + 1) + " has " + to_string((*it)->getReinforcementPool()) + " armies.");
+            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.\n" + "Player " + to_string((*it)->getPlayerID() + 1) + " has " + to_string((*it)->getReinforcementPool()) + " armies.\n");
             Notify(phaseObserver);
         }
     }

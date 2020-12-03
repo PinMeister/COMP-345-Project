@@ -143,10 +143,14 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 	do
 	{
 		cout << "Input number decision between 0 and 99 inclusively" << endl;
+		cout << "Input odd number: finish picking" << endl;
+		cout << "Input even number: continue picking" << endl;
 		cin >> decision;
 		if (decision < 0 || decision >= 100)
 		{
 			cout << "Input number between 0 and 99 inclusively"  << endl;
+			cout << "Input odd number: finish picking" << endl;
+			cout << "Input even number: continue picking" << endl;
 		}
 	} while (decision < 0 || decision >= 100);
 	if (decision % 2 == 0 || toDefendTerritory.size() < 2) // if even, attack
@@ -157,10 +161,14 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 		do
 		{
 			cout << "Input number index between 0 and " << toAttackTerritory.size() - 1 << endl;
+			cout << "Input odd number: finish picking" << endl;
+			cout << "Input even number: continue picking" << endl;
 			cin >> index;
 			if (index < 0 || index >= toAttackTerritory.size())
 			{
 				cout << "Input number between 0 and " << toAttackTerritory.size() - 1 << endl;
+				cout << "Input odd number: finish picking" << endl;
+				cout << "Input even number: continue picking" << endl;
 			}
 		} while (index < 0 || index >= toAttackTerritory.size());
 
@@ -420,10 +428,14 @@ vector<Territory *> HumanPlayerStrategy::toDefend(PhaseObserver *phaseObserver)
 			do
 			{
 				cout << "Input number decision between 0 and 99 inclusively" << endl;
+				cout << "Input odd number: finish picking" << endl;
+				cout << "Input even number: continue picking" << endl;
 				cin >> decision;
 				if (decision < 0 || decision >= 100)
 				{
 					cout << "Input number between 0 and 99 inclusively" << endl;
+					cout << "Input odd number: finish picking" << endl;
+					cout << "Input even number: continue picking" << endl;
 				}
 			} while (decision < 0 || decision >= 100);
 
@@ -532,10 +544,14 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 			do
 			{
 				cout << "Input number decision between 0 and 99 inclusively" << endl;
+				cout << "Input odd number: finish picking" << endl;
+				cout << "Input even number: continue picking" << endl;
 				cin >> decision;
 				if (decision < 0 || decision >= 100)
 				{
 					cout << "Input number between 0 and 99 inclusively" << endl;
+					cout << "Input odd number: finish picking" << endl;
+					cout << "Input even number: continue picking" << endl;
 				}
 			} while (decision < 0 || decision >= 100);
 			if (decision % 2 == 1)
