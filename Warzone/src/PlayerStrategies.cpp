@@ -573,19 +573,6 @@ vector<Territory *> HumanPlayerStrategy::toAttack(PhaseObserver *phaseObserver)
 	return toAttackTerritory;
 }
 
-// NOTE: Only issueOrder is listed here since toAttack and toDefend are called within this
-// function by default (with the way it is currently set up in Player.cpp)
-void HumanPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver)
-{
-	if (phaseObserver != nullptr)
-	{
-		phaseObserver->setPlayer(player);
-		phaseObserver->setInfo("execute Order HumanPlayerStrategy");
-	}
-	player->issueOrder(gameEngine, phaseObserver);
-	gameEngine->Notify(phaseObserver);
-}
-
 // AggressivePlayerStrategy (reinforce strongest country, always attack with it until it can't anymore,
 // fortifies in order to maximize aggregation of forces in one country)
 
@@ -1023,16 +1010,3 @@ vector<Territory *> NeutralPlayerStrategy::toAttack(PhaseObserver *phaseObserver
 
 	return toAttackTerritory;
 }
-
-// // don't execute anything, update phaseObserver
-// void NeutralPlayerStrategy::execute(GameEngine *gameEngine, PhaseObserver *phaseObserver)
-// {
-// 	cout << "NeutralPlayerStrategy not allowed to execute" << endl;
-// 	if (phaseObserver != nullptr)
-// 	{
-// 		phaseObserver->setPlayer(player);
-// 		phaseObserver->setInfo("execute Order NeutralPlayerStrategy");
-// 	}
-// 	player->issueOrder(gameEngine, phaseObserver);
-// 	gameEngine->Notify(phaseObserver);
-// }
