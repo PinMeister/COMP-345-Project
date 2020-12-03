@@ -37,7 +37,7 @@ class Player{
 		vector<Territory*> toAttack(PhaseObserver* phaseObserver);	// returns list of territories to be attacked		
 		void issueOrder(GameEngine* gameEngine, PhaseObserver* phaseObserver);	// generates an order to add to order list
 		Player(int playerID);
-		Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID, PlayerStrategy *strategy);
+		Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID);
 		Player(const Player &player); // copy constructor
 		Player& operator=(const Player &player); //assignment operator
 		friend ostream& operator << (ostream &os, const Player &player); //stream insertion operator for Player

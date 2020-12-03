@@ -70,13 +70,12 @@ int main()
     vector<Card *> defaultCards;            // some cards
     Deck *defaultDeck = new Deck();         // default deck of cards
     gameEngine->deck = defaultDeck;         // set the default deck to the new initialized one
-    PlayerStrategy *strategy;               // default strategy
 
     // create players
     vector<Player *> players;
     for (int i = 0; i < playerNum; i++)
     {
-        Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i, strategy);
+        Player *player = new Player(defaultTerritories, defaultHand, defaultOrders, i);
         players.push_back(player);
         cout << "Player " << i + 1 << " id: " << player->getPlayerID() << "\n";
 

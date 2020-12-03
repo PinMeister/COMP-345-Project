@@ -15,7 +15,7 @@ Player::Player(int playerID){
 }
 
 // construtor with parameters
-Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID, PlayerStrategy *strategy) {
+Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders, int playerID) {
 	this->territories = territories;
 	for(int i = 0; i < territories.size(); i++){
 		territories[i]->addOwner(this);
@@ -24,7 +24,6 @@ Player::Player(vector<Territory*> territories, Hand* hand, vector<Order*> orders
 	this->orders = orders;
 	this->playerID = playerID;
 	this->reinforcementPool = 0;
-	this->strategy = strategy;
 }
 
 // copy constructor
@@ -506,6 +505,5 @@ void Player::setOrdersRef(vector<Order*> ordersRef){
 void Player::setStrategy(PlayerStrategy *newStrat) {
 	// delete the player's strategy and set it to new one
 	delete this->strategy;
-	newStrat->setPlayer(this);
 	this->strategy = newStrat;
 }
