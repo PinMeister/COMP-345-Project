@@ -60,7 +60,23 @@ void Card::play(vector<Order*> &ol, Deck &deck) {
 	}
 	ol.push_back(o);
 
-	cout<< "Play CardType:" << this->getCardType() << endl;
+	switch (this->getCardType()) {
+		case 0:
+			cout << "Played Bomb card." << endl;
+			break;
+		case 1:
+			cout << "Played Reinforcement card." << endl;
+			break;
+		case 2:
+			cout << "Played Blockade card." << endl;
+			break;
+		case 3:
+			cout << "Played Airlift card." << endl;
+			break;
+		case 4:
+			cout << "Played Diplomacy card." << endl;
+			break;
+	}
 
 	deck.addCardBack(*this);
 	return;

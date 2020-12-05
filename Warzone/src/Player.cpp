@@ -113,14 +113,16 @@ vector<Territory*> Player::get_neighbour_territories(Player* p) {
         // for territories to attack find if it's controlled by you
 		for (Territory* neighbour : attacking) {
 			auto result = find(controlled.begin(), controlled.end(), neighbour);
-            if (result == controlled.end()) // vector doesn't contain element
-            {
+			auto exists = find(neighbouring_terrritories.begin(), neighbouring_terrritories.end(), neighbour);
+			// vector doesn't contain element and doesn't already exist in vector
+			if (result == controlled.end() && exists == neighbouring_terrritories.end())
+			{
 				neighbouring_terrritories.push_back(neighbour); // push to neighbouring territories vector
-            }
-            else 
-            {
-                continue;
-            }
+			}
+			else 
+			{
+				continue;
+			}
 		}
 	}
 	return neighbouring_terrritories;

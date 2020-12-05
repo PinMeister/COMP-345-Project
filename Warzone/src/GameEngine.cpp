@@ -250,9 +250,7 @@ Map *GameEngine::chooseMap()
             ConquestFileReader *conquestLoader = new ConquestFileReader(filePath);
             ConquestFileReaderAdapter *adapter = new ConquestFileReaderAdapter(conquestLoader);
             validMap = adapter->parse();
-            cout << "Creating map..." << endl;
             map = adapter->createMap();
-            cout << "Confirming Conquest map..." << endl;
             delete adapter;
             adapter = nullptr;
         }
@@ -408,7 +406,7 @@ void GameEngine::reinforcementPhase(PhaseObserver *phaseObserver)
         if (phaseObserver != nullptr)
         {
             phaseObserver->setPlayer(*it);
-            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.\n" + "Player " + to_string((*it)->getPlayerID() + 1) + " has " + to_string((*it)->getReinforcementPool()) + " armies.\n");
+            phaseObserver->setInfo("Player " + to_string((*it)->getPlayerID() + 1) + " will receive " + to_string(numOfArmies) + " armies.\n" + "Player " + to_string((*it)->getPlayerID() + 1) + " has " + to_string((*it)->getReinforcementPool()) + " armies.");
             Notify(phaseObserver);
         }
     }
@@ -562,7 +560,7 @@ void Startup::startupPhase(vector<Player *> *players, Map *map)
             }
             randTerritoryId.push_back(temp);                           // push it to the vector
             players->at(i)->addTerritory(map->getTerritories()[temp]); // give player the territory
-            cout << "Player " + to_string(i + 1) + " gets territory " + to_string(temp) << "\n";
+            cout << "Player " + to_string(i + 1) + " gets territory " + map->getTerritories()[temp]->getName() << "\n";
             // break the loop if these's no more territory
             if (randTerritoryId.size() >= size)
             {
