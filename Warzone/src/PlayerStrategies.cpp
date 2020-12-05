@@ -313,7 +313,6 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 						phaseObserver->setInfo(phaseObserver->getInfo() + "No armies available in " + result[0]->getName() + "to defend " 
 						+ toDefendTerritory[index]->getName() + ".\n");
 					}
-					toDefendTerritory.erase(find(toDefendTerritory.begin(), toDefendTerritory.end(), result[0])); // pop from the defend list
 					continue;
 				}
 			}
