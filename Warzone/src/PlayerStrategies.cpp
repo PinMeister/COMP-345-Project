@@ -276,7 +276,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 			auto result = find(controlled.begin(), controlled.end(), neighbour);
 			if (result != controlled.end()) // vector contains the element
 			{
-				cout << "\nPlayer " << player->getPlayerID() + 1 << " chooses to deploy armies from " << result[0]->getName() << " to defend "
+				cout << "\nPlayer " << player->getPlayerID() + 1 << " attempts to move armies from " << result[0]->getName() << " to defend "
 				<< toDefendTerritory[index]->getName() << "." << endl;
 				if (result[0]->getArmyNum() > 0) // TODO remove equal later when execution
 				{								 // move random amount of army up to max number in that territory to toDefend Territory
@@ -319,7 +319,7 @@ void HumanPlayerStrategy::issueOrder(GameEngine *gameEngine, PhaseObserver *phas
 			}
 			else // vector does not contain element
 			{
-				cout << "You don't control " << neighbour->getName() << "." <<  endl;
+				cout << "\nYou don't control " << neighbour->getName() << ".";
 				continue;
 			}
 			cout << "\nDefending Ended." << endl;

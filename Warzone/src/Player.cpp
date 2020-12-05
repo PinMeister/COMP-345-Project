@@ -115,7 +115,7 @@ vector<Territory*> Player::get_neighbour_territories(Player* p) {
 			auto result = find(controlled.begin(), controlled.end(), neighbour);
 			auto exists = find(neighbouring_terrritories.begin(), neighbouring_terrritories.end(), neighbour);
 			// vector doesn't contain element and doesn't already exist in vector
-        	if (result == controlled.end() && exists == neighbouring_terrritories.end())
+			if (result == controlled.end() && exists == neighbouring_terrritories.end())
 			{
 				neighbouring_terrritories.push_back(neighbour); // push to neighbouring territories vector
 			}
